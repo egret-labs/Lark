@@ -94,40 +94,40 @@ var lark;
                 this.$sound.$recycle(audio);
                 this.$sound = null;
             };
-            d(p, "volume",
+            d(p, "volume"
                 /**
                  * @private
                  * @inheritDoc
                  */
-                function () {
+                ,function () {
                     if (!this.audio)
                         return 1;
                     return this.audio.volume;
-                },
+                }
                 /**
                  * @inheritDoc
                  */
-                function (value) {
+                ,function (value) {
                     if (!this.audio)
                         return;
                     this.audio.volume = value;
                 }
             );
-            d(p, "position",
+            d(p, "position"
                 /**
                  * @private
                  * @inheritDoc
                  */
-                function () {
+                ,function () {
                     if (!this.audio)
                         return 0;
                     return this.audio.currentTime;
-                },
+                }
                 /**
                  * @private
                  * @inheritDoc
                  */
-                function (value) {
+                ,function (value) {
                     if (!this.audio || this.audio.currentTime == value)
                         return;
                     this.audio.currentTime = value;
@@ -330,64 +330,64 @@ var lark;
                 }
                 lark.stopTick(this.markDirty, this);
             };
-            d(p, "volume",
+            d(p, "volume"
                 /**
                  * @inheritDoc
                  */
-                function () {
+                ,function () {
                     if (!this.video)
                         return 1;
                     return this.video.volume;
-                },
+                }
                 /**
                  * @inheritDoc
                  */
-                function (value) {
+                ,function (value) {
                     if (!this.video)
                         return;
                     this.video.volume = value;
                 }
             );
-            d(p, "position",
+            d(p, "position"
                 /**
                  * @inheritDoc
                  */
-                function () {
+                ,function () {
                     if (!this.video)
                         return 0;
                     return this.video.currentTime;
-                },
+                }
                 /**
                  * @inheritDoc
                  */
-                function (value) {
+                ,function (value) {
                     if (!this.video)
                         return;
                     this.video.currentTime = value;
                 }
             );
-            d(p, "fullscreen",
+            d(p, "fullscreen"
                 /**
                  * @inheritDoc
                  */
-                function () {
+                ,function () {
                     return this._fullscreen;
-                },
+                }
                 /**
                  * @inheritDoc
                  */
-                function (value) {
+                ,function (value) {
                     this._fullscreen = !!value;
                     if (this.video && this.video.paused == false) {
                         this.goFullscreen();
                     }
                 }
             );
-            d(p, "bitmapData",
+            d(p, "bitmapData"
                 /**
                  * @inheritDoc
                  */
-                function () {
+                ,function () {
                     if (!this.video || !this.loaded)
                         return null;
                     if (!this._bitmapData) {
@@ -396,7 +396,7 @@ var lark;
                         this._bitmapData = lark.web['toBitmapData'](this.video);
                     }
                     return this._bitmapData;
-                },undefined
+                }
             );
             p.loadPoster = function () {
                 var _this = this;
@@ -687,7 +687,7 @@ var lark;
                 this.rotation = rotation;
             };
             return WebTouchHandler;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         web.WebTouchHandler = WebTouchHandler;
         lark.registerClass(WebTouchHandler,"lark.web.WebTouchHandler");
     })(web = lark.web || (lark.web = {}));
@@ -917,6 +917,7 @@ var lark;
                     strings[1] = strings[1].toUpperCase();
                 }
                 capabilities.$language = strings.join("-");
+                capabilities.$devicePixelRatio = window.devicePixelRatio || 1;
             };
             /**
              * @private
@@ -1285,7 +1286,7 @@ var lark;
                 }
             };
             return WebTextAdapter;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         web.WebTextAdapter = WebTextAdapter;
         lark.registerClass(WebTextAdapter,"lark.web.WebTextAdapter",["lark.sys.ITextAdapter"]);
         /**
@@ -1394,48 +1395,51 @@ var lark;
                         lark.ProgressEvent.emitProgressEvent(_this, lark.ProgressEvent.PROGRESS, event.loaded, event.total);
                     }
                 };
-                this._xhr = new XMLHttpRequest();
-                this._xhr.onreadystatechange = this.onReadyStateChange;
-                this._xhr.onprogress = this.updateProgress;
             }
             var d = __define,c=WebHttpRequest;p=c.prototype;
-            d(p, "response",
+            d(p, "response"
                 /**
                  * @private
                  * 本次请求返回的数据，数据类型根据responseType设置的值确定。
                  */
-                function () {
-                    if (this._xhr.response)
+                ,function () {
+                    if (!this._xhr) {
+                        return null;
+                    }
+                    if (this._xhr.response) {
                         return this._xhr.response;
-                    if (this._xhr.responseXML)
+                    }
+                    if (this._xhr.responseXML) {
                         return this._xhr.responseXML;
-                    if (this._xhr.responseText)
+                    }
+                    if (this._xhr.responseText) {
                         return this._xhr.responseText;
+                    }
                     return null;
-                },undefined
+                }
             );
-            d(p, "responseType",
+            d(p, "responseType"
                 /**
                  * @private
                  * 设置返回的数据格式，请使用 HttpResponseType 里定义的枚举值。设置非法的值或不设置，都将使用HttpResponseType.TEXT。
                  */
-                function () {
-                    return this._xhr.responseType;
-                },
-                function (value) {
-                    this._xhr.responseType = value;
+                ,function () {
+                    return this._responseType;
+                }
+                ,function (value) {
+                    this._responseType = value;
                 }
             );
-            d(p, "withCredentials",
+            d(p, "withCredentials"
                 /**
                  * @private
                  * 表明在进行跨站(cross-site)的访问控制(Access-Control)请求时，是否使用认证信息(例如cookie或授权的header)。 默认为 false。(这个标志不会影响同站的请求)
                  */
-                function () {
-                    return this._xhr.withCredentials;
-                },
-                function (value) {
-                    this._xhr.withCredentials = !!value;
+                ,function () {
+                    return this._withCredentials;
+                }
+                ,function (value) {
+                    this._withCredentials = value;
                 }
             );
             /**
@@ -1447,6 +1451,22 @@ var lark;
             p.open = function (url, method) {
                 if (method === void 0) { method = "GET"; }
                 this._url = url;
+                if (this._xhr) {
+                    this._xhr.abort();
+                    this._xhr = null;
+                }
+                this._xhr = new XMLHttpRequest();
+                this._xhr.onreadystatechange = this.onReadyStateChange;
+                this._xhr.onprogress = this.updateProgress;
+                if (this._responseType != null) {
+                    this._xhr.responseType = this.responseType;
+                }
+                if (this._withCredentials != null) {
+                    this._xhr.withCredentials = this._withCredentials;
+                }
+                if (this.header != null) {
+                    this._xhr.setRequestHeader(this.header, this.headerValue);
+                }
                 this._xhr.open(method, url, true);
             };
             /**
@@ -1462,13 +1482,18 @@ var lark;
              * 如果请求已经被发送,则立刻中止请求.
              */
             p.abort = function () {
-                this._xhr.abort();
+                if (this._xhr) {
+                    this._xhr.abort();
+                }
             };
             /**
              * @private
              * 返回所有响应头信息(响应头名和值), 如果响应头还没接受,则返回"".
              */
             p.getAllResponseHeaders = function () {
+                if (!this._xhr) {
+                    return null;
+                }
                 var result = this._xhr.getAllResponseHeaders();
                 return result ? result : "";
             };
@@ -1479,7 +1504,8 @@ var lark;
              * @param value 给指定的请求头赋的值.
              */
             p.setRequestHeader = function (header, value) {
-                this._xhr.setRequestHeader(header, value);
+                this.header = header;
+                this.headerValue = value;
             };
             /**
              * @private
@@ -1487,6 +1513,9 @@ var lark;
              * @param header 要返回的响应头名称
              */
             p.getResponseHeader = function (header) {
+                if (!this._xhr) {
+                    return null;
+                }
                 var result = this._xhr.getResponseHeader(header);
                 return result ? result : "";
             };
@@ -2241,6 +2270,9 @@ var lark;
 (function (lark) {
     var web;
     (function (web) {
+        /**
+         * @private
+         */
         var WebPlayer = (function (_super) {
             __extends(WebPlayer, _super);
             function WebPlayer(container) {
@@ -2253,6 +2285,7 @@ var lark;
                 var stage = new lark.Stage();
                 stage.$screen = this;
                 stage.$scaleMode = option.scaleMode;
+                stage.$highResolutionMode = option.highResolutionMode;
                 stage.frameRate = option.frameRate;
                 var surface = lark.sys.surfaceFactory.create();
                 var canvas = surface;
@@ -2287,6 +2320,7 @@ var lark;
                 option.contentWidth = +container.getAttribute("data-content-width") || 480;
                 option.contentHeight = +container.getAttribute("data-content-height") || 800;
                 option.orientation = container.getAttribute("data-orientation") || lark.sys.OrientationMode.AUTO;
+                option.highResolutionMode = container.getAttribute("data-resolution-mode") || lark.sys.HighResolutionMode.DEFAULT;
                 if (DEBUG) {
                     option.showPaintRect = container.getAttribute("data-show-paint-rect") == "true";
                     option.showFPS = container.getAttribute("data-show-fps") == "true";
@@ -2329,49 +2363,65 @@ var lark;
              */
             p.updateScreenSize = function () {
                 var canvas = this.canvas;
-                if (canvas['userTyping'])
-                    return;
                 var option = this.playerOption;
+                var devicePixelRatio = lark.Capabilities.devicePixelRatio;
+                var stagePixelRatio = 1;
                 var screenRect = this.container.getBoundingClientRect();
-                var shouldRotate = false;
-                if (option.orientation != lark.sys.OrientationMode.AUTO) {
-                    shouldRotate = option.orientation != lark.sys.OrientationMode.PORTRAIT && screenRect.height > screenRect.width || option.orientation == lark.sys.OrientationMode.PORTRAIT && screenRect.width > screenRect.height;
-                }
+                var ormode = this.calculateOrientationMode(option, screenRect), shouldRotate = ormode.shouldRotate, rotation = ormode.rotation;
+                var scaleMode = this.stage.$scaleMode, highResolutionMode = this.stage.$highResolutionMode;
                 var screenWidth = shouldRotate ? screenRect.height : screenRect.width;
                 var screenHeight = shouldRotate ? screenRect.width : screenRect.height;
-                var stageSize = lark.sys.screenAdapter.calculateStageSize(this.stage.$scaleMode, screenWidth, screenHeight, option.contentWidth, option.contentHeight);
-                var stageWidth = stageSize.stageWidth;
-                var stageHeight = stageSize.stageHeight;
-                var displayWidth = stageSize.displayWidth;
-                var displayHeight = stageSize.displayHeight;
-                if (canvas.width !== stageWidth) {
-                    canvas.width = stageWidth;
-                }
-                if (canvas.height !== stageHeight) {
-                    canvas.height = stageHeight;
+                var stageSize = lark.sys.screenAdapter.calculateStageSize(scaleMode, screenWidth, screenHeight, option.contentWidth, option.contentHeight);
+                var stageWidth = stageSize.stageWidth, stageHeight = stageSize.stageHeight;
+                var displayWidth = stageSize.displayWidth, displayHeight = stageSize.displayHeight;
+                var canvasWidth = stageWidth, canvasHeight = stageHeight;
+                if (highResolutionMode != lark.sys.HighResolutionMode.DEFAULT) {
+                    canvasWidth *= devicePixelRatio;
+                    canvasHeight *= devicePixelRatio;
+                    if (highResolutionMode == lark.sys.HighResolutionMode.DEVICE) {
+                        stageWidth *= devicePixelRatio;
+                        stageHeight *= devicePixelRatio;
+                    }
+                    if (highResolutionMode == lark.sys.HighResolutionMode.RETINA) {
+                        stagePixelRatio = devicePixelRatio;
+                    }
                 }
                 canvas.style.width = displayWidth + "px";
                 canvas.style.height = displayHeight + "px";
                 canvas.style.top = (screenRect.height - displayHeight) / 2 + "px";
                 canvas.style.left = (screenRect.width - displayWidth) / 2 + "px";
+                if (canvas.width !== canvasWidth)
+                    canvas.width = canvasWidth;
+                if (canvas.height !== canvasHeight)
+                    canvas.height = canvasHeight;
+                var transform = "rotate(" + rotation + "deg)";
+                canvas.style['webkitTransform'] = transform;
+                canvas.style.transform = transform;
+                this.player.updateStageSize(stageWidth, stageHeight, stagePixelRatio);
+                var scaleX = displayWidth / stageWidth;
+                var scaleY = displayHeight / stageHeight;
+                this.webTouchHandler.updateScaleMode(scaleX, scaleY, rotation);
+                this.webTextAdapter.updateScaleMode(scaleX, scaleY, (screenRect.width - displayWidth) / 2, (screenRect.height - displayHeight) / 2, displayWidth / 2, displayHeight / 2, rotation);
+            };
+            p.calculateOrientationMode = function (option, screenRect) {
+                var shouldRotate = false;
                 var rotation = 0;
+                if (option.orientation != lark.sys.OrientationMode.AUTO) {
+                    shouldRotate = option.orientation != lark.sys.OrientationMode.PORTRAIT && screenRect.height > screenRect.width || option.orientation == lark.sys.OrientationMode.PORTRAIT && screenRect.width > screenRect.height;
+                }
                 if (shouldRotate) {
                     if (option.orientation == lark.sys.OrientationMode.LANDSCAPE)
                         rotation = 90;
                     else
                         rotation = -90;
                 }
-                var transform = "rotate(" + rotation + "deg)";
-                canvas.style['webkitTransform'] = transform;
-                canvas.style.transform = transform;
-                this.player.updateStageSize(stageWidth, stageHeight);
-                var scaleX = displayWidth / stageWidth;
-                var scaleY = displayHeight / stageHeight;
-                this.webTouchHandler.updateScaleMode(scaleX, scaleY, rotation);
-                this.webTextAdapter.updateScaleMode(scaleX, scaleY, (screenRect.width - displayWidth) / 2, (screenRect.height - displayHeight) / 2, displayWidth / 2, displayHeight / 2, rotation);
+                return {
+                    shouldRotate: shouldRotate,
+                    rotation: rotation
+                };
             };
             return WebPlayer;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         web.WebPlayer = WebPlayer;
         lark.registerClass(WebPlayer,"lark.web.WebPlayer",["lark.sys.Screen"]);
     })(web = lark.web || (lark.web = {}));
@@ -2414,6 +2464,7 @@ var lark;
          * 当网页尺寸发生改变时此方法会自动被调用。
          */
         function updateAllScreens() {
+            lark.Capabilities.$devicePixelRatio = window.devicePixelRatio || 1;
             var containerList = document.querySelectorAll(".lark-player");
             var length = containerList.length;
             for (var i = 0; i < length; i++) {

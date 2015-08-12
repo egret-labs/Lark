@@ -97,6 +97,9 @@ module swan {
         //$getHeight():number;
         //$setHeight(value:number):void;
 
+        /**
+         * @private
+         */
         $UIComponent:Object;
 
         /**
@@ -783,6 +786,9 @@ module swan {
 
 module swan.sys {
 
+    /**
+     * @private
+     */
     export const enum UIKeys {
         left,
         right,

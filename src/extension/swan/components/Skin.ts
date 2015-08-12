@@ -71,7 +71,7 @@ module swan {
      * @platform Web,Native
      * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
      */
-    export class Skin extends lark.LarkObject {
+    export class Skin extends lark.HashObject {
 
         /**
          * @language en_US

@@ -21,7 +21,7 @@ class HttpRequestExample extends lark.Sprite {
         var statusGetLabel = new lark.TextField();
         this.statusGetLabel = statusGetLabel;
         statusGetLabel.fontSize = 18;
-        statusGetLabel.text = "正在向httpbin.org发送GET请求";
+        statusGetLabel.text = "GET request being sent to httpbin.org";
         this.addChild(statusGetLabel);
         statusGetLabel.x = 50;
         statusGetLabel.y = 40;
@@ -40,11 +40,11 @@ class HttpRequestExample extends lark.Sprite {
         console.log("get data : ",request.response);
         var responseLabel = new lark.TextField();
         responseLabel.fontSize = 18;
-        responseLabel.text = "GET响应: \n" + request.response.substring(0, 50) + "...";
+        responseLabel.text = "GET response: \n" + request.response.substring(0, 50) + "...";
         this.addChild(responseLabel);
         responseLabel.x = 50;
         responseLabel.y = 70;
-        this.statusGetLabel.text = "获得GET响应! ";
+        this.statusGetLabel.text = "Get GET response!";
     }
 
     private onGetIOError(event:lark.Event):void {
@@ -62,7 +62,7 @@ class HttpRequestExample extends lark.Sprite {
         statusPostLabel.fontSize = 18;
         statusPostLabel.x = 300;
         statusPostLabel.y = 40;
-        statusPostLabel.text = "正在向httpbin.org发送POST请求";
+        statusPostLabel.text = "Sending POST request to httpbin.org";
 
         var request = new lark.HttpRequest();
         request.responseType = lark.HttpResponseType.TEXT;
@@ -78,11 +78,11 @@ class HttpRequestExample extends lark.Sprite {
         console.log("post data : ",request.response);
         var responseLabel = new lark.TextField();
         responseLabel.fontSize = 18;
-        responseLabel.text = "POST响应: \n" + request.response.substring(0, 50) + "...";
+        responseLabel.text = "POST response:\n" + request.response.substring(0, 50) + "...";
         this.addChild(responseLabel);
         responseLabel.x = 300;
         responseLabel.y = 70;
-        this.statusPostLabel.text = "获得GET响应! ";
+        this.statusPostLabel.text = "Get POST response!";
     }
 
     private onPostIOError(event:lark.Event):void {

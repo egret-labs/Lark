@@ -30,6 +30,9 @@
 
 module swan {
 
+    /**
+     * @private
+     */
     const enum Keys{
         useVirtualLayout,
         useVirtualLayoutChanged,

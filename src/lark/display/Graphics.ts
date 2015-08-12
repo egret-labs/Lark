@@ -92,7 +92,7 @@ module lark {
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/display/GraphicsExample.ts
      */
-    export class Graphics extends LarkObject {
+    export class Graphics extends HashObject {
 
         /**
          * @language en_US

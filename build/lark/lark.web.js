@@ -687,7 +687,7 @@ var lark;
                 this.rotation = rotation;
             };
             return WebTouchHandler;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         web.WebTouchHandler = WebTouchHandler;
         lark.registerClass(WebTouchHandler,"lark.web.WebTouchHandler");
     })(web = lark.web || (lark.web = {}));
@@ -1286,7 +1286,7 @@ var lark;
                 }
             };
             return WebTextAdapter;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         web.WebTextAdapter = WebTextAdapter;
         lark.registerClass(WebTextAdapter,"lark.web.WebTextAdapter",["lark.sys.ITextAdapter"]);
         /**
@@ -1395,9 +1395,6 @@ var lark;
                         lark.ProgressEvent.emitProgressEvent(_this, lark.ProgressEvent.PROGRESS, event.loaded, event.total);
                     }
                 };
-                this._xhr = new XMLHttpRequest();
-                this._xhr.onreadystatechange = this.onReadyStateChange;
-                this._xhr.onprogress = this.updateProgress;
             }
             var d = __define,c=WebHttpRequest;p=c.prototype;
             d(p, "response"
@@ -1406,12 +1403,18 @@ var lark;
                  * 本次请求返回的数据，数据类型根据responseType设置的值确定。
                  */
                 ,function () {
-                    if (this._xhr.response)
+                    if (!this._xhr) {
+                        return null;
+                    }
+                    if (this._xhr.response) {
                         return this._xhr.response;
-                    if (this._xhr.responseXML)
+                    }
+                    if (this._xhr.responseXML) {
                         return this._xhr.responseXML;
-                    if (this._xhr.responseText)
+                    }
+                    if (this._xhr.responseText) {
                         return this._xhr.responseText;
+                    }
                     return null;
                 }
             );
@@ -1421,10 +1424,10 @@ var lark;
                  * 设置返回的数据格式，请使用 HttpResponseType 里定义的枚举值。设置非法的值或不设置，都将使用HttpResponseType.TEXT。
                  */
                 ,function () {
-                    return this._xhr.responseType;
+                    return this._responseType;
                 }
                 ,function (value) {
-                    this._xhr.responseType = value;
+                    this._responseType = value;
                 }
             );
             d(p, "withCredentials"
@@ -1433,10 +1436,10 @@ var lark;
                  * 表明在进行跨站(cross-site)的访问控制(Access-Control)请求时，是否使用认证信息(例如cookie或授权的header)。 默认为 false。(这个标志不会影响同站的请求)
                  */
                 ,function () {
-                    return this._xhr.withCredentials;
+                    return this._withCredentials;
                 }
                 ,function (value) {
-                    this._xhr.withCredentials = !!value;
+                    this._withCredentials = value;
                 }
             );
             /**
@@ -1448,6 +1451,22 @@ var lark;
             p.open = function (url, method) {
                 if (method === void 0) { method = "GET"; }
                 this._url = url;
+                if (this._xhr) {
+                    this._xhr.abort();
+                    this._xhr = null;
+                }
+                this._xhr = new XMLHttpRequest();
+                this._xhr.onreadystatechange = this.onReadyStateChange;
+                this._xhr.onprogress = this.updateProgress;
+                if (this._responseType != null) {
+                    this._xhr.responseType = this.responseType;
+                }
+                if (this._withCredentials != null) {
+                    this._xhr.withCredentials = this._withCredentials;
+                }
+                if (this.header != null) {
+                    this._xhr.setRequestHeader(this.header, this.headerValue);
+                }
                 this._xhr.open(method, url, true);
             };
             /**
@@ -1463,13 +1482,18 @@ var lark;
              * 如果请求已经被发送,则立刻中止请求.
              */
             p.abort = function () {
-                this._xhr.abort();
+                if (this._xhr) {
+                    this._xhr.abort();
+                }
             };
             /**
              * @private
              * 返回所有响应头信息(响应头名和值), 如果响应头还没接受,则返回"".
              */
             p.getAllResponseHeaders = function () {
+                if (!this._xhr) {
+                    return null;
+                }
                 var result = this._xhr.getAllResponseHeaders();
                 return result ? result : "";
             };
@@ -1480,7 +1504,8 @@ var lark;
              * @param value 给指定的请求头赋的值.
              */
             p.setRequestHeader = function (header, value) {
-                this._xhr.setRequestHeader(header, value);
+                this.header = header;
+                this.headerValue = value;
             };
             /**
              * @private
@@ -1488,6 +1513,9 @@ var lark;
              * @param header 要返回的响应头名称
              */
             p.getResponseHeader = function (header) {
+                if (!this._xhr) {
+                    return null;
+                }
                 var result = this._xhr.getResponseHeader(header);
                 return result ? result : "";
             };
@@ -2242,6 +2270,9 @@ var lark;
 (function (lark) {
     var web;
     (function (web) {
+        /**
+         * @private
+         */
         var WebPlayer = (function (_super) {
             __extends(WebPlayer, _super);
             function WebPlayer(container) {
@@ -2390,7 +2421,7 @@ var lark;
                 };
             };
             return WebPlayer;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         web.WebPlayer = WebPlayer;
         lark.registerClass(WebPlayer,"lark.web.WebPlayer",["lark.sys.Screen"]);
     })(web = lark.web || (lark.web = {}));

@@ -28,6 +28,10 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 module swan.sys {
+
+    /**
+     * @private
+     */
     export const enum ComponentKeys {
         hostComponentKey,
         skinName,
@@ -185,6 +189,9 @@ module swan {
                     }
                     else{
                         clazz = lark.getDefinitionByName(skinName);
+                        if(!clazz) {
+                            DEBUG && lark.$error(2203,skinName);
+                        }
                     }
                     if (clazz) {
                         skin = new clazz();

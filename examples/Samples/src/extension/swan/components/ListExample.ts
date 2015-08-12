@@ -21,7 +21,7 @@ class ListExample extends lark.Sprite {
         var collection = new swan.ArrayCollection();
         for(var i = 0; i < 20; i ++)
         {
-            collection.addItem({"label":"文本" + i});
+            collection.addItem({"label":"Text" + i});
         }
         list.dataProvider = collection;
 

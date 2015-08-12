@@ -3456,7 +3456,7 @@ var swan;
                 if (this.delayList.indexOf(client) == -1) {
                     this.delayList.push(client);
                 }
-                return;
+                return "";
             }
             var skinMap = this.skinMap;
             var skinName = skinMap[client.hostComponentKey];
@@ -4986,7 +4986,7 @@ var swan;
             }
         };
         return State;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     swan.State = State;
     lark.registerClass(State,"swan.State");
 })(swan || (swan = {}));
@@ -5900,6 +5900,7 @@ var swan;
     locale_strings[2104] = "Instantiate class {0} error，the parameters of its constructor method must be empty.";
     locale_strings[2201] = "BasicLayout doesn't support virtualization.";
     locale_strings[2202] = "parse skinName error，the parsing result of skinName must be a instance of swan.Skin.";
+    locale_strings[2203] = "Could not find the skin class '{0}'。";
     locale_strings[2301] = "parse source failed，could not find asset from URL：{0} .";
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -7018,6 +7019,9 @@ var swan;
                     var orgValue = value;
                     switch (type) {
                         case TYPE_CLASS:
+                            if (key == SKIN_NAME) {
+                                value = this.formatString(stringValue);
+                            }
                             break;
                         case "number":
                             if (value.indexOf("#") == 0)
@@ -9835,6 +9839,7 @@ var swan;
     //Swan 报错与警告信息
     locale_strings[2201] = "BasicLayout 不支持虚拟化。";
     locale_strings[2202] = "皮肤解析出错，属性 skinName 的值必须要能够解析为一个 swan.Skin 的实例。";
+    locale_strings[2203] = "找不到指定的皮肤类 '{0}'。";
     locale_strings[2301] = "素材解析失败，找不到URL：{0} 所对应的资源。";
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -12246,15 +12251,13 @@ var swan;
         );
         /**
          * @private
-         *
-         * @param value
          */
         p.$setBitmapData = function (value) {
-            if (value == this.$bitmapData) {
+            var values = this.$Bitmap;
+            if (value == values[0 /* bitmapData */]) {
                 return;
             }
             _super.prototype.$setBitmapData.call(this, value);
-            this._source = value;
             this.sourceChanged = false;
             this.invalidateSize();
             this.invalidateDisplayList();
@@ -12284,7 +12287,7 @@ var swan;
         p.contentChanged = function (data, source) {
             if (source !== this._source)
                 return;
-            if (!lark.is(data, "lark.BitmapData")) {
+            if (!lark.is(data, "lark.BitmapData") && !(data instanceof lark.Texture)) {
                 return;
             }
             this.$setBitmapData(data);
@@ -12297,25 +12300,24 @@ var swan;
         };
         /**
          * @private
-         *
-         * @param bounds
          */
         p.$measureContentBounds = function (bounds) {
-            var bitmapData = this.$bitmapData;
-            if (bitmapData) {
-                var values = this.$UIComponent;
-                var width = values[10 /* width */];
-                var height = values[11 /* height */];
+            var values = this.$Bitmap;
+            var image = values[1 /* image */];
+            if (image) {
+                var uiValues = this.$UIComponent;
+                var width = uiValues[10 /* width */];
+                var height = uiValues[11 /* height */];
                 if (isNaN(width) || isNaN(height)) {
                     bounds.setEmpty();
                     return;
                 }
                 if (this._fillMode == "clip") {
-                    if (width > bitmapData.width) {
-                        width = bitmapData.width;
+                    if (width > values[8 /* width */]) {
+                        width = values[8 /* width */];
                     }
-                    if (height > bitmapData.height) {
-                        height = bitmapData.height;
+                    if (height > values[9 /* height */]) {
+                        height = values[9 /* height */];
                     }
                 }
                 bounds.setTo(0, 0, width, height);
@@ -12330,40 +12332,41 @@ var swan;
          * @param context
          */
         p.$render = function (context) {
-            var bitmapData = this.$bitmapData;
-            if (!bitmapData) {
+            var values = this.$Bitmap;
+            var image = values[1 /* image */];
+            if (!image) {
                 return;
             }
-            var values = this.$UIComponent;
-            var width = values[10 /* width */];
-            var height = values[11 /* height */];
+            var uiValues = this.$UIComponent;
+            var width = uiValues[10 /* width */];
+            var height = uiValues[11 /* height */];
             if (width === 0 || height === 0) {
                 return;
             }
             switch (this._fillMode) {
                 case "clip":
-                    if (width > bitmapData.width) {
-                        width = bitmapData.width;
+                    if (width > values[8 /* width */]) {
+                        width = values[8 /* width */];
                     }
-                    if (height > bitmapData.height) {
-                        height = bitmapData.height;
+                    if (height > values[9 /* height */]) {
+                        height = values[9 /* height */];
                     }
-                    context.drawImage(bitmapData, 0, 0, width, height, 0, 0, width, height);
+                    context.drawImage(image, 0, 0, width, height, 0, 0, width, height);
                     break;
                 case "repeat":
-                    var pattern = context.createPattern(bitmapData, "repeat");
+                    var pattern = context.createPattern(image, "repeat");
                     context.beginPath();
                     context.rect(0, 0, width, height);
                     context.fillStyle = pattern;
                     context.fill();
                     break;
                 default:
-                    context.imageSmoothingEnabled = this.$smoothing;
+                    context.imageSmoothingEnabled = values[10 /* smoothing */];
                     if (this._scale9Grid) {
-                        this.drawScale9GridImage(context, bitmapData, this._scale9Grid, width, height);
+                        this.drawScale9GridImage(context, image, this._scale9Grid, width, height);
                     }
                     else {
-                        context.drawImage(bitmapData, 0, 0, width, height);
+                        context.drawImage(image, 0, 0, width, height);
                     }
                     break;
             }
@@ -12475,9 +12478,10 @@ var swan;
          * @platform Web,Native
          */
         p.measure = function () {
-            var bitmapData = this.$bitmapData;
-            if (bitmapData) {
-                this.setMeasuredSize(bitmapData.width, bitmapData.height);
+            var values = this.$Bitmap;
+            var image = values[1 /* image */];
+            if (image) {
+                this.setMeasuredSize(values[8 /* width */], values[9 /* height */]);
             }
             else {
                 this.setMeasuredSize(0, 0);
@@ -13201,7 +13205,7 @@ var swan;
             this.initializeStates(this._hostComponent.$stage);
         };
         return Skin;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     swan.Skin = Skin;
     lark.registerClass(Skin,"swan.Skin");
     swan.sys.mixin(Skin, swan.sys.StateClient);
@@ -13378,6 +13382,9 @@ var swan;
                     }
                     else {
                         clazz = lark.getDefinitionByName(skinName);
+                        if (!clazz) {
+                            DEBUG && lark.$error(2203, skinName);
+                        }
                     }
                     if (clazz) {
                         skin = new clazz();
@@ -16114,7 +16121,6 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample src/extension/swan/components/HScrollBar.ts
      */
     /**
      * @language zh_CN
@@ -16127,7 +16133,6 @@ var swan;
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
-     * @includeExample src/extension/swan/components/HScrollBar.ts
      */
     var ScrollBarBase = (function (_super) {
         __extends(ScrollBarBase, _super);

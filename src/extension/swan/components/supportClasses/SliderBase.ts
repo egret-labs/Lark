@@ -29,6 +29,9 @@
 
 module swan {
 
+    /**
+     * @private
+     */
     export const enum Keys {
         clickOffsetX,
         clickOffsetY,

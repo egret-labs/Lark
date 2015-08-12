@@ -31,12 +31,22 @@
         },
         {
             "name": "swan",
-            "description": "Lark GUI 图形界面",
+            "description": "Swan 图形界面库",
             "files": [
                 { "path": "i18n/en_US.ts", "debug": true },
                 { "path": "i18n/zh_CN.ts", "debug": true }
             ],
             "root": "src/extension/swan",
+            "dependencies": [ "lark" ]
+        },
+        {
+            "name": "resource",
+            "description": "RES 资源加载库",
+            "files": [
+                { "path": "i18n/en_US.ts", "debug": true },
+                { "path": "i18n/zh_CN.ts", "debug": true }
+            ],
+            "root": "src/extension/resource",
             "dependencies": [ "lark" ]
         }
     ],

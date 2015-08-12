@@ -32,7 +32,7 @@ module lark.sys {
     /**
      * @private
      */
-    export interface Renderable extends LarkObject{
+    export interface Renderable extends HashObject{
 
         /**
          * @private

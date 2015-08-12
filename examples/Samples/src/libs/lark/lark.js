@@ -229,6 +229,62 @@ var lark;
     }
     lark.stopTick = stopTick;
 })(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
     /**
@@ -236,97 +292,13 @@ var lark;
      */
     lark.Motion;
 })(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
     /**
-     * @copy lark.Geolocation
+     * @copy lark.Orientation
      */
-    lark.Geolocation;
+    lark.Orientation = null;
 })(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -603,6 +575,57 @@ var lark;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * Indicates whether an object is a instance of the class or interface specified as the parameter.This method is similar
+     * to the instanceOf operator which indicate whether an object is a instance of the specific class,besides, it can indicate
+     * whether an object is a instance of the specific interface.
+     * @param instance the instance to be checked.
+     * @param typeName the string value representing a specific class or interface.
+     * @returns A value of true if the object is a instance of the class or interface specified as the parameter.
+     * @example
+     * <pre>
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
+     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
+     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
+     * </pre>
+     * @see lark.registerClass()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字作用类似，但除了判断类定义也能判断接口的实现。
+     * @param instance 要判断的实例。
+     * @param typeName 类或接口的完全名称.
+     * @returns 返回true表示当前对象是指定类或接口的实例。
+     * @example
+     * <pre>
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
+     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
+     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
+     * </pre>
+     * @see lark.registerClass()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function is(instance, typeName) {
+        if (!instance || typeof instance != "object") {
+            return false;
+        }
+        var prototype = Object.getPrototypeOf(instance);
+        var types = prototype ? prototype.__types__ : null;
+        if (!types) {
+            return false;
+        }
+        return (types.indexOf(typeName) !== -1);
+    }
+    lark.is = is;
+})(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -631,13 +654,34 @@ var lark;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @copy lark.Orientation
-     */
-    lark.Orientation = null;
-})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -1077,6 +1121,79 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
+    var BasicPlugin = (function () {
+        function BasicPlugin() {
+        }
+        var d = __define,c=BasicPlugin;p=c.prototype;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.init = function (tween, params) {
+            this._tween = tween;
+            this._attributes = params;
+            this.keys = Object.keys(params);
+            var target = this._tween.target;
+            var startAttributes = {};
+            var keys = this.keys;
+            var length = keys.length;
+            for (var i = 0; i < length; i++) {
+                var key = keys[i];
+                startAttributes[key] = target[key];
+            }
+            this.startAttributes = startAttributes;
+        };
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.update = function (value) {
+            var target = this._tween.target;
+            var keys = this.keys;
+            var length = keys.length;
+            var startAttributes = this.startAttributes;
+            for (var i = 0; i < length; i++) {
+                var key = keys[i];
+                target[key] = (this._attributes[key] - startAttributes[key]) * value + startAttributes[key];
+            }
+        };
+        return BasicPlugin;
+    })();
+    lark.BasicPlugin = BasicPlugin;
+    lark.registerClass(BasicPlugin,"lark.BasicPlugin",["lark.IPlugin"]);
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
     var sys;
     (function (sys) {
         /**
@@ -1112,6 +1229,890 @@ var lark;
         sys.OrientationMode = OrientationMode;
         lark.registerClass(OrientationMode,"lark.sys.OrientationMode");
     })(sys = lark.sys || (lark.sys = {}));
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @private
+     */
+    var EaseFunction = (function () {
+        function EaseFunction() {
+        }
+        var d = __define,c=EaseFunction;p=c.prototype;
+        /**
+         * @language en_US
+         * Uniform type of easing.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 匀速缓动类型。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.None = function (t) {
+            return t;
+        };
+        /**
+         * @language en_US
+         * sine curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * sin 曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.SineEaseIn = function (t) {
+            return Math.sin((t - 1) * Math.PI * .5) + 1;
+        };
+        /**
+         * @language en_US
+         * sine curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * sin 曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.SineEaseOut = function (t) {
+            return Math.sin(t * Math.PI * .5);
+        };
+        /**
+         * @language en_US
+         * sine curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * sin 曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,NativeEaseInOutSine
+         */
+        EaseFunction.SineEaseInOut = function (t) {
+            return Math.sin((t - .5) * Math.PI) * .5 + .5;
+        };
+        /**
+         * @language en_US
+         * sine curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * sin 曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,NativeEaseInOutSine
+         */
+        EaseFunction.SineEaseOutIn = function (t) {
+            if (t < 0.5) {
+                return Math.sin(t * Math.PI) * .5;
+            }
+            return Math.sin((t - 1) * Math.PI) * .5 + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 2 power curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 2 次方曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuadEaseIn = function (t) {
+            return t * t;
+        };
+        /**
+         * @language en_US
+         * x to the 2 power curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 2 次方曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuadEaseOut = function (t) {
+            return -(t - 1) * (t - 1) + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 2 power curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 2 次方曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuadEaseInOut = function (t) {
+            if (t < .5) {
+                return t * t * 2;
+            }
+            return -(t - 1) * (t - 1) * 2 + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 2 power curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 2 次方曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuadEaseOutIn = function (t) {
+            var s = (t - .5) * (t - .5) * 2;
+            if (t < .5) {
+                return .5 - s;
+            }
+            return .5 + s;
+        };
+        /**
+         * @language en_US
+         * x to the third 3 curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CubicEaseIn = function (t) {
+            return t * t * t;
+        };
+        /**
+         * @language en_US
+         * x to the third 3 curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CubicEaseOut = function (t) {
+            return (t - 1) * (t - 1) * (t - 1) + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 3 power curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CubicEaseInOut = function (t) {
+            if (t < .5) {
+                return t * t * t * 4;
+            }
+            return (t - 1) * (t - 1) * (t - 1) * 4 + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 3 power curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CubicEaseOutIn = function (t) {
+            return (t - .5) * (t - .5) * (t - .5) * 4 + .5;
+        };
+        /**
+         * @language en_US
+         * x to the 4 power curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 4 次方曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuartEaseIn = function (t) {
+            return t * t * t * t;
+        };
+        /**
+         * @language en_US
+         * x to the 4 power curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 4 次方曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuartEaseOut = function (t) {
+            var a = (t - 1);
+            return -a * a * a * a + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 4 power curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 4 次方曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuartEaseInOut = function (t) {
+            if (t < .5) {
+                return t * t * t * t * 8;
+            }
+            var a = (t - 1);
+            return -a * a * a * a * 8 + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 4 power curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 4 次方曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuartEaseOutIn = function (t) {
+            var s = (t - .5) * (t - .5) * (t - .5) * (t - .5) * 8;
+            if (t < .5) {
+                return .5 - s;
+            }
+            return .5 + s;
+        };
+        /**
+         * @language en_US
+         * x to the 5 power curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 5 次方曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuintEaseIn = function (t) {
+            return t * t * t * t * t;
+        };
+        /**
+         * @language en_US
+         * x to the 5 power curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 5 次方曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuintEaseOut = function (t) {
+            var a = t - 1;
+            return a * a * a * a * a + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 5 power curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 5 次方曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuintEaseInOut = function (t) {
+            if (t < .5) {
+                return t * t * t * t * t * 16;
+            }
+            var a = t - 1;
+            return a * a * a * a * a * 16 + 1;
+        };
+        /**
+         * @language en_US
+         * x to the 5 power curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 5 次方曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.QuintEaseOutIn = function (t) {
+            var a = t - .5;
+            return a * a * a * a * a * 16 + 0.5;
+        };
+        /**
+         * @language en_US
+         * Exponential curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ExpoEaseIn = function (t) {
+            return Math.pow(2, 10 * (t - 1));
+        };
+        /**
+         * @language en_US
+         * Exponential curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ExpoEaseOut = function (t) {
+            return -Math.pow(2, -10 * t) + 1;
+        };
+        /**
+         * @language en_US
+         * Exponential curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ExpoEaseInOut = function (t) {
+            if (t < .5) {
+                return Math.pow(2, 10 * (t * 2 - 1)) * .5;
+            }
+            return -Math.pow(2, -10 * (t - .5) * 2) * .5 + 1.00048828125;
+        };
+        /**
+         * @language en_US
+         * Exponential curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ExpoEaseOutIn = function (t) {
+            if (t < .5) {
+                return -Math.pow(2, -20 * t) * .5 + .5;
+            }
+            return Math.pow(2, 10 * ((t - .5) * 2 - 1)) * .5 + .5;
+        };
+        /**
+         * @language en_US
+         * Circle curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CircEaseIn = function (t) {
+            return 1 - Math.sqrt(1 - t * t);
+        };
+        /**
+         * @language en_US
+         * Circle curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CircEaseOut = function (t) {
+            return Math.sqrt(1 - (1 - t) * (1 - t));
+        };
+        /**
+         * @language en_US
+         * Circle curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CircEaseInOut = function (t) {
+            if (t < .5) {
+                return .5 - Math.sqrt(.25 - t * t);
+            }
+            return Math.sqrt(.25 - (1 - t) * (1 - t)) + .5;
+        };
+        /**
+         * @language en_US
+         * Circle curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.CircEaseOutIn = function (t) {
+            var s = Math.sqrt(.25 - (.5 - t) * (.5 - t));
+            if (t < .5) {
+                return s;
+            }
+            return 1 - s;
+        };
+        /**
+         * @language en_US
+         * 3 power curve x of Rebound curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方回弹曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BackEaseIn = function (t) {
+            return 2.70158 * t * t * t - 1.70158 * t * t;
+        };
+        /**
+         * @language en_US
+         * 3 power curve x of Rebound curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方回弹曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BackEaseOut = function (t) {
+            var a = t - 1;
+            return 2.70158 * a * a * a + 1.70158 * a * a + 1;
+        };
+        /**
+         * @language en_US
+         * 3 power curve x of Rebound curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方回弹曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BackEaseInOut = function (t) {
+            var a = t - 1;
+            if (t < .5) {
+                return 10.80632 * t * t * t - 3.40316 * t * t;
+            }
+            return 10.80632 * a * a * a + 3.40316 * a * a + 1;
+        };
+        /**
+         * @language en_US
+         * 3 power curve x of Rebound curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方回弹曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BackEaseOutIn = function (t) {
+            var a = t - .5;
+            if (t < .5) {
+                return 10.80632 * a * a * a + 3.40316 * a * a + .5;
+            }
+            return 10.80632 * a * a * a - 3.40316 * a * a + .5;
+        };
+        /**
+         * @language en_US
+         * Exponential Decay curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数衰减曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ElasticEaseIn = function (t) {
+            if (t == 0 || t == 1)
+                return t;
+            return -(Math.pow(2, 10 * (t - 1)) * Math.sin((t - 1.075) * 2 * Math.PI / .3));
+        };
+        /**
+         * @language en_US
+         * Exponential Decay curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数衰减曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ElasticEaseOut = function (t) {
+            if (t == 0 || t == .5 || t == 1)
+                return t;
+            return (Math.pow(2, 10 * -t) * Math.sin((-t - .075) * 2 * Math.PI / .3)) + 1;
+        };
+        /**
+         * @language en_US
+         * Exponential Decay curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数衰减曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ElasticEaseInOut = function (t) {
+            if (t == 0 || t == .5 || t == 1)
+                return t;
+            if (t < .5) {
+                return -(Math.pow(2, 10 * t - 10) * Math.sin((t * 2 - 2.15) * Math.PI / .3));
+            }
+            return (Math.pow(2, 10 - 20 * t) * Math.sin((-4 * t + 1.85) * Math.PI / .3)) * .5 + 1;
+        };
+        /**
+         * @language en_US
+         * Exponential Decay curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数衰减曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.ElasticEaseOutIn = function (t) {
+            if (t == 0 || t == .5 || t == 1)
+                return t;
+            if (t < .5) {
+                return (Math.pow(2, -20 * t) * Math.sin((-t * 4 - .15) * Math.PI / .3)) * .5 + .5;
+            }
+            return -(Math.pow(2, 20 * (t - 1)) * Math.sin((t * 4 - 4.15) * Math.PI / .3)) * .5 + .5;
+        };
+        EaseFunction.bounceEaseIn = function (t) {
+            return 1 - EaseFunction.bounceEaseOut(1 - t);
+        };
+        EaseFunction.bounceEaseOut = function (t) {
+            var s;
+            var a = 7.5625;
+            var b = 2.75;
+            if (t < (1 / 2.75)) {
+                s = a * t * t;
+            }
+            else if (t < (2 / b)) {
+                s = (a * (t - (1.5 / b)) * (t - (1.5 / b)) + .75);
+            }
+            else if (t < (2.5 / b)) {
+                s = (a * (t - (2.25 / b)) * (t - (2.25 / b)) + .9375);
+            }
+            else {
+                s = (a * (t - (2.625 / b)) * (t - (2.625 / b)) + .984375);
+            }
+            return s;
+        };
+        /**
+         * @language en_US
+         * Circle curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BounceEaseInOut = function (t) {
+            if (t < .5)
+                return EaseFunction.bounceEaseIn(t * 2) * .5;
+            else
+                return EaseFunction.bounceEaseOut(t * 2 - 1) * .5 + .5;
+        };
+        /**
+         * @language en_US
+         * Circle curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BounceEaseOutIn = function (t) {
+            if (t < .5)
+                return EaseFunction.bounceEaseOut(t * 2) * .5;
+            else
+                return EaseFunction.bounceEaseIn(t * 2 - 1) * .5 + .5;
+        };
+        /**
+         * @language en_US
+         * Circle curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BounceEaseIn = EaseFunction.bounceEaseIn;
+        /**
+         * @language en_US
+         * Circle curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        EaseFunction.BounceEaseOut = EaseFunction.bounceEaseOut;
+        return EaseFunction;
+    })();
+    lark.EaseFunction = EaseFunction;
+    lark.registerClass(EaseFunction,"lark.EaseFunction");
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    var sys;
+    (function (sys) {
+        /**
+         * @private
+         * HighResolutionMode 类为高分辨率屏幕显示模式提供可选值。
+         * 可选值为<br/>
+         *  DEFAULT = "default" 使用设备的逻辑分辨率作为舞台的尺寸和渲染分辨率。
+         *  RETINA = "retina"   使用设备的逻辑分辨率作为舞台的尺寸，但使用高清分辨率来渲染。
+         *  DEVICE = "device"   使用设备的物理分辨率作为舞台的尺寸
+         */
+        var HighResolutionMode = (function () {
+            function HighResolutionMode() {
+            }
+            var d = __define,c=HighResolutionMode;p=c.prototype;
+            /**
+             * @private
+             * 使用设备提供的逻辑分辨率作为舞台的尺寸和渲染分辨率。
+             * 这种模式下，相同字号的文本在不同DPI的屏幕上具有相同的视觉尺寸，但在高DPI屏幕下文字会模糊。
+             */
+            HighResolutionMode.DEFAULT = "default";
+            /**
+             * @private
+             * 使用设备提供的逻辑分辨率作为舞台的尺寸，但使用高清分辨率来渲染。
+             * 这种模式下，相同字号的文字在不同DPI的屏幕上具有相同的视觉尺寸，在高DPI屏幕下文字会有更好的渲染效果。
+             */
+            HighResolutionMode.RETINA = "retina";
+            /**
+             * @private
+             * 使用设备的物理分辨率作为舞台的尺寸
+             * 这种模式下，相同字号的文字在不同DPI的屏幕上视觉尺寸会不同，在高DPI屏幕下文字看起来会比较小。
+             */
+            HighResolutionMode.DEVICE = "device";
+            return HighResolutionMode;
+        })();
+        sys.HighResolutionMode = HighResolutionMode;
+        lark.registerClass(HighResolutionMode,"lark.sys.HighResolutionMode");
+    })(sys = lark.sys || (lark.sys = {}));
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * Creates a ImageLoader object
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 创建一个 ImageLoader 实例
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    lark.ImageLoader;
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1185,77 +2186,12 @@ var lark;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
     /**
-     * @language en_US
-     * Creates a ImageLoader object
-     * @version Lark 1.0
-     * @platform Web,Native
+     * @copy lark.Sound
      */
-    /**
-     * @language zh_CN
-     * 创建一个 ImageLoader 实例
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    lark.ImageLoader;
+    lark.Sound;
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1362,13 +2298,6 @@ var lark;
 //  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 //////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @copy lark.Sound
-     */
-    lark.Sound;
-})(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -1439,113 +2368,6 @@ var lark;
         return superClass;
     }
     lark.getQualifiedSuperclassName = getQualifiedSuperclassName;
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * Indicates whether an object is a instance of the class or interface specified as the parameter.This method is similar
-     * to the instanceOf operator which indicate whether an object is a instance of the specific class,besides, it can indicate
-     * whether an object is a instance of the specific interface.
-     * @param instance the instance to be checked.
-     * @param typeName the string value representing a specific class or interface.
-     * @returns A value of true if the object is a instance of the class or interface specified as the parameter.
-     * @example
-     * <pre>
-     *     var instance = new lark.Sprite();
-     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
-     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
-     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
-     * </pre>
-     * @see lark.registerClass()
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字作用类似，但除了判断类定义也能判断接口的实现。
-     * @param instance 要判断的实例。
-     * @param typeName 类或接口的完全名称.
-     * @returns 返回true表示当前对象是指定类或接口的实例。
-     * @example
-     * <pre>
-     *     var instance = new lark.Sprite();
-     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
-     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
-     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
-     * </pre>
-     * @see lark.registerClass()
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function is(instance, typeName) {
-        if (!instance || typeof instance != "object") {
-            return false;
-        }
-        var prototype = Object.getPrototypeOf(instance);
-        var types = prototype ? prototype.__types__ : null;
-        if (!types) {
-            return false;
-        }
-        return (types.indexOf(typeName) !== -1);
-    }
-    lark.is = is;
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1755,6 +2577,57 @@ var lark;
 (function (lark) {
     /**
      * @language en_US
+     * Creates a HttpRequest object.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 创建一个 HttpRequest 实例。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    lark.HttpRequest;
+})(lark || (lark = {}));
+var lark;
+(function (lark) {
+    /**
+     * @copy lark.Geolocation
+     */
+    lark.Geolocation;
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
      * The HttpResponseType class provides values that specify how downloaded data is received.
      * @see lark.HttpRequest
      * @version Lark 1.0
@@ -1802,305 +2675,561 @@ var lark;
     lark.HttpResponseType = HttpResponseType;
     lark.registerClass(HttpResponseType,"lark.HttpResponseType");
 })(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
     /**
-     * @private
-     */
-    lark.$START_TIME = 0;
-    /**
      * @language en_US
-     * Used to compute relative time.this method returns the number of milliseconds since the Lark framework was initialized
-     * @returns The number of milliseconds since the Lark framework was initialized
-     * @example
-     * This example shows getting and printing the number of milliseconds since the Lark framework was initialized
-     * <pre>
-     *  var duration = lark.getTimer();
-     *  console.log("duration: " + duration);
-     * </pre>
+     * Ease defines some common easing function.
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 用于计算相对时间。此方法返回自启动 Lark 框架以来经过的毫秒数。
-     * @returns 启动 Lark 框架以来经过的毫秒数。
-     * @example
-     * 获取并打印自启动 Lark 框架以来经过的毫秒数。
-     * <pre>
-     *  var duration = lark.getTimer();
-     *  console.log("duration: " + duration);
-     * </pre>
+     * Ease 定义了一些常用的缓动函数。
      * @version Lark 1.0
      * @platform Web,Native
      */
-    function getTimer() {
-        return Date.now() - lark.$START_TIME;
-    }
-    lark.getTimer = getTimer;
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * Creates a HttpRequest object.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 创建一个 HttpRequest 实例。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    lark.HttpRequest;
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    var sys;
-    (function (sys) {
-        /**
-         * @private
-         */
-        function unionArea(r1, r2) {
-            var minX = r1.minX < r2.minX ? r1.minX : r2.minX;
-            var minY = r1.minY < r2.minY ? r1.minY : r2.minY;
-            var maxX = r1.maxX > r2.maxX ? r1.maxX : r2.maxX;
-            var maxY = r1.maxY > r2.maxY ? r1.maxY : r2.maxY;
-            return (maxX - minX) * (maxY - minY);
+    var Ease = (function () {
+        function Ease() {
         }
+        var d = __define,c=Ease;p=c.prototype;
         /**
-         * @private
-         * 脏矩形计算工具类
+         * @language en_US
+         * Uniform type of easing.
+         * @version Lark 1.0
+         * @platform Web,Native
          */
-        var DirtyRegion = (function () {
-            function DirtyRegion() {
-                /**
-                 * @private
-                 */
-                this.dirtyList = [];
-                /**
-                 * @private
-                 */
-                this.hasClipRect = false;
-                /**
-                 * @private
-                 */
-                this.clipWidth = 0;
-                /**
-                 * @private
-                 */
-                this.clipHeight = 0;
-                /**
-                 * @private
-                 */
-                this.clipArea = 0;
-                /**
-                 * @private
-                 */
-                this.clipRectChanged = false;
-            }
-            var d = __define,c=DirtyRegion;p=c.prototype;
-            /**
-             * @private
-             * 设置剪裁边界，超过边界的节点将跳过绘制。
-             */
-            p.setClipRect = function (width, height) {
-                this.hasClipRect = true;
-                this.clipRectChanged = true;
-                this.clipWidth = Math.ceil(width);
-                this.clipHeight = Math.ceil(height);
-                this.clipArea = this.clipWidth * this.clipHeight;
-            };
-            /**
-             * @private
-             * 添加一个脏矩形区域，返回是否添加成功，当矩形为空或者在屏幕之外时返回false。
-             */
-            p.addRegion = function (target) {
-                var minX = target.minX, minY = target.minY, maxX = target.maxX, maxY = target.maxY;
-                if (this.hasClipRect) {
-                    if (minX < 0) {
-                        minX = 0;
-                    }
-                    if (minY < 0) {
-                        minY = 0;
-                    }
-                    if (maxX > this.clipWidth) {
-                        maxX = this.clipWidth;
-                    }
-                    if (maxY > this.clipHeight) {
-                        maxY = this.clipHeight;
-                    }
-                }
-                if (minX >= maxX || minY >= maxY) {
-                    return false;
-                }
-                if (this.clipRectChanged) {
-                    return true;
-                }
-                var dirtyList = this.dirtyList;
-                var region = sys.Region.create();
-                dirtyList.push(region.setTo(minX, minY, maxX, maxY));
-                this.mergeDirtyList(dirtyList);
-                return true;
-            };
-            /**
-             * @private
-             */
-            p.clear = function () {
-                var dirtyList = this.dirtyList;
-                var length = dirtyList.length;
-                for (var i = 0; i < length; i++) {
-                    sys.Region.release(dirtyList[i]);
-                }
-                dirtyList.length = 0;
-            };
-            /**
-             * @private
-             * 获取最终的脏矩形列表
-             */
-            p.getDirtyRegions = function () {
-                var dirtyList = this.dirtyList;
-                if (this.clipRectChanged) {
-                    this.clipRectChanged = false;
-                    this.clear();
-                    var region = sys.Region.create();
-                    dirtyList.push(region.setTo(0, 0, this.clipWidth, this.clipHeight));
-                }
-                else {
-                    while (this.mergeDirtyList(dirtyList)) {
-                    }
-                }
-                return this.dirtyList;
-            };
-            /**
-             * @private
-             * 合并脏矩形列表
-             */
-            p.mergeDirtyList = function (dirtyList) {
-                var length = dirtyList.length;
-                if (length < 2) {
-                    return false;
-                }
-                var hasClipRect = this.hasClipRect;
-                var bestDelta = length > 3 ? Number.POSITIVE_INFINITY : 0;
-                var mergeA = 0;
-                var mergeB = 0;
-                var totalArea = 0;
-                for (var i = 0; i < length - 1; i++) {
-                    var regionA = dirtyList[i];
-                    hasClipRect && (totalArea += regionA.area);
-                    for (var j = i + 1; j < length; j++) {
-                        var regionB = dirtyList[j];
-                        var delta = unionArea(regionA, regionB) - regionA.area - regionB.area;
-                        if (bestDelta > delta) {
-                            mergeA = i;
-                            mergeB = j;
-                            bestDelta = delta;
-                        }
-                    }
-                }
-                if (hasClipRect && (totalArea / this.clipArea) > 0.95) {
-                    this.clipRectChanged = true;
-                }
-                if (mergeA != mergeB) {
-                    var region = dirtyList[mergeB];
-                    dirtyList[mergeA].union(region);
-                    sys.Region.release(region);
-                    dirtyList.splice(mergeB, 1);
-                    return true;
-                }
-                return false;
-            };
-            return DirtyRegion;
-        })();
-        sys.DirtyRegion = DirtyRegion;
-        lark.registerClass(DirtyRegion,"lark.sys.DirtyRegion");
-    })(sys = lark.sys || (lark.sys = {}));
+        /**
+         * @language zh_CN
+         * 匀速缓动类型。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.None = "None";
+        /**
+         * @language en_US
+         * sine curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * sin 曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.SineEaseIn = "SineEaseIn";
+        /**
+         * @language en_US
+         * sine curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * sin 曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.SineEaseOut = "SineEaseOut";
+        /**
+         * @language en_US
+         * sine curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * sin 曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,NativeEaseInOutSine
+         */
+        Ease.SineEaseInOut = "SineEaseInOut";
+        /**
+         * @language en_US
+         * sine curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * sin 曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,NativeEaseInOutSine
+         */
+        Ease.SineEaseOutIn = "SineEaseOutIn";
+        /**
+         * @language en_US
+         * x to the 2 power curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 2 次方曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.QuadEaseIn = "QuadEaseIn";
+        /**
+         * @language en_US
+         * x to the 2 power curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 2 次方曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.QuadEaseOut = "QuadEaseOut";
+        /**
+         * @language en_US
+         * x to the 2 power curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 2 次方曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.QuadEaseInOut = "QuadEaseInOut";
+        /**
+         * @language en_US
+         * x to the 2 power curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 2 次方曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.QuadEaseOutIn = "QuadEaseOutIn";
+        /**
+         * @language en_US
+         * x to the third 3 curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.CubicEaseIn = "CubicEaseIn";
+        /**
+         * @language en_US
+         * x to the third 3 curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.CubicEaseOut = "CubicEaseOut";
+        /**
+         * @language en_US
+         * x to the 3 power curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.CubicEaseInOut = "CubicEaseInOut";
+        /**
+         * @language en_US
+         * x to the 3 power curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.CubicEaseOutIn = "CubicEaseOutIn";
+        /**
+         * @language en_US
+         * x to the 4 power curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 4 次方曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.QuartEaseIn = "QuartEaseIn";
+        /**
+         * @language en_US
+         * x to the 4 power curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 4 次方曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.QuartEaseOut = "QuartEaseOut";
+        /**
+         * @language en_US
+         * x to the 4 power curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 4 次方曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.QuartEaseInOut = "QuartEaseInOut";
+        /**
+         * @language en_US
+         * x to the 4 power curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 4 次方曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.QuartEaseOutIn = "QuartEaseOutIn";
+        /**
+         * @language en_US
+         * x to the 5 power curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 5 次方曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.QuintEaseIn = "QuintEaseIn";
+        /**
+         * @language en_US
+         * x to the 5 power curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 5 次方曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.QuintEaseOut = "QuintEaseOut";
+        /**
+         * @language en_US
+         * x to the 5 power curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 5 次方曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.QuintEaseInOut = "QuintEaseInOut";
+        /**
+         * @language en_US
+         * x to the 5 power curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 5 次方曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.QuintEaseOutIn = "QuintEaseOutIn";
+        /**
+         * @language en_US
+         * Exponential curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.ExpoEaseIn = "ExpoEaseIn";
+        /**
+         * @language en_US
+         * Exponential curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.ExpoEaseOut = "ExpoEaseOut";
+        /**
+         * @language en_US
+         * Exponential curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.ExpoEaseInOut = "ExpoEaseInOut";
+        /**
+         * @language en_US
+         * Exponential curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.ExpoEaseOutIn = "ExpoEaseOutIn";
+        /**
+         * @language en_US
+         * Circle curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.CircEaseIn = "CircEaseIn";
+        /**
+         * @language en_US
+         * Circle curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.CircEaseOut = "CircEaseOut";
+        /**
+         * @language en_US
+         * Circle curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.CircEaseInOut = "CircEaseInOut";
+        /**
+         * @language en_US
+         * Circle curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.CircEaseOutIn = "CircEaseOutIn";
+        /**
+         * @language en_US
+         * 3 power curve x of Rebound curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方回弹曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.BackEaseIn = "BackEaseIn";
+        /**
+         * @language en_US
+         * 3 power curve x of Rebound curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方回弹曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.BackEaseOut = "BackEaseOut";
+        /**
+         * @language en_US
+         * 3 power curve x of Rebound curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方回弹曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.BackEaseInOut = "BackEaseInOut";
+        /**
+         * @language en_US
+         * 3 power curve x of Rebound curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * x 的 3 次方回弹曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.BackEaseOutIn = "BackEaseOutIn";
+        /**
+         * @language en_US
+         * Exponential Decay curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数衰减曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.ElasticEaseIn = "ElasticEaseIn";
+        /**
+         * @language en_US
+         * Exponential Decay curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数衰减曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.ElasticEaseOut = "ElasticEaseOut";
+        /**
+         * @language en_US
+         * Exponential Decay curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数衰减曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.ElasticEaseInOut = "ElasticEaseInOut";
+        /**
+         * @language en_US
+         * Exponential Decay curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 指数衰减曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.ElasticEaseOutIn = "ElasticEaseOutIn";
+        /**
+         * @language en_US
+         * Circle curve fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.BounceEaseIn = "BounceEaseIn";
+        /**
+         * @language en_US
+         * Circle curve fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.BounceEaseOut = "BounceEaseOut";
+        /**
+         * @language en_US
+         * Circle curve fade in and fade out.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡入淡出。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.BounceEaseInOut = "BounceEaseInOut";
+        /**
+         * @language en_US
+         * Circle curve fade out and fade in.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 圆形曲线淡出淡入。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Ease.BounceEaseOutIn = "BounceEaseOutIn";
+        return Ease;
+    })();
+    lark.Ease = Ease;
+    lark.registerClass(Ease,"lark.Ease");
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -2171,6 +3300,71 @@ var lark;
         }
         sys.tr = tr;
     })(sys = lark.sys || (lark.sys = {}));
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @private
+     */
+    lark.$START_TIME = 0;
+    /**
+     * @language en_US
+     * Used to compute relative time.this method returns the number of milliseconds since the Lark framework was initialized
+     * @returns The number of milliseconds since the Lark framework was initialized
+     * @example
+     * This example shows getting and printing the number of milliseconds since the Lark framework was initialized
+     * <pre>
+     *  var duration = lark.getTimer();
+     *  console.log("duration: " + duration);
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 用于计算相对时间。此方法返回自启动 Lark 框架以来经过的毫秒数。
+     * @returns 启动 Lark 框架以来经过的毫秒数。
+     * @example
+     * 获取并打印自启动 Lark 框架以来经过的毫秒数。
+     * <pre>
+     *  var duration = lark.getTimer();
+     *  console.log("duration: " + duration);
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function getTimer() {
+        return Date.now() - lark.$START_TIME;
+    }
+    lark.getTimer = getTimer;
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -2464,66 +3658,167 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
-    /**
-     * @private
-     */
-    var getDefinitionByNameCache = {};
-    /**
-     * @language en_US
-     * Returns a reference to the class object of the class specified by the name parameter.
-     * @param name The name of a class.
-     * @example
-     * <pre>
-     *  var clazz:any = lark.getDefinitionByName("lark.Shape"); //get definition of class lark.Shape
-     *  var shape:lark.Shape = new clazz();
-     *  shape.graphics.fillStyle = "#ff0000";
-     *  shape.graphics.fillRect(0,0,100,100);
-     * </pre>
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 返回 name 参数指定的类的类对象引用。
-     * @param name 类的名称。
-     * @example
-     * <pre>
-     *  var clazz:any = lark.getDefinitionByName("lark.Shape"); //获取lark.Shape类定义
-     *  var shape:lark.Shape = new clazz();
-     *  shape.graphics.fillStyle = "#ff0000";
-     *  shape.graphics.fillRect(0,0,100,100);
-     * </pre>
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function getDefinitionByName(name) {
-        if (!name)
-            return null;
-        var definition = getDefinitionByNameCache[name];
-        if (definition) {
-            return definition;
+    var sys;
+    (function (sys) {
+        /**
+         * @private
+         */
+        function unionArea(r1, r2) {
+            var minX = r1.minX < r2.minX ? r1.minX : r2.minX;
+            var minY = r1.minY < r2.minY ? r1.minY : r2.minY;
+            var maxX = r1.maxX > r2.maxX ? r1.maxX : r2.maxX;
+            var maxY = r1.maxY > r2.maxY ? r1.maxY : r2.maxY;
+            return (maxX - minX) * (maxY - minY);
         }
-        var paths = name.split(".");
-        var length = paths.length;
-        definition = __global;
-        for (var i = 0; i < length; i++) {
-            var path = paths[i];
-            definition = definition[path];
-            if (!definition) {
-                return null;
+        /**
+         * @private
+         * 脏矩形计算工具类
+         */
+        var DirtyRegion = (function () {
+            function DirtyRegion() {
+                /**
+                 * @private
+                 */
+                this.dirtyList = [];
+                /**
+                 * @private
+                 */
+                this.hasClipRect = false;
+                /**
+                 * @private
+                 */
+                this.clipWidth = 0;
+                /**
+                 * @private
+                 */
+                this.clipHeight = 0;
+                /**
+                 * @private
+                 */
+                this.clipArea = 0;
+                /**
+                 * @private
+                 */
+                this.clipRectChanged = false;
             }
-        }
-        getDefinitionByNameCache[name] = definition;
-        return definition;
-    }
-    lark.getDefinitionByName = getDefinitionByName;
-    if (DEBUG) {
-        lark["cleanCache"] = function () {
-            getDefinitionByNameCache = {};
-        };
-    }
+            var d = __define,c=DirtyRegion;p=c.prototype;
+            /**
+             * @private
+             * 设置剪裁边界，超过边界的节点将跳过绘制。
+             */
+            p.setClipRect = function (width, height) {
+                this.hasClipRect = true;
+                this.clipRectChanged = true;
+                this.clipWidth = Math.ceil(width);
+                this.clipHeight = Math.ceil(height);
+                this.clipArea = this.clipWidth * this.clipHeight;
+            };
+            /**
+             * @private
+             * 添加一个脏矩形区域，返回是否添加成功，当矩形为空或者在屏幕之外时返回false。
+             */
+            p.addRegion = function (target) {
+                var minX = target.minX, minY = target.minY, maxX = target.maxX, maxY = target.maxY;
+                if (this.hasClipRect) {
+                    if (minX < 0) {
+                        minX = 0;
+                    }
+                    if (minY < 0) {
+                        minY = 0;
+                    }
+                    if (maxX > this.clipWidth) {
+                        maxX = this.clipWidth;
+                    }
+                    if (maxY > this.clipHeight) {
+                        maxY = this.clipHeight;
+                    }
+                }
+                if (minX >= maxX || minY >= maxY) {
+                    return false;
+                }
+                if (this.clipRectChanged) {
+                    return true;
+                }
+                var dirtyList = this.dirtyList;
+                var region = sys.Region.create();
+                dirtyList.push(region.setTo(minX, minY, maxX, maxY));
+                this.mergeDirtyList(dirtyList);
+                return true;
+            };
+            /**
+             * @private
+             */
+            p.clear = function () {
+                var dirtyList = this.dirtyList;
+                var length = dirtyList.length;
+                for (var i = 0; i < length; i++) {
+                    sys.Region.release(dirtyList[i]);
+                }
+                dirtyList.length = 0;
+            };
+            /**
+             * @private
+             * 获取最终的脏矩形列表
+             */
+            p.getDirtyRegions = function () {
+                var dirtyList = this.dirtyList;
+                if (this.clipRectChanged) {
+                    this.clipRectChanged = false;
+                    this.clear();
+                    var region = sys.Region.create();
+                    dirtyList.push(region.setTo(0, 0, this.clipWidth, this.clipHeight));
+                }
+                else {
+                    while (this.mergeDirtyList(dirtyList)) {
+                    }
+                }
+                return this.dirtyList;
+            };
+            /**
+             * @private
+             * 合并脏矩形列表
+             */
+            p.mergeDirtyList = function (dirtyList) {
+                var length = dirtyList.length;
+                if (length < 2) {
+                    return false;
+                }
+                var hasClipRect = this.hasClipRect;
+                var bestDelta = length > 3 ? Number.POSITIVE_INFINITY : 0;
+                var mergeA = 0;
+                var mergeB = 0;
+                var totalArea = 0;
+                for (var i = 0; i < length - 1; i++) {
+                    var regionA = dirtyList[i];
+                    hasClipRect && (totalArea += regionA.area);
+                    for (var j = i + 1; j < length; j++) {
+                        var regionB = dirtyList[j];
+                        var delta = unionArea(regionA, regionB) - regionA.area - regionB.area;
+                        if (bestDelta > delta) {
+                            mergeA = i;
+                            mergeB = j;
+                            bestDelta = delta;
+                        }
+                    }
+                }
+                if (hasClipRect && (totalArea / this.clipArea) > 0.95) {
+                    this.clipRectChanged = true;
+                }
+                if (mergeA != mergeB) {
+                    var region = dirtyList[mergeB];
+                    dirtyList[mergeA].union(region);
+                    sys.Region.release(region);
+                    dirtyList.splice(mergeB, 1);
+                    return true;
+                }
+                return false;
+            };
+            return DirtyRegion;
+        })();
+        sys.DirtyRegion = DirtyRegion;
+        lark.registerClass(DirtyRegion,"lark.sys.DirtyRegion");
+    })(sys = lark.sys || (lark.sys = {}));
 })(lark || (lark = {}));
-var __global = __global || this;
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -2709,7 +4004,7 @@ var lark;
         function Capabilities() {
         }
         var d = __define,c=Capabilities;p=c.prototype;
-        d(Capabilities, "language",
+        d(Capabilities, "language"
             /**
              * @language en_US
              * Specifies the language code of the system on which the content is running. The language is specified as a lowercase
@@ -2741,11 +4036,11 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return Capabilities.$language;
-            },undefined
+            }
         );
-        d(Capabilities, "isMobile",
+        d(Capabilities, "isMobile"
             /**
              * @language en_US
              * Specifies whether the system is running in a mobile device.(such as a mobile phone or tablet)
@@ -2758,11 +4053,11 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return Capabilities.$isMobile;
-            },undefined
+            }
         );
-        d(Capabilities, "os",
+        d(Capabilities, "os"
             /**
              * @language en_US
              * Specifies the current operating system. The os property can return the following strings:
@@ -2791,11 +4086,11 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return Capabilities.$os;
-            },undefined
+            }
         );
-        d(Capabilities, "hasGeolocation",
+        d(Capabilities, "hasGeolocation"
             /**
              * @language en_US
              * Specifies whether the system supports the geolocation services
@@ -2808,11 +4103,11 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return Capabilities.$hasGeolocation;
-            },undefined
+            }
         );
-        d(Capabilities, "hasOrientation",
+        d(Capabilities, "hasOrientation"
             /**
              * @language en_US
              * Specifies whether the system supports detecting the device orientation.
@@ -2825,11 +4120,11 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return Capabilities.$hasOrientation;
-            },undefined
+            }
         );
-        d(Capabilities, "hasMotion",
+        d(Capabilities, "hasMotion"
             /**
              * @language en_US
              * Specifies whether the system supports the motion Sensor
@@ -2842,9 +4137,28 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return Capabilities.$hasMotion;
-            },undefined
+            }
+        );
+        d(Capabilities, "devicePixelRatio"
+            /**
+             * @language en_US
+             * The devicePixelRatio read-only property returns the ratio
+             * of the (vertical) size of one physical pixel on the current display
+             * device to the size of one logical pixel.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * devicePixelRatio 反应设备物理分辨率与逻辑分辨率的比值
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return Capabilities.$devicePixelRatio;
+            }
         );
         /**
          * @private
@@ -2867,6 +4181,96 @@ var lark;
         lark.$markReadOnly(Capabilities, "os", true);
     }
 })(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @private
+     */
+    var getDefinitionByNameCache = {};
+    /**
+     * @language en_US
+     * Returns a reference to the class object of the class specified by the name parameter.
+     * @param name The name of a class.
+     * @example
+     * <pre>
+     *  var clazz:any = lark.getDefinitionByName("lark.Shape"); //get definition of class lark.Shape
+     *  var shape:lark.Shape = new clazz();
+     *  shape.graphics.fillStyle = "#ff0000";
+     *  shape.graphics.fillRect(0,0,100,100);
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 返回 name 参数指定的类的类对象引用。
+     * @param name 类的名称。
+     * @example
+     * <pre>
+     *  var clazz:any = lark.getDefinitionByName("lark.Shape"); //获取lark.Shape类定义
+     *  var shape:lark.Shape = new clazz();
+     *  shape.graphics.fillStyle = "#ff0000";
+     *  shape.graphics.fillRect(0,0,100,100);
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function getDefinitionByName(name) {
+        if (!name)
+            return null;
+        var definition = getDefinitionByNameCache[name];
+        if (definition) {
+            return definition;
+        }
+        var paths = name.split(".");
+        var length = paths.length;
+        definition = __global;
+        for (var i = 0; i < length; i++) {
+            var path = paths[i];
+            definition = definition[path];
+            if (!definition) {
+                return null;
+            }
+        }
+        getDefinitionByNameCache[name] = definition;
+        return definition;
+    }
+    lark.getDefinitionByName = getDefinitionByName;
+    if (DEBUG) {
+        lark["cleanCache"] = function () {
+            getDefinitionByNameCache = {};
+        };
+    }
+})(lark || (lark = {}));
+var __global = __global || this;
 //////////////////////////////////////////////////////////////////////////////////////
 //
 //  Copyright (c) 2014-2015, Egret Technology Inc.
@@ -3161,25 +4565,65 @@ if (DEBUG) {
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
-    lark.$locale_strings = lark.$locale_strings || {};
-    lark.$locale_strings["en_US"] = lark.$locale_strings["en_US"] || {};
-    var locale_strings = lark.$locale_strings["en_US"];
-    locale_strings[1001] = "Could not find Lark entry class: {0}。";
-    locale_strings[1002] = "Lark entry class '{0}' must inherit from lark.DisplayObject.";
-    locale_strings[1003] = "Parameter {0} must be non-null.";
-    locale_strings[1004] = "An object cannot be added as a child to one of it's children (or children's children, etc.).";
-    locale_strings[1005] = "An object cannot be added as a child of itself.";
-    locale_strings[1006] = "The supplied DisplayObject must be a child of the caller.";
-    locale_strings[1007] = "An index specified for a parameter was out of range.";
-    locale_strings[1008] = "Instantiate singleton error，singleton class {0} can not create multiple instances.";
-    locale_strings[1009] = "The Stage class does not implement this property or method.";
-    locale_strings[1010] = "the property \"{1}\" of the class \"{0}\" is readonly";
-    locale_strings[1011] = "Stream Error. URL: {0}";
-    locale_strings[1012] = "The type of parameter {0} is wrong.";
-    locale_strings[3001] = "Please call the play method when the media is loaded";
-    locale_strings[3002] = "Please pass the URL of media you want to load";
-    locale_strings[3003] = "When you want to play video in fullscreen mode, please call the play method when the media is loaded";
-    locale_strings[3004] = "There is no location service on this device";
+    /**
+     * @private
+     * 哈希计数
+     */
+    lark.$hashCount = 1;
+    /**
+     * @language en_US
+     * The LarkObject class is the base class for all objects in the Lark framework.The LarkObject
+     * class includes a hashCode property, which is a unique identification number of the instance.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * Lark顶级对象。框架内所有对象的基类，为对象实例提供唯一的hashCode值。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var HashObject = (function () {
+        /**
+         * @language en_US
+         * Initializes a LarkObject
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 LarkObject 对象
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function HashObject() {
+            this.$hashCode = lark.$hashCount++;
+        }
+        var d = __define,c=HashObject;p=c.prototype;
+        d(p, "hashCode"
+            /**
+             * @language en_US
+             * a unique identification number assigned to this instance.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$hashCode;
+            }
+        );
+        return HashObject;
+    })();
+    lark.HashObject = HashObject;
+    lark.registerClass(HashObject,"lark.HashObject");
+    if (DEBUG) {
+        lark.$markReadOnly(HashObject, "hashCode");
+    }
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -3211,65 +4655,25 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
-    /**
-     * @private
-     * 哈希计数
-     */
-    lark.$hashCount = 1;
-    /**
-     * @language en_US
-     * The LarkObject class is the base class for all objects in the Lark framework.The LarkObject
-     * class includes a hashCode property, which is a unique identification number of the instance.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * Lark顶级对象。框架内所有对象的基类，为对象实例提供唯一的hashCode值。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var LarkObject = (function () {
-        /**
-         * @language en_US
-         * Initializes a LarkObject
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个 LarkObject 对象
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        function LarkObject() {
-            this.$hashCode = lark.$hashCount++;
-        }
-        var d = __define,c=LarkObject;p=c.prototype;
-        d(p, "hashCode",
-            /**
-             * @language en_US
-             * a unique identification number assigned to this instance.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 返回此对象唯一的哈希值,用于唯一确定一个对象。hashCode为大于等于1的整数。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$hashCode;
-            },undefined
-        );
-        return LarkObject;
-    })();
-    lark.LarkObject = LarkObject;
-    lark.registerClass(LarkObject,"lark.LarkObject");
-    if (DEBUG) {
-        lark.$markReadOnly(LarkObject, "hashCode");
-    }
+    lark.$locale_strings = lark.$locale_strings || {};
+    lark.$locale_strings["en_US"] = lark.$locale_strings["en_US"] || {};
+    var locale_strings = lark.$locale_strings["en_US"];
+    locale_strings[1001] = "Could not find Lark entry class: {0}。";
+    locale_strings[1002] = "Lark entry class '{0}' must inherit from lark.DisplayObject.";
+    locale_strings[1003] = "Parameter {0} must be non-null.";
+    locale_strings[1004] = "An object cannot be added as a child to one of it's children (or children's children, etc.).";
+    locale_strings[1005] = "An object cannot be added as a child of itself.";
+    locale_strings[1006] = "The supplied DisplayObject must be a child of the caller.";
+    locale_strings[1007] = "An index specified for a parameter was out of range.";
+    locale_strings[1008] = "Instantiate singleton error，singleton class {0} can not create multiple instances.";
+    locale_strings[1009] = "The Stage class does not implement this property or method.";
+    locale_strings[1010] = "the property \"{1}\" of the class \"{0}\" is readonly";
+    locale_strings[1011] = "Stream Error. URL: {0}";
+    locale_strings[1012] = "The type of parameter {0} is wrong.";
+    locale_strings[3001] = "Please call the play method when the media is loaded";
+    locale_strings[3002] = "Please pass the URL of media you want to load";
+    locale_strings[3003] = "When you want to play video in fullscreen mode, please call the play method when the media is loaded";
+    locale_strings[3004] = "There is no location service on this device";
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -3381,7 +4785,7 @@ var lark;
                 };
             };
             return ScreenAdapter;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         sys.ScreenAdapter = ScreenAdapter;
         lark.registerClass(ScreenAdapter,"lark.sys.ScreenAdapter",["lark.sys.IScreenAdapter"]);
     })(sys = lark.sys || (lark.sys = {}));
@@ -3528,7 +4932,7 @@ var lark;
                 return target;
             };
             return TouchHandler;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         sys.TouchHandler = TouchHandler;
         lark.registerClass(TouchHandler,"lark.sys.TouchHandler");
     })(sys = lark.sys || (lark.sys = {}));
@@ -3582,6 +4986,833 @@ var lark;
     locale_strings[3002] = "请指定要加载的媒体的URL";
     locale_strings[3003] = "全屏幕播放视频时，请先调用 load 方法，等待媒体加载完成后再调用 play 方法";
     locale_strings[3004] = "该设备不支持 Location 服务";
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/TextureExample.ts
+     */
+    /**
+     * @language zh_CN
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/TextureExample.ts
+     */
+    var Texture = (function (_super) {
+        __extends(Texture, _super);
+        /**
+         * @language en_US
+         * Create an Texture object
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+
+         * 创建一个 Texture 对象
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function Texture(bitmapData, clipX, clipY, clipWidth, clipHeight, offsetX, offsetY, width, height) {
+            _super.call(this);
+            /**
+             * @private
+             * 表示这个纹理在 bitmapData 上的 x 起始位置
+             */
+            this.$clipX = 0;
+            /**
+             * @private
+             * 表示这个纹理在 bitmapData 上的 y 起始位置
+             */
+            this.$clipY = 0;
+            /**
+             * @private
+             * 表示这个纹理在 bitmapData 上的宽度
+             */
+            this.$clipWidth = 0;
+            /**
+             * @private
+             * 表示这个纹理在 bitmapData 上的高度
+             */
+            this.$clipHeight = 0;
+            /**
+             * @private
+             * 表示这个纹理显示了之后在 x 方向的渲染偏移量
+             */
+            this.$offsetX = 0;
+            /**
+             * @private
+             * 表示这个纹理显示了之后在 y 方向的渲染偏移量
+             */
+            this.$offsetY = 0;
+            /**
+             * @private
+             * 纹理宽度
+             */
+            this.$width = 0;
+            /**
+             * @private
+             * 纹理高度
+             */
+            this.$height = 0;
+            this.$bitmapData = null;
+            if (DEBUG) {
+                if (!bitmapData) {
+                    lark.$error(1003, "bitmapData");
+                }
+                if (!lark.is(bitmapData, "lark.BitmapData")) {
+                    lark.$error(1012, "bitmapData");
+                }
+            }
+            this.$bitmapData = bitmapData;
+            this.$clipX = +clipX | 0;
+            this.$clipY = +clipY | 0;
+            this.$clipWidth = +clipWidth | 0;
+            this.$clipHeight = +clipHeight | 0;
+            this.$offsetX = +offsetX | 0;
+            this.$offsetY = +offsetY | 0;
+            this.$width = +width || (this.$clipWidth + Math.max(0, this.$offsetX));
+            this.$height = +height || (this.$clipHeight + Math.max(0, this.$offsetY));
+        }
+        var d = __define,c=Texture;p=c.prototype;
+        d(p, "width"
+            /**
+             * @language en_US
+             * Texture width
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 纹理宽度
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$width;
+            }
+        );
+        d(p, "height"
+            /**
+             * @language en_US
+             * Texture height
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 纹理高度
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$height;
+            }
+        );
+        d(p, "bitmapData"
+            /**
+             * @language en_US
+             * The BitmapData object being referenced.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 被引用的 BitmapData 对象。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$bitmapData;
+            }
+        );
+        return Texture;
+    })(lark.HashObject);
+    lark.Texture = Texture;
+    lark.registerClass(Texture,"lark.Texture");
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * The Event class is used as the base class for the creation of Event objects, which are passed as parameters to event
+     * listeners when an event occurs.The properties of the Event class carry basic information about an event, such as
+     * the event's type or whether the event's default behavior can be canceled. For many events, such as the events represented
+     * by the Event class constants, this basic information is sufficient. Other events, however, may require more detailed
+     * information. Events associated with a touch tap, for example, need to include additional information about the
+     * location of the touch event. You can pass such additional information to event listeners by extending the Event class,
+     * which is what the TouchEvent class does. Lark API defines several Event subclasses for common events that require
+     * additional information. Events associated with each of the Event subclasses are described in the documentation for
+     * each class.The methods of the Event class can be used in event listener functions to affect the behavior of the event
+     * object. Some events have an associated default behavior. Your event listener can cancel this behavior by calling the
+     * preventDefault() method. You can also make the current event listener the last one to process an event by calling
+     * the stopPropagation() or stopImmediatePropagation() method.
+     * @see lark.EventEmitter
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/events/EventExample.ts
+     */
+    /**
+     * @language zh_CN
+     * Event 类作为创建事件实例的基类，当发生事件时，Event 实例将作为参数传递给事件侦听器。Event 类的属性包含有关事件的基本信息，例如事件
+     * 的类型或者是否可以取消事件的默认行为。对于许多事件（如由 Event 类常量表示的事件），此基本信息就足够了。但其他事件可能需要更详细的信息。
+     * 例如，与触摸关联的事件需要包括有关触摸事件的位置信息。您可以通过扩展 Event 类（TouchEvent 类执行的操作）将此类其他信息传递给事件侦听器。
+     * Lark API 为需要其他信息的常见事件定义多个 Event 子类。与每个 Event 子类关联的事件将在每个类的文档中加以介绍。Event 类的方法可以在
+     * 事件侦听器函数中使用以影响事件对象的行为。某些事件有关联的默认行为，通过调用 preventDefault() 方法，您的事件侦听器可以取消此行为。
+     * 可以通过调用 stopPropagation() 或 stopImmediatePropagation() 方法，将当前事件侦听器作为处理事件的最后一个事件侦听器。
+     * @see lark.EventEmitter
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/events/EventExample.ts
+     */
+    var Event = (function (_super) {
+        __extends(Event, _super);
+        /**
+         * @language en_US
+         * Creates an Event object to pass as a parameter to event listeners.
+         * @param type  The type of the event, accessible as Event.type.
+         * @param bubbles  Determines whether the Event object participates in the bubbling stage of the event flow. The default value is false.
+         * @param cancelable Determines whether the Event object can be canceled. The default values is false.
+         * @param data the optional data associated with this event
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个作为参数传递给事件侦听器的 Event 对象。
+         * @param type  事件的类型，可以作为 Event.type 访问。
+         * @param bubbles  确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
+         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
+         * @param data 与此事件对象关联的可选数据。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function Event(type, bubbles, cancelable, data) {
+            _super.call(this);
+            /**
+             * @private
+             */
+            this.$eventPhase = 2;
+            /**
+             * @private
+             */
+            this.$currentTarget = null;
+            /**
+             * @private
+             */
+            this.$target = null;
+            /**
+             * @private
+             */
+            this.$isDefaultPrevented = false;
+            /**
+             * @private
+             */
+            this.$isPropagationStopped = false;
+            /**
+             * @private
+             */
+            this.$isPropagationImmediateStopped = false;
+            this.$type = type;
+            this.$bubbles = !!bubbles;
+            this.$cancelable = !!cancelable;
+            this.data = data;
+        }
+        var d = __define,c=Event;p=c.prototype;
+        d(p, "type"
+            /**
+             * @language en_US
+             * The type of event. The type is case-sensitive.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             *  事件的类型。类型区分大小写。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$type;
+            }
+        );
+        d(p, "bubbles"
+            /**
+             * @language en_US
+             * Indicates whether an event is a bubbling event.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             *  表示事件是否为冒泡事件。如果事件可以冒泡，则此值为 true；否则为 false。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$bubbles;
+            }
+        );
+        d(p, "cancelable"
+            /**
+             * @language en_US
+             * Indicates whether the behavior associated with the event can be prevented. If the behavior can be
+             * canceled, this value is true; otherwise it is false.
+             * @see #preventDefault()
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             *  表示是否可以阻止与事件相关联的行为。如果可以取消该行为，则此值为 true；否则为 false。
+             * @see #preventDefault()
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$cancelable;
+            }
+        );
+        d(p, "eventPhase"
+            /**
+             * @language en_US
+             * The current phase in the event flow. This property can contain the following numeric values:
+             * The capture phase (EventPhase.CAPTURING_PHASE).
+             * The target phase (EventPhase.AT_TARGET)
+             * The bubbling phase (EventPhase.BUBBLING_PHASE).
+             * @see lark.EventPhase
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             *  事件流中的当前阶段。此属性可以包含以下数值：
+             * 捕获阶段 (EventPhase.CAPTURING_PHASE)。
+             * 目标阶段 (EventPhase.AT_TARGET)。
+             * 冒泡阶段 (EventPhase.BUBBLING_PHASE)。
+             * @see lark.EventPhase
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$eventPhase;
+            }
+        );
+        d(p, "currentTarget"
+            /**
+             * @language en_US
+             * The object that is actively processing the Event object with an event listener. For example, if a
+             * user clicks an OK button, the current target could be the node containing that button or one of its ancestors
+             * that has registered an event listener for that event.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             *  当前正在使用某个事件侦听器处理 Event 对象的对象。例如，如果用户单击“确定”按钮，
+             * 则当前目标可以是包含该按钮的节点，也可以是它的已为该事件注册了事件侦听器的始祖之一。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$currentTarget;
+            }
+        );
+        d(p, "target"
+            /**
+             * @language en_US
+             * The event target. This property contains the target node. For example, if a user clicks an OK button,
+             * the target node is the display list node containing that button.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             *  事件目标。此属性包含目标节点。例如，如果用户单击“确定”按钮，则目标节点就是包含该按钮的显示列表节点。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$target;
+            }
+        );
+        p.$setTarget = function (target) {
+            this.$target = target;
+        };
+        /**
+         * @language en_US
+         * Checks whether the preventDefault() method has been called on the event. If the preventDefault() method has been
+         * called, returns true; otherwise, returns false.
+         * @returns If preventDefault() has been called, returns true; otherwise, returns false.
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 检查是否已对事件调用 preventDefault() 方法。
+         * @returns 如果已调用 preventDefault() 方法，则返回 true；否则返回 false。
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.isDefaultPrevented = function () {
+            return this.$isDefaultPrevented;
+        };
+        /**
+         * @language en_US
+         * Cancels an event's default behavior if that behavior can be canceled.Many events have associated behaviors that
+         * are carried out by default. For example, if a user types a character into a text input, the default behavior
+         * is that the character is displayed in the text input. Because the TextEvent.TEXT_INPUT event's default behavior
+         * can be canceled, you can use the preventDefault() method to prevent the character from appearing.
+         * You can use the Event.cancelable property to check whether you can prevent the default behavior associated with
+         * a particular event. If the value of Event.cancelable is true, then preventDefault() can be used to cancel the event;
+         * otherwise, preventDefault() has no effect.
+         * @see #cancelable
+         * @see #isDefaultPrevented
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果可以取消事件的默认行为，则取消该行为。
+         * 许多事件都有默认执行的关联行为。例如，如果用户在文本字段中键入一个字符，则默认行为就是在文本字段中显示该字符。
+         * 由于可以取消 TextEvent.TEXT_INPUT 事件的默认行为，因此您可以使用 preventDefault() 方法来防止显示该字符。
+         * 您可以使用 Event.cancelable 属性来检查是否可以防止与特定事件关联的默认行为。如果 Event.cancelable 的值为 true，
+         * 则可以使用 preventDefault() 来取消事件；否则，preventDefault() 无效。
+         * @see #cancelable
+         * @see #isDefaultPrevented
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.preventDefault = function () {
+            if (this.$cancelable)
+                this.$isDefaultPrevented = true;
+        };
+        /**
+         * @language en_US
+         * Prevents processing of any event listeners in nodes subsequent to the current node in the event flow. This method
+         * does not affect any event listeners in the current node (currentTarget). In contrast, the stopImmediatePropagation()
+         * method prevents processing of event listeners in both the current node and subsequent nodes. Additional calls to this
+         * method have no effect. This method can be called in any phase of the event flow.<br/>
+         * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
+         * @see #stopImmediatePropagation()
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 防止对事件流中当前节点的后续节点中的所有事件侦听器进行处理。此方法不会影响当前节点 currentTarget 中的任何事件侦听器。
+         * 相比之下，stopImmediatePropagation() 方法可以防止对当前节点中和后续节点中的事件侦听器进行处理。
+         * 对此方法的其它调用没有任何效果。可以在事件流的任何阶段中调用此方法。<br/>
+         * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
+         * @see #stopImmediatePropagation()
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.stopPropagation = function () {
+            if (this.$bubbles)
+                this.$isPropagationStopped = true;
+        };
+        /**
+         * @language en_US
+         * Prevents processing of any event listeners in the current node and any subsequent nodes in the event flow.
+         * This method takes effect immediately, and it affects event listeners in the current node. In contrast, the
+         * stopPropagation() method doesn't take effect until all the event listeners in the current node finish processing.<br/>
+         * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
+         * @see #stopPropagation()
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 防止对事件流中当前节点中和所有后续节点中的事件侦听器进行处理。此方法会立即生效，并且会影响当前节点中的事件侦听器。
+         * 相比之下，在当前节点中的所有事件侦听器都完成处理之前，stopPropagation() 方法不会生效。<br/>
+         * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
+         * @see #stopPropagation()
+         * @see #preventDefault()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.stopImmediatePropagation = function () {
+            if (this.$bubbles)
+                this.$isPropagationImmediateStopped = true;
+        };
+        /**
+         * @language en_US
+         * This method will be called automatically when you pass the event object as the parameters to the Event.release() method.
+         * If your custom event is designed for reusable,you should override this method to make sure all the references to external
+         * objects are cleaned. if not,it may cause memory leaking.
+         * @see lark.Event.create()
+         * @see lark.Event.release()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当事件实例传递给Event.release()静态方法时，实例上的clean()方法将会被自动调用。
+         * 若此自定义事件的实例设计为可以循环复用的，为了避免引起内存泄露，自定义事件需要覆盖此方法来确保实例被缓存前断开对外部对象的一切引用。
+         * @see lark.Event.create()
+         * @see lark.Event.release()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.clean = function () {
+            this.data = this.$currentTarget = null;
+            this.$setTarget(null);
+        };
+        /**
+         * @language en_US
+         * Gets one event instance from the object pool or create a new one. We highly recommend using the Event.create()
+         * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
+         * which allows you to get better code execution performance.<br/>
+         * Note: If you want to use this method to initialize your custom event object,you must make sure the constructor
+         * of your custom event is the same as the constructor of lark.Event.
+         * @example
+         * <pre>
+         *    var event = Event.create(Event,type, bubbles);
+         *    event.data = data;    //optional,initializes custom data here
+         *    this.emit(event);
+         *    Event.release(event);
+         * </pre>
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从对象池中取出或创建一个新的事件实例。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
+         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
+         * 注意：若使用此方法来创建自定义事件的实例，自定义的构造函数参数列表必须跟Event类一致。
+         * @example
+         * <pre>
+         *    var event = Event.create(Event,type, bubbles);
+         *    event.data = data;  //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
+         *    this.emit(event);
+         *    Event.release(event);
+         * </pre>
+         * @see #clean()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.create = function (EventClass, type, bubbles, cancelable) {
+            var eventPool = EventClass.eventPool;
+            if (!eventPool) {
+                eventPool = EventClass.eventPool = [];
+            }
+            if (eventPool.length) {
+                var event = eventPool.pop();
+                event.$type = type;
+                event.$bubbles = !!bubbles;
+                event.$cancelable = !!cancelable;
+                event.$isDefaultPrevented = false;
+                event.$isPropagationStopped = false;
+                event.$isPropagationImmediateStopped = false;
+                event.$eventPhase = 2 /* AT_TARGET */;
+                return event;
+            }
+            return new EventClass(type, bubbles, cancelable);
+        };
+        /**
+         * @language en_US
+         * Releases an event object and cache it into the object pool.We highly recommend using the Event.create()
+         * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
+         * which allows you to get better code execution performance.<br/>
+         * Note: The parameters of this method only accepts an instance created by the Event.create() method.
+         * if not,it may throw an error.
+         * @example
+         * <pre>
+         *    var event = Event.create(Event,type, bubbles);
+         *    event.data = data; //optional,initializes custom data here
+         *    this.emit(event);
+         *    Event.release(event);
+         * </pre>
+         * @see #clean()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 释放一个事件对象，并缓存到对象池。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
+         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
+         * 注意：此方法只能传入由Event.create()创建的事件实例，传入非法对象实例可能会导致报错。
+         * @example
+         * <pre>
+         *    var event = Event.create(Event,type, bubbles);
+         *    event.data = data;   //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
+         *    this.emit(event);
+         *    Event.release(event);
+         * </pre>
+         * @see #clean()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.release = function (event) {
+            event.clean();
+            var EventClass = Object.getPrototypeOf(event).constructor;
+            EventClass.eventPool.push(event);
+        };
+        /**
+         * @language en_US
+         * Emitted when a display object is added to the on stage display list, either directly or through the addition
+         * of a sub tree in which the display object is contained.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在将显示对象直接添加到舞台显示列表或将包含显示对象的子树添加至舞台显示列表中时调度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.ADDED_TO_STAGE = "addedToStage";
+        /**
+         * @language en_US
+         * Emitted when a display object is about to be removed from the display list, either directly or through the removal
+         * of a sub tree in which the display object is contained.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在从显示列表中直接删除显示对象或删除包含显示对象的子树时调度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.REMOVED_FROM_STAGE = "removedFromStage";
+        /**
+         * @language en_US
+         * Emitted when a display object is added to the display list.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将显示对象添加到显示列表中时调度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.ADDED = "added";
+        /**
+         * @language en_US
+         * Emitted when a display object is about to be removed from the display list.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将要从显示列表中删除显示对象时调度。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.REMOVED = "removed";
+        /**
+         * @language en_US
+         * [broadcast event] Emitted when the playhead is entering a new frame.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * [广播事件] 进入新的一帧,监听此事件将会在下一帧开始时触发一次回调。这是一个广播事件，可以在任何一个显示对象上监听，无论它是否在显示列表中。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.ENTER_FRAME = "enterFrame";
+        /**
+         * @language en_US
+         * Emitted when the display list is about to be updated and rendered.
+         * Note: Every time you want to receive a render event,you must call the stage.invalidate() method.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 渲染事件，监听此事件将会在本帧末即将开始渲染的前一刻触发回调，这是一个广播事件，可以在任何一个显示对象上监听，无论它是否在显示列表中。
+         * 注意：每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 stage.invalidate() 方法，由于每帧只会触发一次屏幕刷新，
+         * 若在 Event.RENDER 回调函数执行期间再次调用stage.invalidate()，将会被忽略。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.RENDER = "render";
+        /**
+         * @language en_US
+         * Emitted when the size of stage or UIComponent is changed.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 舞台尺寸或UI组件尺寸发生改变
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.RESIZE = "resize";
+        /**
+         * @language en_US
+         * Emitted when the value or selection of a property is chaned.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 属性值或状态发生改变。通常是按钮的选中状态，或者列表的选中项索引改变。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.CHANGE = "change";
+        /**
+         * @language en_US
+         * Emitted when the value or selection of a property is going to change.you can cancel this by calling the
+         * preventDefault() method.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 属性值或状态即将发生改变,通常是按钮的选中状态，或者列表的选中项索引改变。可以通过调用 preventDefault() 方法阻止索引发生更改。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.CHANGING = "changing";
+        /**
+         * @language en_US
+         * Emitted when the net request is complete.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 网络请求加载完成
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.COMPLETE = "complete";
+        /**
+         * @language en_US
+         * Emitted when the net request is failed.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 网络请求加载失败
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.IO_ERROR = "ioError";
+        /**
+         * @language en_US
+         * Emitted when the TextInput instance gets focus.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * TextInput实例获得焦点
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.FOCUS_IN = "focusIn";
+        /**
+         * @language en_US
+         * Emitted when the TextInput instance loses focus.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * TextInput实例失去焦点
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.FOCUS_OUT = "focusOut";
+        /**
+         * @language en_US
+         * Emitted when the playback is ended.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 动画声音等播放完成
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Event.ENDED = "ended";
+        return Event;
+    })(lark.HashObject);
+    lark.Event = Event;
+    lark.registerClass(Event,"lark.Event");
+    if (DEBUG) {
+        lark.$markReadOnly(Event, "type");
+        lark.$markReadOnly(Event, "bubbles");
+        lark.$markReadOnly(Event, "cancelable");
+        lark.$markReadOnly(Event, "eventPhase");
+        lark.$markReadOnly(Event, "currentTarget");
+        lark.$markReadOnly(Event, "target");
+    }
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -3761,7 +5992,7 @@ var lark;
         Graphics.createPattern = function (bitmapData, repetition) {
             return lark.sys.sharedRenderContext.createPattern(bitmapData, repetition);
         };
-        d(p, "fillStyle",
+        d(p, "fillStyle"
             /**
              * @language en_US
              * specifies the color or style to use inside shapes.
@@ -3776,10 +6007,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._fillStyle;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (typeof value == "number") {
                     value = lark.sys.toColorString(value);
                 }
@@ -3787,7 +6018,7 @@ var lark;
                 this.pushCommand(5 /* fillStyle */, arguments);
             }
         );
-        d(p, "lineWidth",
+        d(p, "lineWidth"
             /**
              * @language en_US
              * sets the thickness of lines in pixels.
@@ -3803,15 +6034,15 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._lineWidth;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this._lineWidth = value;
                 this.pushCommand(3 /* lineWidth */, arguments);
             }
         );
-        d(p, "lineCap",
+        d(p, "lineCap"
             /**
              * @language en_US
              * determines how the end points of every line are drawn. There are three possible values for this property and those are:<br/>
@@ -3836,15 +6067,15 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._lineCap;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this._lineCap = value;
                 this.pushCommand(1 /* lineCap */, arguments);
             }
         );
-        d(p, "strokeStyle",
+        d(p, "strokeStyle"
             /**
              * @language en_US
              * specifies the color or style to use for the lines around shapes.
@@ -3859,10 +6090,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._strokeStyle;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (typeof value == "number") {
                     value = lark.sys.toColorString(value);
                 }
@@ -3870,7 +6101,7 @@ var lark;
                 this.pushCommand(4 /* strokeStyle */, arguments);
             }
         );
-        d(p, "lineJoin",
+        d(p, "lineJoin"
             /**
              * @language en_US
              * specifies the type of joint appearance used at angles.There are three possible values for this property and those are:<br/>
@@ -3898,15 +6129,15 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._lineJoin;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this._lineJoin = value;
                 this.pushCommand(2 /* lineJoin */, arguments);
             }
         );
-        d(p, "miterLimit",
+        d(p, "miterLimit"
             /**
              * @language en_US
              * A number that indicates the limit at which a miter is cut off.
@@ -3921,10 +6152,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._miterLimit;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this._miterLimit = value;
                 this.pushCommand(0 /* miterLimit */, arguments);
             }
@@ -4471,7 +6702,7 @@ var lark;
             context.restore();
         };
         return Graphics;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     lark.Graphics = Graphics;
     lark.registerClass(Graphics,"lark.Graphics");
     function mapGraphicsFunction(context) {
@@ -4508,658 +6739,6 @@ var lark;
             context.strokeStyle = value;
         };
         return map;
-    }
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * The Event class is used as the base class for the creation of Event objects, which are passed as parameters to event
-     * listeners when an event occurs.The properties of the Event class carry basic information about an event, such as
-     * the event's type or whether the event's default behavior can be canceled. For many events, such as the events represented
-     * by the Event class constants, this basic information is sufficient. Other events, however, may require more detailed
-     * information. Events associated with a touch tap, for example, need to include additional information about the
-     * location of the touch event. You can pass such additional information to event listeners by extending the Event class,
-     * which is what the TouchEvent class does. Lark API defines several Event subclasses for common events that require
-     * additional information. Events associated with each of the Event subclasses are described in the documentation for
-     * each class.The methods of the Event class can be used in event listener functions to affect the behavior of the event
-     * object. Some events have an associated default behavior. Your event listener can cancel this behavior by calling the
-     * preventDefault() method. You can also make the current event listener the last one to process an event by calling
-     * the stopPropagation() or stopImmediatePropagation() method.
-     * @see lark.EventEmitter
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/events/EventExample.ts
-     */
-    /**
-     * @language zh_CN
-     * Event 类作为创建事件实例的基类，当发生事件时，Event 实例将作为参数传递给事件侦听器。Event 类的属性包含有关事件的基本信息，例如事件
-     * 的类型或者是否可以取消事件的默认行为。对于许多事件（如由 Event 类常量表示的事件），此基本信息就足够了。但其他事件可能需要更详细的信息。
-     * 例如，与触摸关联的事件需要包括有关触摸事件的位置信息。您可以通过扩展 Event 类（TouchEvent 类执行的操作）将此类其他信息传递给事件侦听器。
-     * Lark API 为需要其他信息的常见事件定义多个 Event 子类。与每个 Event 子类关联的事件将在每个类的文档中加以介绍。Event 类的方法可以在
-     * 事件侦听器函数中使用以影响事件对象的行为。某些事件有关联的默认行为，通过调用 preventDefault() 方法，您的事件侦听器可以取消此行为。
-     * 可以通过调用 stopPropagation() 或 stopImmediatePropagation() 方法，将当前事件侦听器作为处理事件的最后一个事件侦听器。
-     * @see lark.EventEmitter
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/events/EventExample.ts
-     */
-    var Event = (function (_super) {
-        __extends(Event, _super);
-        /**
-         * @language en_US
-         * Creates an Event object to pass as a parameter to event listeners.
-         * @param type  The type of the event, accessible as Event.type.
-         * @param bubbles  Determines whether the Event object participates in the bubbling stage of the event flow. The default value is false.
-         * @param cancelable Determines whether the Event object can be canceled. The default values is false.
-         * @param data the optional data associated with this event
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个作为参数传递给事件侦听器的 Event 对象。
-         * @param type  事件的类型，可以作为 Event.type 访问。
-         * @param bubbles  确定 Event 对象是否参与事件流的冒泡阶段。默认值为 false。
-         * @param cancelable 确定是否可以取消 Event 对象。默认值为 false。
-         * @param data 与此事件对象关联的可选数据。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        function Event(type, bubbles, cancelable, data) {
-            _super.call(this);
-            /**
-             * @private
-             */
-            this.$eventPhase = 2;
-            /**
-             * @private
-             */
-            this.$currentTarget = null;
-            /**
-             * @private
-             */
-            this.$target = null;
-            /**
-             * @private
-             */
-            this.$isDefaultPrevented = false;
-            /**
-             * @private
-             */
-            this.$isPropagationStopped = false;
-            /**
-             * @private
-             */
-            this.$isPropagationImmediateStopped = false;
-            this.$type = type;
-            this.$bubbles = !!bubbles;
-            this.$cancelable = !!cancelable;
-            this.data = data;
-        }
-        var d = __define,c=Event;p=c.prototype;
-        d(p, "type",
-            /**
-             * @language en_US
-             * The type of event. The type is case-sensitive.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             *  事件的类型。类型区分大小写。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$type;
-            },undefined
-        );
-        d(p, "bubbles",
-            /**
-             * @language en_US
-             * Indicates whether an event is a bubbling event.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             *  表示事件是否为冒泡事件。如果事件可以冒泡，则此值为 true；否则为 false。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$bubbles;
-            },undefined
-        );
-        d(p, "cancelable",
-            /**
-             * @language en_US
-             * Indicates whether the behavior associated with the event can be prevented. If the behavior can be
-             * canceled, this value is true; otherwise it is false.
-             * @see #preventDefault()
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             *  表示是否可以阻止与事件相关联的行为。如果可以取消该行为，则此值为 true；否则为 false。
-             * @see #preventDefault()
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$cancelable;
-            },undefined
-        );
-        d(p, "eventPhase",
-            /**
-             * @language en_US
-             * The current phase in the event flow. This property can contain the following numeric values:
-             * The capture phase (EventPhase.CAPTURING_PHASE).
-             * The target phase (EventPhase.AT_TARGET)
-             * The bubbling phase (EventPhase.BUBBLING_PHASE).
-             * @see lark.EventPhase
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             *  事件流中的当前阶段。此属性可以包含以下数值：
-             * 捕获阶段 (EventPhase.CAPTURING_PHASE)。
-             * 目标阶段 (EventPhase.AT_TARGET)。
-             * 冒泡阶段 (EventPhase.BUBBLING_PHASE)。
-             * @see lark.EventPhase
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$eventPhase;
-            },undefined
-        );
-        d(p, "currentTarget",
-            /**
-             * @language en_US
-             * The object that is actively processing the Event object with an event listener. For example, if a
-             * user clicks an OK button, the current target could be the node containing that button or one of its ancestors
-             * that has registered an event listener for that event.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             *  当前正在使用某个事件侦听器处理 Event 对象的对象。例如，如果用户单击“确定”按钮，
-             * 则当前目标可以是包含该按钮的节点，也可以是它的已为该事件注册了事件侦听器的始祖之一。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$currentTarget;
-            },undefined
-        );
-        d(p, "target",
-            /**
-             * @language en_US
-             * The event target. This property contains the target node. For example, if a user clicks an OK button,
-             * the target node is the display list node containing that button.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             *  事件目标。此属性包含目标节点。例如，如果用户单击“确定”按钮，则目标节点就是包含该按钮的显示列表节点。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$target;
-            },undefined
-        );
-        p.$setTarget = function (target) {
-            this.$target = target;
-        };
-        /**
-         * @language en_US
-         * Checks whether the preventDefault() method has been called on the event. If the preventDefault() method has been
-         * called, returns true; otherwise, returns false.
-         * @returns If preventDefault() has been called, returns true; otherwise, returns false.
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 检查是否已对事件调用 preventDefault() 方法。
-         * @returns 如果已调用 preventDefault() 方法，则返回 true；否则返回 false。
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.isDefaultPrevented = function () {
-            return this.$isDefaultPrevented;
-        };
-        /**
-         * @language en_US
-         * Cancels an event's default behavior if that behavior can be canceled.Many events have associated behaviors that
-         * are carried out by default. For example, if a user types a character into a text input, the default behavior
-         * is that the character is displayed in the text input. Because the TextEvent.TEXT_INPUT event's default behavior
-         * can be canceled, you can use the preventDefault() method to prevent the character from appearing.
-         * You can use the Event.cancelable property to check whether you can prevent the default behavior associated with
-         * a particular event. If the value of Event.cancelable is true, then preventDefault() can be used to cancel the event;
-         * otherwise, preventDefault() has no effect.
-         * @see #cancelable
-         * @see #isDefaultPrevented
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果可以取消事件的默认行为，则取消该行为。
-         * 许多事件都有默认执行的关联行为。例如，如果用户在文本字段中键入一个字符，则默认行为就是在文本字段中显示该字符。
-         * 由于可以取消 TextEvent.TEXT_INPUT 事件的默认行为，因此您可以使用 preventDefault() 方法来防止显示该字符。
-         * 您可以使用 Event.cancelable 属性来检查是否可以防止与特定事件关联的默认行为。如果 Event.cancelable 的值为 true，
-         * 则可以使用 preventDefault() 来取消事件；否则，preventDefault() 无效。
-         * @see #cancelable
-         * @see #isDefaultPrevented
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.preventDefault = function () {
-            if (this.$cancelable)
-                this.$isDefaultPrevented = true;
-        };
-        /**
-         * @language en_US
-         * Prevents processing of any event listeners in nodes subsequent to the current node in the event flow. This method
-         * does not affect any event listeners in the current node (currentTarget). In contrast, the stopImmediatePropagation()
-         * method prevents processing of event listeners in both the current node and subsequent nodes. Additional calls to this
-         * method have no effect. This method can be called in any phase of the event flow.<br/>
-         * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
-         * @see #stopImmediatePropagation()
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 防止对事件流中当前节点的后续节点中的所有事件侦听器进行处理。此方法不会影响当前节点 currentTarget 中的任何事件侦听器。
-         * 相比之下，stopImmediatePropagation() 方法可以防止对当前节点中和后续节点中的事件侦听器进行处理。
-         * 对此方法的其它调用没有任何效果。可以在事件流的任何阶段中调用此方法。<br/>
-         * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
-         * @see #stopImmediatePropagation()
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.stopPropagation = function () {
-            if (this.$bubbles)
-                this.$isPropagationStopped = true;
-        };
-        /**
-         * @language en_US
-         * Prevents processing of any event listeners in the current node and any subsequent nodes in the event flow.
-         * This method takes effect immediately, and it affects event listeners in the current node. In contrast, the
-         * stopPropagation() method doesn't take effect until all the event listeners in the current node finish processing.<br/>
-         * Note: This method does not cancel the behavior associated with this event; see preventDefault() for that functionality.
-         * @see #stopPropagation()
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 防止对事件流中当前节点中和所有后续节点中的事件侦听器进行处理。此方法会立即生效，并且会影响当前节点中的事件侦听器。
-         * 相比之下，在当前节点中的所有事件侦听器都完成处理之前，stopPropagation() 方法不会生效。<br/>
-         * 注意：此方法不会取消与此事件相关联的行为；有关此功能的信息，请参阅 preventDefault()。
-         * @see #stopPropagation()
-         * @see #preventDefault()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.stopImmediatePropagation = function () {
-            if (this.$bubbles)
-                this.$isPropagationImmediateStopped = true;
-        };
-        /**
-         * @language en_US
-         * This method will be called automatically when you pass the event object as the parameters to the Event.release() method.
-         * If your custom event is designed for reusable,you should override this method to make sure all the references to external
-         * objects are cleaned. if not,it may cause memory leaking.
-         * @see lark.Event.create()
-         * @see lark.Event.release()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当事件实例传递给Event.release()静态方法时，实例上的clean()方法将会被自动调用。
-         * 若此自定义事件的实例设计为可以循环复用的，为了避免引起内存泄露，自定义事件需要覆盖此方法来确保实例被缓存前断开对外部对象的一切引用。
-         * @see lark.Event.create()
-         * @see lark.Event.release()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.clean = function () {
-            this.data = this.$currentTarget = null;
-            this.$setTarget(null);
-        };
-        /**
-         * @language en_US
-         * Gets one event instance from the object pool or create a new one. We highly recommend using the Event.create()
-         * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
-         * which allows you to get better code execution performance.<br/>
-         * Note: If you want to use this method to initialize your custom event object,you must make sure the constructor
-         * of your custom event is the same as the constructor of lark.Event.
-         * @example
-         * <pre>
-         *    var event = Event.create(Event,type, bubbles);
-         *    event.data = data;    //optional,initializes custom data here
-         *    this.emit(event);
-         *    Event.release(event);
-         * </pre>
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从对象池中取出或创建一个新的事件实例。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
-         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
-         * 注意：若使用此方法来创建自定义事件的实例，自定义的构造函数参数列表必须跟Event类一致。
-         * @example
-         * <pre>
-         *    var event = Event.create(Event,type, bubbles);
-         *    event.data = data;  //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
-         *    this.emit(event);
-         *    Event.release(event);
-         * </pre>
-         * @see #clean()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.create = function (EventClass, type, bubbles, cancelable) {
-            var eventPool = EventClass.eventPool;
-            if (!eventPool) {
-                eventPool = EventClass.eventPool = [];
-            }
-            if (eventPool.length) {
-                var event = eventPool.pop();
-                event.$type = type;
-                event.$bubbles = !!bubbles;
-                event.$cancelable = !!cancelable;
-                event.$isDefaultPrevented = false;
-                event.$isPropagationStopped = false;
-                event.$isPropagationImmediateStopped = false;
-                event.$eventPhase = 2 /* AT_TARGET */;
-                return event;
-            }
-            return new EventClass(type, bubbles, cancelable);
-        };
-        /**
-         * @language en_US
-         * Releases an event object and cache it into the object pool.We highly recommend using the Event.create()
-         * and Event.release() methods to create and release an event object,it can reduce the number of reallocate objects,
-         * which allows you to get better code execution performance.<br/>
-         * Note: The parameters of this method only accepts an instance created by the Event.create() method.
-         * if not,it may throw an error.
-         * @example
-         * <pre>
-         *    var event = Event.create(Event,type, bubbles);
-         *    event.data = data; //optional,initializes custom data here
-         *    this.emit(event);
-         *    Event.release(event);
-         * </pre>
-         * @see #clean()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 释放一个事件对象，并缓存到对象池。我们建议您尽可能使用Event.create()和Event.release() 这一对方法来创建和释放事件对象，
-         * 这一对方法会将事件实例在内部缓存下来供下次循环使用，减少对象的创建次数,从而获得更高的代码运行性能。<br/>
-         * 注意：此方法只能传入由Event.create()创建的事件实例，传入非法对象实例可能会导致报错。
-         * @example
-         * <pre>
-         *    var event = Event.create(Event,type, bubbles);
-         *    event.data = data;   //可选，若指定义事件上需要附加其他参数，可以在获取实例后在此处设置。
-         *    this.emit(event);
-         *    Event.release(event);
-         * </pre>
-         * @see #clean()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.release = function (event) {
-            event.clean();
-            var EventClass = Object.getPrototypeOf(event).constructor;
-            EventClass.eventPool.push(event);
-        };
-        /**
-         * @language en_US
-         * Emitted when a display object is added to the on stage display list, either directly or through the addition
-         * of a sub tree in which the display object is contained.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在将显示对象直接添加到舞台显示列表或将包含显示对象的子树添加至舞台显示列表中时调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.ADDED_TO_STAGE = "addedToStage";
-        /**
-         * @language en_US
-         * Emitted when a display object is about to be removed from the display list, either directly or through the removal
-         * of a sub tree in which the display object is contained.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在从显示列表中直接删除显示对象或删除包含显示对象的子树时调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.REMOVED_FROM_STAGE = "removedFromStage";
-        /**
-         * @language en_US
-         * Emitted when a display object is added to the display list.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将显示对象添加到显示列表中时调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.ADDED = "added";
-        /**
-         * @language en_US
-         * Emitted when a display object is about to be removed from the display list.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将要从显示列表中删除显示对象时调度。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.REMOVED = "removed";
-        /**
-         * @language en_US
-         * [broadcast event] Emitted when the playhead is entering a new frame.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * [广播事件] 进入新的一帧,监听此事件将会在下一帧开始时触发一次回调。这是一个广播事件，可以在任何一个显示对象上监听，无论它是否在显示列表中。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.ENTER_FRAME = "enterFrame";
-        /**
-         * @language en_US
-         * Emitted when the display list is about to be updated and rendered.
-         * Note: Every time you want to receive a render event,you must call the stage.invalidate() method.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 渲染事件，监听此事件将会在本帧末即将开始渲染的前一刻触发回调，这是一个广播事件，可以在任何一个显示对象上监听，无论它是否在显示列表中。
-         * 注意：每次您希望 Lark 发送 Event.RENDER 事件时，都必须调用 stage.invalidate() 方法，由于每帧只会触发一次屏幕刷新，
-         * 若在 Event.RENDER 回调函数执行期间再次调用stage.invalidate()，将会被忽略。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.RENDER = "render";
-        /**
-         * @language en_US
-         * Emitted when the size of stage or UIComponent is changed.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 舞台尺寸或UI组件尺寸发生改变
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.RESIZE = "resize";
-        /**
-         * @language en_US
-         * Emitted when the value or selection of a property is chaned.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 属性值或状态发生改变。通常是按钮的选中状态，或者列表的选中项索引改变。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.CHANGE = "change";
-        /**
-         * @language en_US
-         * Emitted when the value or selection of a property is going to change.you can cancel this by calling the
-         * preventDefault() method.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 属性值或状态即将发生改变,通常是按钮的选中状态，或者列表的选中项索引改变。可以通过调用 preventDefault() 方法阻止索引发生更改。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.CHANGING = "changing";
-        /**
-         * @language en_US
-         * Emitted when the net request is complete.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 网络请求加载完成
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.COMPLETE = "complete";
-        /**
-         * @language en_US
-         * Emitted when the net request is failed.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 网络请求加载失败
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.IO_ERROR = "ioError";
-        /**
-         * @language en_US
-         * Emitted when the TextInput instance gets focus.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * TextInput实例获得焦点
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.FOCUS_IN = "focusIn";
-        /**
-         * @language en_US
-         * Emitted when the TextInput instance loses focus.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * TextInput实例失去焦点
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.FOCUS_OUT = "focusOut";
-        /**
-         * @language en_US
-         * Emitted when the playback is ended.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 动画声音等播放完成
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Event.ENDED = "ended";
-        return Event;
-    })(lark.LarkObject);
-    lark.Event = Event;
-    lark.registerClass(Event,"lark.Event");
-    if (DEBUG) {
-        lark.$markReadOnly(Event, "type");
-        lark.$markReadOnly(Event, "bubbles");
-        lark.$markReadOnly(Event, "cancelable");
-        lark.$markReadOnly(Event, "eventPhase");
-        lark.$markReadOnly(Event, "currentTarget");
-        lark.$markReadOnly(Event, "target");
     }
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
@@ -5427,7 +7006,7 @@ var lark;
             return true;
         };
         return EventEmitter;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     lark.EventEmitter = EventEmitter;
     lark.registerClass(EventEmitter,"lark.EventEmitter",["lark.IEventEmitter"]);
 })(lark || (lark = {}));
@@ -5540,7 +7119,7 @@ var lark;
             }
             return point.setTo(x, y);
         };
-        d(p, "length",
+        d(p, "length"
             /**
              * @language en_US
              * The length of the line segment from (0,0) to this point.
@@ -5553,9 +7132,9 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return Math.sqrt(this.x * this.x + this.y * this.y);
-            },undefined
+            }
         );
         /**
          * @language en_US
@@ -5634,7 +7213,7 @@ var lark;
             return Math.sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
         };
         return Point;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     lark.Point = Point;
     lark.registerClass(Point,"lark.Point");
     if (DEBUG) {
@@ -5645,6 +7224,143 @@ var lark;
      * 仅供框架内复用，要防止暴露引用到外部。
      */
     lark.$TempPoint = new Point();
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * The GeolocationEvent represents the position and altitude of the device on Earth,
+     * and show errors occurred while getting the location of the device.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * GeolocationEvent 提供设备的地理位置信息和获取位置时发生的错误信息
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var GeolocationEvent = (function (_super) {
+        __extends(GeolocationEvent, _super);
+        function GeolocationEvent() {
+            _super.apply(this, arguments);
+        }
+        var d = __define,c=GeolocationEvent;p=c.prototype;
+        /**
+         * @language en_US
+         * The acquisition of the location information failed because of app don't have permission.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 由于用户拒绝访问位置信息，获取位置信息失败
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        GeolocationEvent.PERMISSION_DENIED = "permissionDenied";
+        /**
+         * @language en_US
+         * The acquisition of the location failed because at least one internal source of position returned an internal error.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设备位置服务不可用或者超时等原因没有得到位置信息
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        GeolocationEvent.UNAVAILABLE = "unavailable";
+        return GeolocationEvent;
+    })(lark.Event);
+    lark.GeolocationEvent = GeolocationEvent;
+    lark.registerClass(GeolocationEvent,"lark.GeolocationEvent");
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
+     * MotionEvent represents the device's movement
+     * Acceleration and accelerationIncludingGravity to represents the device's acceleration
+     * RotationRate to represents the device's rotation
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * MotionEvent 类呈现设备运动的具体信息
+     * Acceleration 和 accelerationIncludingGravity 呈现设备三个维度的加速度信息
+     * RotationRate 呈现设备的旋转状态信息
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var MotionEvent = (function (_super) {
+        __extends(MotionEvent, _super);
+        function MotionEvent() {
+            _super.apply(this, arguments);
+        }
+        var d = __define,c=MotionEvent;p=c.prototype;
+        return MotionEvent;
+    })(lark.Event);
+    lark.MotionEvent = MotionEvent;
+    lark.registerClass(MotionEvent,"lark.MotionEvent");
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -5859,120 +7575,6 @@ var lark;
 (function (lark) {
     /**
      * @language en_US
-     * MotionEvent represents the device's movement
-     * Acceleration and accelerationIncludingGravity to represents the device's acceleration
-     * RotationRate to represents the device's rotation
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * MotionEvent 类呈现设备运动的具体信息
-     * Acceleration 和 accelerationIncludingGravity 呈现设备三个维度的加速度信息
-     * RotationRate 呈现设备的旋转状态信息
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var MotionEvent = (function (_super) {
-        __extends(MotionEvent, _super);
-        function MotionEvent() {
-            _super.apply(this, arguments);
-        }
-        var d = __define,c=MotionEvent;p=c.prototype;
-        return MotionEvent;
-    })(lark.Event);
-    lark.MotionEvent = MotionEvent;
-    lark.registerClass(MotionEvent,"lark.MotionEvent");
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
-     * The OrientationEvent provides information from the physical orientation of the device.
-     * Note: Currently, Browsers on the iOS and Android does not handle the coordinates the same way.
-     * Take care about this while using them.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * OrientationEvent 提供设备的方向信息
-     * 注意: 目前各个浏览器和操作系统处理方向的方式不完全相同，请根据使用场景做相应的校正，
-     * 比如使用两次方向数据的变化而不是直接使用方向的值
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var OrientationEvent = (function (_super) {
-        __extends(OrientationEvent, _super);
-        function OrientationEvent() {
-            _super.apply(this, arguments);
-        }
-        var d = __define,c=OrientationEvent;p=c.prototype;
-        return OrientationEvent;
-    })(lark.Event);
-    lark.OrientationEvent = OrientationEvent;
-    lark.registerClass(OrientationEvent,"lark.OrientationEvent");
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    /**
-     * @language en_US
      * A ProgressEvent object is emitted when a load operation has begun. These events are usually generated when data are
      * loaded into an application.
      * @version Lark 1.0
@@ -6123,482 +7725,465 @@ var lark;
 (function (lark) {
     /**
      * @language en_US
-     * The GeolocationEvent represents the position and altitude of the device on Earth,
-     * and show errors occurred while getting the location of the device.
+     * The OrientationEvent provides information from the physical orientation of the device.
+     * Note: Currently, Browsers on the iOS and Android does not handle the coordinates the same way.
+     * Take care about this while using them.
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * GeolocationEvent 提供设备的地理位置信息和获取位置时发生的错误信息
+     * OrientationEvent 提供设备的方向信息
+     * 注意: 目前各个浏览器和操作系统处理方向的方式不完全相同，请根据使用场景做相应的校正，
+     * 比如使用两次方向数据的变化而不是直接使用方向的值
      * @version Lark 1.0
      * @platform Web,Native
      */
-    var GeolocationEvent = (function (_super) {
-        __extends(GeolocationEvent, _super);
-        function GeolocationEvent() {
+    var OrientationEvent = (function (_super) {
+        __extends(OrientationEvent, _super);
+        function OrientationEvent() {
             _super.apply(this, arguments);
         }
-        var d = __define,c=GeolocationEvent;p=c.prototype;
-        /**
-         * @language en_US
-         * The acquisition of the location information failed because of app don't have permission.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 由于用户拒绝访问位置信息，获取位置信息失败
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        GeolocationEvent.PERMISSION_DENIED = "permissionDenied";
-        /**
-         * @language en_US
-         * The acquisition of the location failed because at least one internal source of position returned an internal error.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设备位置服务不可用或者超时等原因没有得到位置信息
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        GeolocationEvent.UNAVAILABLE = "unavailable";
-        return GeolocationEvent;
+        var d = __define,c=OrientationEvent;p=c.prototype;
+        return OrientationEvent;
     })(lark.Event);
-    lark.GeolocationEvent = GeolocationEvent;
-    lark.registerClass(GeolocationEvent,"lark.GeolocationEvent");
+    lark.OrientationEvent = OrientationEvent;
+    lark.registerClass(OrientationEvent,"lark.OrientationEvent");
 })(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
-    var rectanglePool = [];
+    /**
+     * @private
+     */
+    var initTweenFlag = true;
+    /**
+     * @private
+     */
+    var easeCache = {};
     /**
      * @language en_US
-     * A Rectangle object is an area defined by its position, as indicated by its top-left corner point (x, y) and by its
-     * width and its height.<br/>
-     * The x, y, width, and height properties of the Rectangle class are independent of each other; changing the value of
-     * one property has no effect on the others. However, the right and bottom properties are integrally related to those
-     * four properties. For example, if you change the value of the right property, the value of the width property changes;
-     * if you change the bottom property, the value of the height property changes.
+     * The tween.
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/geom/RectangleExample.ts
      */
     /**
      * @language zh_CN
-     * Rectangle 对象是按其位置（由它左上角的点 (x, y) 确定）以及宽度和高度定义的区域。<br/>
-     * Rectangle 类的 x、y、width 和 height 属性相互独立；更改一个属性的值不会影响其他属性。
-     * 但是，right 和 bottom 属性与这四个属性是整体相关的。例如，如果更改 right 属性的值，则 width
-     * 属性的值将发生变化；如果更改 bottom 属性，则 height 属性的值将发生变化。
+     * 缓动类。
      * @version Lark 1.0
      * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/geom/RectangleExample.ts
      */
-    var Rectangle = (function (_super) {
-        __extends(Rectangle, _super);
+    var Tween = (function (_super) {
+        __extends(Tween, _super);
         /**
          * @language en_US
-         * Creates a new Rectangle object with the top-left corner specified by the x and y parameters and with the specified
-         * width and height parameters.
-         * @param x The x coordinate of the top-left corner of the rectangle.
-         * @param y The y coordinate of the top-left corner of the rectangle.
-         * @param width The width of the rectangle, in pixels.
-         * @param height The height of the rectangle, in pixels.
+         * Constructor.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 创建一个新 Rectangle 对象，其左上角由 x 和 y 参数指定，并具有指定的 width 和 height 参数。
-         * @param x 矩形左上角的 x 坐标。
-         * @param y 矩形左上角的 y 坐标。
-         * @param width 矩形的宽度（以像素为单位）。
-         * @param height 矩形的高度（以像素为单位）。
+         * 构造函数。
+         * @param target 要变换的属性
          * @version Lark 1.0
          * @platform Web,Native
          */
-        function Rectangle(x, y, width, height) {
-            if (x === void 0) { x = 0; }
-            if (y === void 0) { y = 0; }
-            if (width === void 0) { width = 0; }
-            if (height === void 0) { height = 0; }
+        function Tween(target, time, params, ease) {
             _super.call(this);
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-        }
-        var d = __define,c=Rectangle;p=c.prototype;
-        /**
-         * @language en_US
-         * Releases a rectangle instance to the object pool.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 释放一个Rectangle实例到对象池
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Rectangle.release = function (rect) {
-            if (!rect) {
+            /**
+             * @private
+             */
+            this._startTime = -1;
+            /**
+             * @private
+             */
+            this._currentTime = 0;
+            /**
+             * @private
+             */
+            this._pugins = [];
+            /**
+             * @private
+             */
+            this._bePlay = false;
+            /**
+             * @privbate
+             */
+            this._waitTime = 0;
+            time = +time;
+            this._time = time;
+            this._target = target;
+            if (time <= 0)
                 return;
+            this.params = params;
+            this.ease = ease;
+            if (!this._ease) {
+                this.ease = lark.Ease.None;
             }
-            rectanglePool.push(rect);
-        };
-        /**
-         * @language en_US
-         * get a rectangle instance from the object pool or create a new one.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从对象池中取出或创建一个新的Rectangle对象。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        Rectangle.create = function () {
-            var rect = rectanglePool.pop();
-            if (!rect) {
-                rect = new Rectangle();
+            if (initTweenFlag) {
+                this._startTime = lark.getTimer();
+                this._isPlaying = true;
+                this.initParmas();
             }
-            return rect;
-        };
-        d(p, "right",
-            /**
-             * @language en_US
-             * The sum of the x and width properties.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * x 和 width 属性的和。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.x + this.width;
-            },
-            function (value) {
-                this.width = value - this.x;
+            else {
+                this._isPlaying = false;
             }
-        );
-        d(p, "bottom",
-            /**
-             * @language en_US
-             * The sum of the y and height properties.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * y 和 height 属性的和。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.y + this.height;
-            },
-            function (value) {
-                this.height = value - this.y;
-            }
-        );
-        d(p, "left",
-            /**
-             * @language en_US
-             * The x coordinate of the top-left corner of the rectangle. Changing the left property of a Rectangle object has
-             * no effect on the y and height properties. However it does affect the width property, whereas changing the x value
-             * does not affect the width property.
-             * The value of the left property is equal to the value of the x property.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 矩形左上角的 x 坐标。更改 Rectangle 对象的 left 属性对 y 和 height 属性没有影响。但是，它会影响 width 属性，而更改 x 值不会影响 width 属性。
-             * left 属性的值等于 x 属性的值。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.x;
-            },
-            function (value) {
-                this.width += this.x - value;
-                this.x = value;
-            }
-        );
-        d(p, "top",
-            /**
-             * @language en_US
-             * The y coordinate of the top-left corner of the rectangle. Changing the top property of a Rectangle object has
-             * no effect on the x and width properties. However it does affect the height property, whereas changing the y
-             * value does not affect the height property.<br/>
-             * The value of the top property is equal to the value of the y property.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 矩形左上角的 y 坐标。更改 Rectangle 对象的 top 属性对 x 和 width 属性没有影响。但是，它会影响 height 属性，而更改 y 值不会影响 height 属性。<br/>
-             * top 属性的值等于 y 属性的值。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.y;
-            },
-            function (value) {
-                this.height += this.y - value;
-                this.y = value;
-            }
-        );
-        /**
-         * @language en_US
-         * Copies all of rectangle data from the source Rectangle object into the calling Rectangle object.
-         * @param sourceRect The Rectangle object from which to copy the data.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将源 Rectangle 对象中的所有矩形数据复制到调用方 Rectangle 对象中。
-         * @param sourceRect 要从中复制数据的 Rectangle 对象。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.copyFrom = function (sourceRect) {
-            this.x = sourceRect.x;
-            this.y = sourceRect.y;
-            this.width = sourceRect.width;
-            this.height = sourceRect.height;
-            return this;
-        };
-        /**
-         * @language en_US
-         * Sets the members of Rectangle to the specified values
-         * @param x The x coordinate of the top-left corner of the rectangle.
-         * @param y The y coordinate of the top-left corner of the rectangle.
-         * @param width The width of the rectangle, in pixels.
-         * @param height The height of the rectangle, in pixels.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将 Rectangle 的成员设置为指定值
-         * @param x 矩形左上角的 x 坐标。
-         * @param y 矩形左上角的 y 坐标。
-         * @param width 矩形的宽度（以像素为单位）。
-         * @param height 矩形的高度（以像素为单位）。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.setTo = function (x, y, width, height) {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-            return this;
-        };
-        /**
-         * @language en_US
-         * Determines whether the specified point is contained within the rectangular region defined by this Rectangle object.
-         * @param x The x coordinate (horizontal position) of the point.
-         * @param y The y coordinate (vertical position) of the point.
-         * @returns A value of true if the Rectangle object contains the specified point; otherwise false.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 确定由此 Rectangle 对象定义的矩形区域内是否包含指定的点。
-         * @param x 检测点的x轴
-         * @param y 检测点的y轴
-         * @returns 如果检测点位于矩形内，返回true，否则，返回false
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.contains = function (x, y) {
-            return this.x <= x && this.x + this.width >= x && this.y <= y && this.y + this.height >= y;
-        };
-        /**
-         * @language en_US
-         * If the Rectangle object specified in the toIntersect parameter intersects with this Rectangle object, returns
-         * the area of intersection as a Rectangle object. If the rectangles do not intersect, this method returns an empty
-         * Rectangle object with its properties set to 0.
-         * @param toIntersect The Rectangle object to compare against to see if it intersects with this Rectangle object.
-         * @returns A Rectangle object that equals the area of intersection. If the rectangles do not intersect, this method
-         * returns an empty Rectangle object; that is, a rectangle with its x, y, width, and height properties set to 0.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果在 toIntersect 参数中指定的 Rectangle 对象与此 Rectangle 对象相交，则返回交集区域作为 Rectangle 对象。如果矩形不相交，
-         * 则此方法返回一个空的 Rectangle 对象，其属性设置为 0。
-         * @param toIntersect 要对照比较以查看其是否与此 Rectangle 对象相交的 Rectangle 对象。
-         * @returns 等于交集区域的 Rectangle 对象。如果该矩形不相交，则此方法返回一个空的 Rectangle 对象；即，其 x、y、width 和
-         * height 属性均设置为 0 的矩形。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.intersection = function (toIntersect) {
-            return this.clone().$intersectInPlace(toIntersect);
-        };
+        }
+        var d = __define,c=Tween;p=c.prototype;
         /**
          * @private
          */
-        p.$intersectInPlace = function (clipRect) {
-            var x0 = this.x;
-            var y0 = this.y;
-            var x1 = clipRect.x;
-            var y1 = clipRect.y;
-            var l = Math.max(x0, x1);
-            var r = Math.min(x0 + this.width, x1 + clipRect.width);
-            if (l <= r) {
-                var t = Math.max(y0, y1);
-                var b = Math.min(y0 + this.height, y1 + clipRect.height);
-                if (t <= b) {
-                    this.setTo(l, t, r - l, b - t);
-                    return this;
+        p.initParmas = function () {
+            var controller;
+            var params = this.params;
+            if (params) {
+                var keys = Object.keys(params);
+                for (var i = 0; i < keys.length; i++) {
+                    var key = keys[i];
+                    if (typeof (key) != "string") {
+                        delete params[key];
+                        keys.splice(i, 1);
+                        i--;
+                        continue;
+                    }
+                    var attribute = params[key];
+                    if (typeof (attribute) != "number" || !(key in this._target)) {
+                        delete params[key];
+                        keys.splice(i, 1);
+                        i--;
+                        continue;
+                    }
+                }
+                if (keys.length) {
+                    controller = new lark.BasicPlugin();
+                    controller.init(this, params);
+                    this._pugins.push(controller);
                 }
             }
-            this.setEmpty();
+            lark.startTick(this.update, this);
+        };
+        d(p, "time"
+            /**
+             * @language en_US
+             * The total transformation time.
+             * @see lark.Tween
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 总的变换时间。
+             * @see lark.Tween
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this._time;
+            }
+        );
+        d(p, "currentTime"
+            /**
+             * @language en_US
+             * The current transformation time.
+             * @see lark.Tween
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 当前的变换时间。
+             * @see lark.Tween
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this._currentTime;
+            }
+        );
+        d(p, "target"
+            /**
+             * @language en_US
+             * The object to transform.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 要变换的对象。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this._target;
+            }
+        );
+        d(p, "ease"
+            /**
+             * @language en_US
+             * The type of ease.
+             * @see lark.Ease
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 缓动类型。
+             * @see lark.Ease
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this._ease;
+            }
+            ,function (val) {
+                if (!easeCache[val]) {
+                    var func = lark.EaseFunction[val];
+                    if (func == null) {
+                        //warn
+                        return;
+                    }
+                    var cache = [];
+                    for (var i = 0; i <= 2000; i++) {
+                        cache[i] = func(i / 2000);
+                    }
+                    easeCache[val] = cache;
+                }
+                this._ease = val;
+                this._easeData = easeCache[val];
+            }
+        );
+        d(p, "nextTween"
+            /**
+             * @language en_US
+             * The next tween.
+             * @see lark.Tween
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 下一个Tween。
+             * @see lark.Tween
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this._nextTween;
+            }
+            ,function (tween) {
+                this._nextTween = tween;
+            }
+        );
+        /**
+         * @language en_US
+         * Pauses the current Tween.
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 暂停当前 Tween。
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.pause = function () {
+            this._isPlaying = false;
+        };
+        /**
+         * @language en_US
+         * The tween is playing or not.
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当前 Tween 是否正则播放。
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.isPlaying = function () {
+            return this._isPlaying;
+        };
+        /**
+         * @language en_US
+         * Plays the current Tween. If you pause before too, we will continue to play.
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 播放当前 Tween。如果之前暂停过，会继续播放。
+         * @see lark.Tween
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.play = function () {
+            this._isPlaying = true;
+        };
+        p.$initPlay = function (time) {
+            this._startTime = time;
+            this._isPlaying = true;
+            this.initParmas();
+        };
+        /**
+         * @language en_US
+         * Tween end callback function.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * Tween 结束回调函数。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.call = function (callBack, thisObj, params) {
+            this._complete = callBack;
+            this._completeThis = thisObj;
+            this._completeParams = params;
             return this;
         };
         /**
          * @language en_US
-         * Determines whether the object specified in the toIntersect parameter intersects with this Rectangle object.
-         * This method checks the x, y, width, and height properties of the specified Rectangle object to see if it
-         * intersects with this Rectangle object.
-         * @param toIntersect The Rectangle object to compare against this Rectangle object.
-         * @returns A value of true if the specified object intersects with this Rectangle object; otherwise false.
+         * Completely stop the current Tween. And recycling of cyberspace.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 确定在 toIntersect 参数中指定的对象是否与此 Rectangle 对象相交。此方法检查指定的 Rectangle
-         * 对象的 x、y、width 和 height 属性，以查看它是否与此 Rectangle 对象相交。
-         * @param toIntersect 要与此 Rectangle 对象比较的 Rectangle 对象。
-         * @returns 如果两个矩形相交，返回true，否则返回false
+         * 完全停止当前 Tween。并回收资源。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        p.intersects = function (toIntersect) {
-            return Math.max(this.x, toIntersect.x) <= Math.min(this.right, toIntersect.right) && Math.max(this.y, toIntersect.y) <= Math.min(this.bottom, toIntersect.bottom);
+        p.kill = function () {
+            this._isPlaying = false;
+            lark.stopTick(this.update, this);
         };
         /**
-         * @language en_US
-         * Determines whether or not this Rectangle object is empty.
-         * @returns A value of true if the Rectangle object's width or height is less than or equal to 0; otherwise false.
-         * @version Lark 1.0
-         * @platform Web,Native
+         * @private
+         * @param time
+         * @returns {boolean}
          */
-        /**
-         * @language zh_CN
-         * 确定此 Rectangle 对象是否为空。
-         * @returns 如果 Rectangle 对象的宽度或高度小于等于 0，则返回 true 值，否则返回 false。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.isEmpty = function () {
-            return this.width <= 0 || this.height <= 0;
-        };
-        /**
-         * @language en_US
-         * Sets all of the Rectangle object's properties to 0. A Rectangle object is empty if its width or height is less than or equal to 0.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将 Rectangle 对象的所有属性设置为 0。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.setEmpty = function () {
-            this.x = 0;
-            this.y = 0;
-            this.width = 0;
-            this.height = 0;
-        };
-        /**
-         * @language en_US
-         * Returns a new Rectangle object with the same values for the x, y, width, and height properties as the original Rectangle object.
-         * @returns A new Rectangle object with the same values for the x, y, width, and height properties as the original Rectangle object.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回一个新的 Rectangle 对象，其 x、y、width 和 height 属性的值与原始 Rectangle 对象的对应值相同。
-         * @returns 新的 Rectangle 对象，其 x、y、width 和 height 属性的值与原始 Rectangle 对象的对应值相同。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        p.clone = function () {
-            return new Rectangle(this.x, this.y, this.width, this.height);
+        p.update = function (time) {
+            if (this._isPlaying == false) {
+                return true;
+            }
+            this._bePlay = true;
+            this._currentTime = time - this._startTime;
+            if (this._currentTime > this._time) {
+                this._currentTime = this._time;
+            }
+            var length = this._pugins.length;
+            var s = this._easeData[2000 * (this._currentTime / this._time) | 0];
+            for (var i = 0; i < length; i++) {
+                this._pugins[i].update(s);
+            }
+            if (this._currentTime == this._time) {
+                lark.stopTick(this.update, this);
+                if (this._complete != null) {
+                    this._complete.apply(this._completeThis, this._completeParams);
+                }
+                if (this._waitTime) {
+                    this._waitTime += lark.getTimer();
+                    lark.startTick(this.waitEndTime, this);
+                }
+                else {
+                    if (this._nextTween) {
+                        this._nextTween.$initPlay(time);
+                    }
+                }
+            }
+            return true;
         };
         /**
          * @private
          */
-        p.$getBaseWidth = function (angle) {
-            var u = Math.abs(Math.cos(angle));
-            var v = Math.abs(Math.sin(angle));
-            return u * this.width + v * this.height;
+        p.waitEndTime = function (time) {
+            if (time > this._waitTime) {
+                lark.stopTick(this.waitEndTime, this);
+                if (this._nextTween) {
+                    this._nextTween.$initPlay(time);
+                }
+            }
+            return true;
         };
         /**
          * @private
+         * @param tween
+         * @returns {Tween}
          */
-        p.$getBaseHeight = function (angle) {
-            var u = Math.abs(Math.cos(angle));
-            var v = Math.abs(Math.sin(angle));
-            return v * this.width + u * this.height;
+        p.concatTween = function (tween) {
+            var lastTween = this;
+            while (lastTween.nextTween) {
+                lastTween = lastTween.nextTween;
+            }
+            lastTween.nextTween = tween;
+            return tween;
         };
-        return Rectangle;
-    })(lark.LarkObject);
-    lark.Rectangle = Rectangle;
-    lark.registerClass(Rectangle,"lark.Rectangle");
-    /**
-     * @private
-     * 仅供框架内复用，要防止暴露引用到外部。
-     */
-    lark.$TempRectangle = new Rectangle();
+        /**
+         * @language en_US
+         * Link to a Tween. Tween from the current target will have been looking back, until it finds a Tween object is not set nextTween property, and is connected to the back of Tween.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 链接一个 Tween 。会从当前 Tween 对象一直往后找，直到发现一个 Tween 对象没有设置 nextTween 属性，并连到那个 Tween 后面。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.to = function (target, time, params, ease) {
+            initTweenFlag = false;
+            var tween = new Tween(target, time, params, ease);
+            initTweenFlag = true;
+            return this.concatTween(tween);
+        };
+        /**
+         * @language en_US
+         * The time to wait before the next tween starts.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在下一个动画开始前等待多少时间。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.wait = function (time) {
+            time = +time;
+            this._waitTime = time;
+            return this;
+        };
+        /**
+         * @language en_US
+         * Create a Tween object.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个 Tween 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Tween.get = function (target, time, params, ease) {
+            initTweenFlag = true;
+            var tween = new Tween(target, time, params, ease);
+            return tween;
+        };
+        Tween.registerPlugin = function (paramName, plugin) {
+            Tween.plugins[paramName] = plugin;
+        };
+        Tween.plugins = {};
+        return Tween;
+    })(lark.EventEmitter);
+    lark.Tween = Tween;
+    lark.registerClass(Tween,"lark.Tween");
 })(lark || (lark = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -6700,7 +8285,7 @@ var lark;
             this.repeatCount = +repeatCount | 0;
         }
         var d = __define,c=Timer;p=c.prototype;
-        d(p, "delay",
+        d(p, "delay"
             /**
              * @language en_US
              * The delay between timer events, in milliseconds. A delay lower than 20 milliseconds is not recommended.<br/>
@@ -6715,10 +8300,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._delay;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 if (value < 1) {
                     value = 1;
@@ -6730,7 +8315,7 @@ var lark;
                 this.lastCount = this.updateInterval = Math.round(60 * value);
             }
         );
-        d(p, "currentCount",
+        d(p, "currentCount"
             /**
              * @language en_US
              * The total number of times the timer has fired since it started at zero. If the timer has been reset, only the fires since the reset are counted.
@@ -6743,11 +8328,11 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._currentCount;
-            },undefined
+            }
         );
-        d(p, "running",
+        d(p, "running"
             /**
              * @language en_US
              * The timer's current state; true if the timer is running, otherwise false.
@@ -6760,9 +8345,9 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this._running;
-            },undefined
+            }
         );
         /**
          * @language en_US
@@ -7464,7 +9049,7 @@ var lark;
             target.ty = ty;
         };
         return Matrix;
-    })(lark.LarkObject);
+    })(lark.HashObject);
     lark.Matrix = Matrix;
     lark.registerClass(Matrix,"lark.Matrix");
     /**
@@ -7760,7 +9345,7 @@ var lark;
                 this.$parent.$propagateFlagsUp(4 /* InvalidBounds */);
             }
         };
-        d(p, "name",
+        d(p, "name"
             /**
              * @language en_US
              * Indicates the instance name of the DisplayObject. The object can be identified in the child list of its parent
@@ -7775,14 +9360,14 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$DisplayObject[5 /* name */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$DisplayObject[5 /* name */] = value;
             }
         );
-        d(p, "parent",
+        d(p, "parent"
             /**
              * @language en_US
              * Indicates the DisplayObjectContainer object that contains this display object. Use the parent property to specify
@@ -7797,9 +9382,9 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$parent;
-            },undefined
+            }
         );
         /**
          * @private
@@ -7825,7 +9410,7 @@ var lark;
             this.$nestLevel = 0;
             lark.Sprite.$EVENT_REMOVE_FROM_STAGE_LIST.push(this);
         };
-        d(p, "stage",
+        d(p, "stage"
             /**
              * @language en_US
              * The Stage of the display object. you can create and load multiple display objects into the display list, and
@@ -7842,11 +9427,11 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$stage;
-            },undefined
+            }
         );
-        d(p, "matrix",
+        d(p, "matrix"
             /**
              * @language en_US
              * A Matrix object containing values that alter the scaling, rotation, and translation of the display object.<br/>
@@ -7874,10 +9459,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$getMatrix().clone();
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$setMatrix(value);
             }
         );
@@ -7951,7 +9536,7 @@ var lark;
             }
             return values[8 /* invertedConcatenatedMatrix */];
         };
-        d(p, "x",
+        d(p, "x"
             /**
              * @language en_US
              * Indicates the x coordinate of the DisplayObject instance relative to the local coordinates of the parent
@@ -7973,10 +9558,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$getX();
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$setX(value);
             }
         );
@@ -8001,7 +9586,7 @@ var lark;
             this.invalidatePosition();
             return true;
         };
-        d(p, "y",
+        d(p, "y"
             /**
              * @language en_US
              * Indicates the y coordinate of the DisplayObject instance relative to the local coordinates of the parent
@@ -8023,10 +9608,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$getY();
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$setY(value);
             }
         );
@@ -8051,7 +9636,7 @@ var lark;
             this.invalidatePosition();
             return true;
         };
-        d(p, "scaleX",
+        d(p, "scaleX"
             /**
              * @language en_US
              * Indicates the horizontal scale (percentage) of the object as applied from the registration point. <br/>
@@ -8069,10 +9654,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$DisplayObject[0 /* scaleX */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$setScaleX(value);
             }
         );
@@ -8090,7 +9675,7 @@ var lark;
             this.invalidateMatrix();
             return true;
         };
-        d(p, "scaleY",
+        d(p, "scaleY"
             /**
              * @language en_US
              * Indicates the vertical scale (percentage) of an object as applied from the registration point of the object.
@@ -8108,10 +9693,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$DisplayObject[1 /* scaleY */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$setScaleY(value);
             }
         );
@@ -8128,7 +9713,7 @@ var lark;
             this.invalidateMatrix();
             return true;
         };
-        d(p, "rotation",
+        d(p, "rotation"
             /**
              * @language en_US
              * Indicates the rotation of the DisplayObject instance, in degrees, from its original orientation. Values from
@@ -8148,10 +9733,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$DisplayObject[4 /* rotation */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 value = clampRotation(value);
                 var values = this.$DisplayObject;
@@ -8166,7 +9751,7 @@ var lark;
                 this.invalidateMatrix();
             }
         );
-        d(p, "width",
+        d(p, "width"
             /**
              * @language en_US
              * Indicates the width of the display object, in pixels. The width is calculated based on the bounds of the content
@@ -8180,10 +9765,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$getWidth();
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$setWidth(value);
             }
         );
@@ -8216,7 +9801,7 @@ var lark;
             values[0 /* scaleX */] = value / baseWidth;
             this.invalidateMatrix();
         };
-        d(p, "height",
+        d(p, "height"
             /**
              * @language en_US
              * Indicates the height of the display object, in pixels. The height is calculated based on the bounds of the
@@ -8230,10 +9815,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$getHeight();
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$setHeight(value);
             }
         );
@@ -8266,7 +9851,7 @@ var lark;
             values[0 /* scaleX */] = bounds.width / baseWidth;
             this.invalidateMatrix();
         };
-        d(p, "visible",
+        d(p, "visible"
             /**
              * @language en_US
              * Whether or not the display object is visible. Display objects that are not visible are disabled. For example,
@@ -8282,10 +9867,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$visible;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = !!value;
                 if (value === this.$visible) {
                     return;
@@ -8294,7 +9879,7 @@ var lark;
                 this.$invalidateTransform();
             }
         );
-        d(p, "cacheAsBitmap",
+        d(p, "cacheAsBitmap"
             /**
              * @language en_US
              * If set to true, Lark runtime caches an internal bitmap representation of the display object. This caching can
@@ -8317,10 +9902,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$DisplayObject[11 /* cacheAsBitmap */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = !!value;
                 this.$DisplayObject[11 /* cacheAsBitmap */] = value;
                 var hasDisplayList = !!this.$displayList;
@@ -8332,6 +9917,7 @@ var lark;
                     if (displayList) {
                         this.$displayList = displayList;
                         if (this.$parentDisplayList) {
+                            displayList.setDevicePixelRatio(this.$parentDisplayList.$ratioMatrix.a);
                             this.$parentDisplayList.markDirty(displayList);
                         }
                         this.$cacheAsBitmapChanged();
@@ -8353,8 +9939,9 @@ var lark;
             if (this.$renderRegion) {
                 parentCache.markDirty(this);
             }
+            this.$propagateFlagsDown(16 /* InvalidConcatenatedMatrix */ | 32 /* InvalidInvertedConcatenatedMatrix */);
         };
-        d(p, "alpha",
+        d(p, "alpha"
             /**
              * @language en_US
              * Indicates the alpha transparency value of the object specified. Valid values are 0 (fully transparent) to 1 (fully opaque).
@@ -8371,10 +9958,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$alpha;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 if (value === this.$alpha) {
                     return;
@@ -8401,7 +9988,7 @@ var lark;
             }
             return this.$renderAlpha;
         };
-        d(p, "touchEnabled",
+        d(p, "touchEnabled"
             /**
              * @language en_US
              * Specifies whether this object receives touch or other user input. The default value is true, which means that
@@ -8424,10 +10011,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$touchEnabled;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$setTouchEnabled(!!value);
             }
         );
@@ -8437,7 +10024,7 @@ var lark;
         p.$setTouchEnabled = function (value) {
             this.$touchEnabled = value;
         };
-        d(p, "scrollRect",
+        d(p, "scrollRect"
             /**
              * @language en_US
              * The scroll rectangle bounds of the display object. The display object is cropped to the size defined by the rectangle,
@@ -8474,10 +10061,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$scrollRect;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (!value && !this.$scrollRect) {
                     return;
                 }
@@ -8493,7 +10080,7 @@ var lark;
                 this.invalidatePosition();
             }
         );
-        d(p, "blendMode",
+        d(p, "blendMode"
             /**
              * @language en_US
              * A value from the BlendMode class that specifies which blend mode to use. Determine how a source image (new one)
@@ -8513,10 +10100,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return lark.sys.numberToBlendMode(this.$blendMode);
-            },
-            function (value) {
+            }
+            ,function (value) {
                 var mode = lark.sys.blendModeToNumber(value);
                 if (mode === this.$blendMode) {
                     return;
@@ -8525,7 +10112,7 @@ var lark;
                 this.$invalidateTransform();
             }
         );
-        d(p, "mask",
+        d(p, "mask"
             /**
              * @language en_US
              * The calling display object is masked by the specified mask object. To ensure that masking works when the Stage
@@ -8547,10 +10134,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$mask;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (value === this.$mask || value === this) {
                     return;
                 }
@@ -8764,7 +10351,7 @@ var lark;
                 region.moved = false;
                 return false;
             }
-            if (!region.moved) {
+            if (!region.moved && !displayList.$ratioChanged) {
                 return false;
             }
             region.moved = false;
@@ -8772,10 +10359,36 @@ var lark;
             matrix.copyFrom(concatenatedMatrix);
             var root = displayList.root;
             if (root !== this.$stage) {
-                root.$getInvertedConcatenatedMatrix().$preMultiplyInto(matrix, matrix);
+                this.$getConcatenatedMatrixAt(root, matrix);
             }
+            displayList.$ratioMatrix.$preMultiplyInto(matrix, matrix);
             region.updateRegion(bounds, matrix);
             return true;
+        };
+        /**
+         * @private
+         * 获取相对于指定根节点的连接矩阵。
+         * @param root 根节点显示对象
+         * @param matrix 目标显示对象相对于舞台的完整连接矩阵。
+         */
+        p.$getConcatenatedMatrixAt = function (root, matrix) {
+            var invertMatrix = root.$getInvertedConcatenatedMatrix();
+            if (invertMatrix.a === 0 || invertMatrix.d === 0) {
+                var target = this;
+                var rootLevel = root.$nestLevel;
+                matrix.identity();
+                while (target.$nestLevel > rootLevel) {
+                    var rect = target.$scrollRect;
+                    if (rect) {
+                        matrix.concat(lark.$TempMatrix.setTo(1, 0, 0, 1, -rect.x, -rect.y));
+                    }
+                    matrix.concat(target.$getMatrix());
+                    target = target.$parent;
+                }
+            }
+            else {
+                invertMatrix.$preMultiplyInto(matrix, matrix);
+            }
         };
         /**
          * @private
@@ -9029,7 +10642,7 @@ var lark;
             this.$stageX = +stageX || 0;
             this.$stageY = +stageY || 0;
         };
-        d(p, "stageX",
+        d(p, "stageX"
             /**
              * @language en_US
              * The horizontal coordinate at which the event occurred in global Stage coordinates.
@@ -9042,11 +10655,11 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$stageX;
-            },undefined
+            }
         );
-        d(p, "stageY",
+        d(p, "stageY"
             /**
              * @language en_US
              * The vertical coordinate at which the event occurred in global Stage coordinates.
@@ -9059,11 +10672,11 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$stageY;
-            },undefined
+            }
         );
-        d(p, "localX",
+        d(p, "localX"
             /**
              * @language en_US
              * The horizontal coordinate at which the event occurred relative to the display object.
@@ -9076,14 +10689,14 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 if (this.targetChanged) {
                     this.getLocalXY();
                 }
                 return this._localX;
-            },undefined
+            }
         );
-        d(p, "localY",
+        d(p, "localY"
             /**
              * @language en_US
              * The vertical coordinate at which the event occurred relative to the display object.
@@ -9096,12 +10709,12 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 if (this.targetChanged) {
                     this.getLocalXY();
                 }
                 return this._localY;
-            },undefined
+            }
         );
         /**
          * @private
@@ -9287,6 +10900,435 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
+    var rectanglePool = [];
+    /**
+     * @language en_US
+     * A Rectangle object is an area defined by its position, as indicated by its top-left corner point (x, y) and by its
+     * width and its height.<br/>
+     * The x, y, width, and height properties of the Rectangle class are independent of each other; changing the value of
+     * one property has no effect on the others. However, the right and bottom properties are integrally related to those
+     * four properties. For example, if you change the value of the right property, the value of the width property changes;
+     * if you change the bottom property, the value of the height property changes.
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/geom/RectangleExample.ts
+     */
+    /**
+     * @language zh_CN
+     * Rectangle 对象是按其位置（由它左上角的点 (x, y) 确定）以及宽度和高度定义的区域。<br/>
+     * Rectangle 类的 x、y、width 和 height 属性相互独立；更改一个属性的值不会影响其他属性。
+     * 但是，right 和 bottom 属性与这四个属性是整体相关的。例如，如果更改 right 属性的值，则 width
+     * 属性的值将发生变化；如果更改 bottom 属性，则 height 属性的值将发生变化。
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/geom/RectangleExample.ts
+     */
+    var Rectangle = (function (_super) {
+        __extends(Rectangle, _super);
+        /**
+         * @language en_US
+         * Creates a new Rectangle object with the top-left corner specified by the x and y parameters and with the specified
+         * width and height parameters.
+         * @param x The x coordinate of the top-left corner of the rectangle.
+         * @param y The y coordinate of the top-left corner of the rectangle.
+         * @param width The width of the rectangle, in pixels.
+         * @param height The height of the rectangle, in pixels.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个新 Rectangle 对象，其左上角由 x 和 y 参数指定，并具有指定的 width 和 height 参数。
+         * @param x 矩形左上角的 x 坐标。
+         * @param y 矩形左上角的 y 坐标。
+         * @param width 矩形的宽度（以像素为单位）。
+         * @param height 矩形的高度（以像素为单位）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function Rectangle(x, y, width, height) {
+            if (x === void 0) { x = 0; }
+            if (y === void 0) { y = 0; }
+            if (width === void 0) { width = 0; }
+            if (height === void 0) { height = 0; }
+            _super.call(this);
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+        var d = __define,c=Rectangle;p=c.prototype;
+        /**
+         * @language en_US
+         * Releases a rectangle instance to the object pool.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 释放一个Rectangle实例到对象池
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Rectangle.release = function (rect) {
+            if (!rect) {
+                return;
+            }
+            rectanglePool.push(rect);
+        };
+        /**
+         * @language en_US
+         * get a rectangle instance from the object pool or create a new one.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从对象池中取出或创建一个新的Rectangle对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        Rectangle.create = function () {
+            var rect = rectanglePool.pop();
+            if (!rect) {
+                rect = new Rectangle();
+            }
+            return rect;
+        };
+        d(p, "right"
+            /**
+             * @language en_US
+             * The sum of the x and width properties.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * x 和 width 属性的和。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.x + this.width;
+            }
+            ,function (value) {
+                this.width = value - this.x;
+            }
+        );
+        d(p, "bottom"
+            /**
+             * @language en_US
+             * The sum of the y and height properties.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * y 和 height 属性的和。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.y + this.height;
+            }
+            ,function (value) {
+                this.height = value - this.y;
+            }
+        );
+        d(p, "left"
+            /**
+             * @language en_US
+             * The x coordinate of the top-left corner of the rectangle. Changing the left property of a Rectangle object has
+             * no effect on the y and height properties. However it does affect the width property, whereas changing the x value
+             * does not affect the width property.
+             * The value of the left property is equal to the value of the x property.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 矩形左上角的 x 坐标。更改 Rectangle 对象的 left 属性对 y 和 height 属性没有影响。但是，它会影响 width 属性，而更改 x 值不会影响 width 属性。
+             * left 属性的值等于 x 属性的值。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.x;
+            }
+            ,function (value) {
+                this.width += this.x - value;
+                this.x = value;
+            }
+        );
+        d(p, "top"
+            /**
+             * @language en_US
+             * The y coordinate of the top-left corner of the rectangle. Changing the top property of a Rectangle object has
+             * no effect on the x and width properties. However it does affect the height property, whereas changing the y
+             * value does not affect the height property.<br/>
+             * The value of the top property is equal to the value of the y property.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 矩形左上角的 y 坐标。更改 Rectangle 对象的 top 属性对 x 和 width 属性没有影响。但是，它会影响 height 属性，而更改 y 值不会影响 height 属性。<br/>
+             * top 属性的值等于 y 属性的值。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.y;
+            }
+            ,function (value) {
+                this.height += this.y - value;
+                this.y = value;
+            }
+        );
+        /**
+         * @language en_US
+         * Copies all of rectangle data from the source Rectangle object into the calling Rectangle object.
+         * @param sourceRect The Rectangle object from which to copy the data.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将源 Rectangle 对象中的所有矩形数据复制到调用方 Rectangle 对象中。
+         * @param sourceRect 要从中复制数据的 Rectangle 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.copyFrom = function (sourceRect) {
+            this.x = sourceRect.x;
+            this.y = sourceRect.y;
+            this.width = sourceRect.width;
+            this.height = sourceRect.height;
+            return this;
+        };
+        /**
+         * @language en_US
+         * Sets the members of Rectangle to the specified values
+         * @param x The x coordinate of the top-left corner of the rectangle.
+         * @param y The y coordinate of the top-left corner of the rectangle.
+         * @param width The width of the rectangle, in pixels.
+         * @param height The height of the rectangle, in pixels.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将 Rectangle 的成员设置为指定值
+         * @param x 矩形左上角的 x 坐标。
+         * @param y 矩形左上角的 y 坐标。
+         * @param width 矩形的宽度（以像素为单位）。
+         * @param height 矩形的高度（以像素为单位）。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.setTo = function (x, y, width, height) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            return this;
+        };
+        /**
+         * @language en_US
+         * Determines whether the specified point is contained within the rectangular region defined by this Rectangle object.
+         * @param x The x coordinate (horizontal position) of the point.
+         * @param y The y coordinate (vertical position) of the point.
+         * @returns A value of true if the Rectangle object contains the specified point; otherwise false.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定由此 Rectangle 对象定义的矩形区域内是否包含指定的点。
+         * @param x 检测点的x轴
+         * @param y 检测点的y轴
+         * @returns 如果检测点位于矩形内，返回true，否则，返回false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.contains = function (x, y) {
+            return this.x <= x && this.x + this.width >= x && this.y <= y && this.y + this.height >= y;
+        };
+        /**
+         * @language en_US
+         * If the Rectangle object specified in the toIntersect parameter intersects with this Rectangle object, returns
+         * the area of intersection as a Rectangle object. If the rectangles do not intersect, this method returns an empty
+         * Rectangle object with its properties set to 0.
+         * @param toIntersect The Rectangle object to compare against to see if it intersects with this Rectangle object.
+         * @returns A Rectangle object that equals the area of intersection. If the rectangles do not intersect, this method
+         * returns an empty Rectangle object; that is, a rectangle with its x, y, width, and height properties set to 0.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果在 toIntersect 参数中指定的 Rectangle 对象与此 Rectangle 对象相交，则返回交集区域作为 Rectangle 对象。如果矩形不相交，
+         * 则此方法返回一个空的 Rectangle 对象，其属性设置为 0。
+         * @param toIntersect 要对照比较以查看其是否与此 Rectangle 对象相交的 Rectangle 对象。
+         * @returns 等于交集区域的 Rectangle 对象。如果该矩形不相交，则此方法返回一个空的 Rectangle 对象；即，其 x、y、width 和
+         * height 属性均设置为 0 的矩形。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.intersection = function (toIntersect) {
+            return this.clone().$intersectInPlace(toIntersect);
+        };
+        /**
+         * @private
+         */
+        p.$intersectInPlace = function (clipRect) {
+            var x0 = this.x;
+            var y0 = this.y;
+            var x1 = clipRect.x;
+            var y1 = clipRect.y;
+            var l = Math.max(x0, x1);
+            var r = Math.min(x0 + this.width, x1 + clipRect.width);
+            if (l <= r) {
+                var t = Math.max(y0, y1);
+                var b = Math.min(y0 + this.height, y1 + clipRect.height);
+                if (t <= b) {
+                    this.setTo(l, t, r - l, b - t);
+                    return this;
+                }
+            }
+            this.setEmpty();
+            return this;
+        };
+        /**
+         * @language en_US
+         * Determines whether the object specified in the toIntersect parameter intersects with this Rectangle object.
+         * This method checks the x, y, width, and height properties of the specified Rectangle object to see if it
+         * intersects with this Rectangle object.
+         * @param toIntersect The Rectangle object to compare against this Rectangle object.
+         * @returns A value of true if the specified object intersects with this Rectangle object; otherwise false.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定在 toIntersect 参数中指定的对象是否与此 Rectangle 对象相交。此方法检查指定的 Rectangle
+         * 对象的 x、y、width 和 height 属性，以查看它是否与此 Rectangle 对象相交。
+         * @param toIntersect 要与此 Rectangle 对象比较的 Rectangle 对象。
+         * @returns 如果两个矩形相交，返回true，否则返回false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.intersects = function (toIntersect) {
+            return Math.max(this.x, toIntersect.x) <= Math.min(this.right, toIntersect.right) && Math.max(this.y, toIntersect.y) <= Math.min(this.bottom, toIntersect.bottom);
+        };
+        /**
+         * @language en_US
+         * Determines whether or not this Rectangle object is empty.
+         * @returns A value of true if the Rectangle object's width or height is less than or equal to 0; otherwise false.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定此 Rectangle 对象是否为空。
+         * @returns 如果 Rectangle 对象的宽度或高度小于等于 0，则返回 true 值，否则返回 false。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.isEmpty = function () {
+            return this.width <= 0 || this.height <= 0;
+        };
+        /**
+         * @language en_US
+         * Sets all of the Rectangle object's properties to 0. A Rectangle object is empty if its width or height is less than or equal to 0.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将 Rectangle 对象的所有属性设置为 0。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.setEmpty = function () {
+            this.x = 0;
+            this.y = 0;
+            this.width = 0;
+            this.height = 0;
+        };
+        /**
+         * @language en_US
+         * Returns a new Rectangle object with the same values for the x, y, width, and height properties as the original Rectangle object.
+         * @returns A new Rectangle object with the same values for the x, y, width, and height properties as the original Rectangle object.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回一个新的 Rectangle 对象，其 x、y、width 和 height 属性的值与原始 Rectangle 对象的对应值相同。
+         * @returns 新的 Rectangle 对象，其 x、y、width 和 height 属性的值与原始 Rectangle 对象的对应值相同。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.clone = function () {
+            return new Rectangle(this.x, this.y, this.width, this.height);
+        };
+        /**
+         * @private
+         */
+        p.$getBaseWidth = function (angle) {
+            var u = Math.abs(Math.cos(angle));
+            var v = Math.abs(Math.sin(angle));
+            return u * this.width + v * this.height;
+        };
+        /**
+         * @private
+         */
+        p.$getBaseHeight = function (angle) {
+            var u = Math.abs(Math.cos(angle));
+            var v = Math.abs(Math.sin(angle));
+            return v * this.width + u * this.height;
+        };
+        return Rectangle;
+    })(lark.HashObject);
+    lark.Rectangle = Rectangle;
+    lark.registerClass(Rectangle,"lark.Rectangle");
+    /**
+     * @private
+     * 仅供框架内复用，要防止暴露引用到外部。
+     */
+    lark.$TempRectangle = new Rectangle();
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
     /**
      * @language en_US
      * This class is used to create lightweight shapes using the drawing application program interface (API). The Shape
@@ -9325,7 +11367,7 @@ var lark;
             this.$renderRegion = new lark.sys.Region();
         }
         var d = __define,c=Shape;p=c.prototype;
-        d(p, "graphics",
+        d(p, "graphics"
             /**
              * @language en_US
              * Specifies the Graphics object belonging to this Shape object, where vector drawing commands can occur.
@@ -9338,9 +11380,9 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$graphics;
-            },undefined
+            }
         );
         p.$hitTest = function (stageX, stageY) {
             var target = _super.prototype.$hitTest.call(this, stageX, stageY);
@@ -9399,236 +11441,7 @@ var lark;
 //////////////////////////////////////////////////////////////////////////////////////
 var lark;
 (function (lark) {
-    /**
-     * @language en_US
-     * The Bitmap class represents display objects that represent bitmap images.
-     * The Bitmap() constructor allows you to create a Bitmap object that contains a reference to a BitmapData object.
-     * After you create a Bitmap object, use the addChild() or addChildAt() method of the parent DisplayObjectContainer
-     * instance to place the bitmap on the display list.A Bitmap object can share its BitmapData reference among several
-     * Bitmap objects, independent of translation or rotation properties. Because you can create multiple Bitmap objects
-     * that reference the same BitmapData object, multiple display objects can use the same complex BitmapData object
-     * without incurring the memory overhead of a BitmapData object for each display object instance.
-     *
-     * @see lark.BitmapData
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
-     */
-    /**
-     * @language zh_CN
-     * Bitmap 类表示用于显示位图图片的显示对象。
-     * 利用 Bitmap() 构造函数，可以创建包含对 BitmapData 对象引用的 Bitmap 对象。创建了 Bitmap 对象后，
-     * 使用父级 DisplayObjectContainer 实例的 addChild() 或 addChildAt() 方法可以将位图放在显示列表中。
-     * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 BitmapData 引用，与缩放或旋转属性无关。
-     * 由于能够创建引用相同 BitmapData 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的 BitmapData 对象，
-     * 而不会因为每个显示对象实例使用一个 BitmapData 对象而产生额外内存开销。
-     *
-     * @see lark.BitmapData
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
-     */
-    var Bitmap = (function (_super) {
-        __extends(Bitmap, _super);
-        /**
-         * @language en_US
-         * Initializes a Bitmap object to refer to the specified BitmapData object.
-         * @param bitmapData The BitmapData object being referenced.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个引用指定 BitmapData 实例的 Bitmap 对象
-         * @param bitmapData 被引用的 BitmapData 实例
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        function Bitmap(bitmapData) {
-            _super.call(this);
-            /**
-             * @private
-             */
-            this.$smoothing = true;
-            this._pixelHitTest = false;
-            this.$renderRegion = new lark.sys.Region();
-            this.bitmapData = bitmapData;
-        }
-        var d = __define,c=Bitmap;p=c.prototype;
-        d(p, "bitmapData",
-            /**
-             * @language en_US
-             * bitmapData The BitmapData object being referenced.
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 被引用的 BitmapData 对象。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$bitmapData;
-            },
-            function (value) {
-                this.$setBitmapData(value);
-            }
-        );
-        /**
-         * @private
-         */
-        p.$setBitmapData = function (value) {
-            if (value == this.$bitmapData) {
-                return;
-            }
-            this.$bitmapData = value;
-            this.$invalidateContentBounds();
-        };
-        d(p, "smoothing",
-            /**
-             * @language en_US
-             * Whether or not the bitmap is smoothed when scaled.
-             * @default true。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 控制在缩放时是否对位图进行平滑处理。
-             * @default true。
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this.$smoothing;
-            },
-            function (value) {
-                value = !!value;
-                if (value === this.$smoothing) {
-                    return;
-                }
-                this.$smoothing = value;
-                this.$invalidate();
-            }
-        );
-        d(p, "pixelHitTest",
-            /**
-             * @language en_US
-             * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
-             * is set to true,the transparent area of the bitmap will be touched through.
-             * Note:If the image is loaded from cross origin,that we can't access to the pixel data,so it might cause
-             * the pixelHitTest property invalid.
-             * @default false
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透。<br/>
-             * 注意：若图片资源是以跨域方式从外部服务器加载的，将无法访问图片的像素数据，而导致此属性失效。
-             * @default false
-             * @version Lark 1.0
-             * @platform Web,Native
-             */
-            function () {
-                return this._pixelHitTest;
-            },
-            function (value) {
-                this._pixelHitTest = !!value;
-            }
-        );
-        p.$hitTest = function (stageX, stageY) {
-            var target = _super.prototype.$hitTest.call(this, stageX, stageY);
-            if (target && this._pixelHitTest) {
-                target = this.hitTestPixel(stageX, stageY);
-            }
-            return target;
-        };
-        /**
-         * @private
-         */
-        p.hitTestPixel = function (stageX, stageY) {
-            var m = this.$getInvertedConcatenatedMatrix();
-            var localX = m.a * stageX + m.c * stageY + m.tx;
-            var localY = m.b * stageX + m.d * stageY + m.ty;
-            var context;
-            var data;
-            var displayList = this.$displayList;
-            if (displayList) {
-                context = displayList.renderContext;
-                data = context.getImageData(localX - displayList.offsetX, localY - displayList.offsetY, 1, 1).data;
-            }
-            else {
-                context = lark.sys.sharedRenderContext;
-                context.surface.width = context.surface.height = 3;
-                context.translate(1 - localX, 1 - localY);
-                this.$render(context);
-                data = context.getImageData(1, 1, 1, 1).data;
-            }
-            if (data[3] === 0) {
-                return null;
-            }
-            return this;
-        };
-        /**
-         * @private
-         */
-        p.$measureContentBounds = function (bounds) {
-            var bitmapData = this.$bitmapData;
-            if (bitmapData) {
-                bounds.setTo(0, 0, bitmapData.width, bitmapData.height);
-            }
-            else {
-                bounds.setEmpty();
-            }
-        };
-        /**
-         * @private
-         */
-        p.$render = function (context) {
-            var bitmapData = this.$bitmapData;
-            if (bitmapData) {
-                context.imageSmoothingEnabled = this.$smoothing;
-                context.drawImage(bitmapData, 0, 0);
-            }
-        };
-        return Bitmap;
-    })(lark.DisplayObject);
-    lark.Bitmap = Bitmap;
-    lark.registerClass(Bitmap,"lark.Bitmap");
-})(lark || (lark = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var lark;
-(function (lark) {
-    var SplitRegex = /(?=[\u00BF-\u1FFF\u2C00-\uD7FF]|\b|\s)(?![。，！、》…）)}”】\.\,\!\?\]\:])/;
+    var SplitRegex = new RegExp("(?=[\u00BF-\u1FFF\u2C00-\uD7FF]|\b|\s)(?![。，！、》…）)}”】\.\,\!\?\]\:])");
     /**
      * @language en_US
      * The TextField class is used to create display objects for text display. You can use the methods and properties of
@@ -9705,7 +11518,7 @@ var lark;
             this.text = text;
         }
         var d = __define,c=TextField;p=c.prototype;
-        d(p, "fontFamily",
+        d(p, "fontFamily"
             /**
              * @language en_US
              * The name of the font to use, or a comma-separated list of font names.
@@ -9720,10 +11533,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$TextField[8 /* fontFamily */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 var values = this.$TextField;
                 if (values[8 /* fontFamily */] == value) {
                     return;
@@ -9732,7 +11545,7 @@ var lark;
                 this.invalidateFontString();
             }
         );
-        d(p, "fontSize",
+        d(p, "fontSize"
             /**
              * @language en_US
              * The size in pixels of text
@@ -9747,10 +11560,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$TextField[0 /* fontSize */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 var values = this.$TextField;
                 if (values[0 /* fontSize */] === value) {
@@ -9760,7 +11573,7 @@ var lark;
                 this.invalidateFontString();
             }
         );
-        d(p, "bold",
+        d(p, "bold"
             /**
              * @language en_US
              * Specifies whether the text is boldface.
@@ -9775,10 +11588,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$TextField[15 /* bold */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = !!value;
                 var values = this.$TextField;
                 if (value === values[15 /* bold */]) {
@@ -9788,7 +11601,7 @@ var lark;
                 this.invalidateFontString();
             }
         );
-        d(p, "italic",
+        d(p, "italic"
             /**
              * @language en_US
              * Determines whether the text is italic font.
@@ -9803,10 +11616,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$TextField[16 /* italic */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = !!value;
                 var values = this.$TextField;
                 if (value === values[16 /* italic */]) {
@@ -9836,7 +11649,7 @@ var lark;
             }
             return values[12 /* fontString */];
         };
-        d(p, "textAlign",
+        d(p, "textAlign"
             /**
              * @language en_US
              * Horizontal alignment of text.
@@ -9851,10 +11664,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$TextField[9 /* textAlign */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 var values = this.$TextField;
                 if (values[9 /* textAlign */] == value) {
                     return;
@@ -9863,7 +11676,7 @@ var lark;
                 this.$invalidateContentBounds();
             }
         );
-        d(p, "verticalAlign",
+        d(p, "verticalAlign"
             /**
              * @language en_US
              * Vertical alignment of text.
@@ -9878,10 +11691,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$TextField[10 /* verticalAlign */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 var values = this.$TextField;
                 if (values[10 /* verticalAlign */] == value) {
                     return;
@@ -9890,7 +11703,7 @@ var lark;
                 this.$invalidateContentBounds();
             }
         );
-        d(p, "lineSpacing",
+        d(p, "lineSpacing"
             /**
              * @language en_US
              * An integer representing the amount of vertical space between lines.
@@ -9905,10 +11718,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$TextField[1 /* lineSpacing */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value || 0;
                 var values = this.$TextField;
                 if (values[1 /* lineSpacing */] === value)
@@ -9917,7 +11730,7 @@ var lark;
                 this.$invalidateContentBounds();
             }
         );
-        d(p, "textColor",
+        d(p, "textColor"
             /**
              * @language en_US
              * Color of the text.
@@ -9932,10 +11745,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$TextField[2 /* textColor */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = +value | 0;
                 var values = this.$TextField;
                 if (values[2 /* textColor */] === value) {
@@ -9946,7 +11759,7 @@ var lark;
                 this.$invalidate();
             }
         );
-        d(p, "wordWrap",
+        d(p, "wordWrap"
             /**
              * @language en_US
              * A Boolean value that indicates whether the text field has word wrap. If the value of wordWrap is true, the text
@@ -9963,10 +11776,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$TextField[19 /* wordWrap */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 value = !!value;
                 var values = this.$TextField;
                 if (value === values[19 /* wordWrap */]) {
@@ -9979,7 +11792,7 @@ var lark;
                 this.$invalidateContentBounds();
             }
         );
-        d(p, "text",
+        d(p, "text"
             /**
              * @language en_US
              * A string to display in the text field.
@@ -9992,10 +11805,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$TextField[13 /* text */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (value === null || value === undefined) {
                     value = "";
                 }
@@ -10013,7 +11826,7 @@ var lark;
             values[13 /* text */] = value;
             this.$invalidateContentBounds();
         };
-        d(p, "numLines",
+        d(p, "numLines"
             /**
              * @language en_US
              * Defines the number of text lines in a multiline text field. If wordWrap property is set to true, the number of
@@ -10027,11 +11840,11 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.textLines.length;
-            },undefined
+            }
         );
-        d(p, "textWidth",
+        d(p, "textWidth"
             /**
              * @language en_US
              * The width of the text in pixels.
@@ -10044,12 +11857,12 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 this.updateTextLines();
                 return this.$TextField[5 /* textWidth */];
-            },undefined
+            }
         );
-        d(p, "textHeight",
+        d(p, "textHeight"
             /**
              * @language en_US
              * The height of the text in pixels.
@@ -10062,10 +11875,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 this.updateTextLines();
                 return this.$TextField[6 /* textHeight */];
-            },undefined
+            }
         );
         /**
          * @private
@@ -10415,6 +12228,283 @@ var lark;
 (function (lark) {
     /**
      * @language en_US
+     * The Bitmap class represents display objects that represent bitmap images.
+     * The Bitmap() constructor allows you to create a Bitmap object that contains a reference to a BitmapData object.
+     * After you create a Bitmap object, use the addChild() or addChildAt() method of the parent DisplayObjectContainer
+     * instance to place the bitmap on the display list.A Bitmap object can share its BitmapData reference among several
+     * Bitmap objects, independent of translation or rotation properties. Because you can create multiple Bitmap objects
+     * that reference the same BitmapData object, multiple display objects can use the same complex BitmapData object
+     * without incurring the memory overhead of a BitmapData object for each display object instance.
+     *
+     * @see lark.BitmapData
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
+     */
+    /**
+     * @language zh_CN
+     * Bitmap 类表示用于显示位图图片的显示对象。
+     * 利用 Bitmap() 构造函数，可以创建包含对 BitmapData 对象引用的 Bitmap 对象。创建了 Bitmap 对象后，
+     * 使用父级 DisplayObjectContainer 实例的 addChild() 或 addChildAt() 方法可以将位图放在显示列表中。
+     * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 BitmapData 引用，与缩放或旋转属性无关。
+     * 由于能够创建引用相同 BitmapData 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的 BitmapData 对象，
+     * 而不会因为每个显示对象实例使用一个 BitmapData 对象而产生额外内存开销。
+     *
+     * @see lark.BitmapData
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
+     */
+    var Bitmap = (function (_super) {
+        __extends(Bitmap, _super);
+        /**
+         * @language en_US
+         * Initializes a Bitmap object to refer to the specified BitmapData object.
+         * @param bitmapData The BitmapData object being referenced.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个引用指定 BitmapData 实例的 Bitmap 对象
+         * @param bitmapData 被引用的 BitmapData 实例
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function Bitmap(bitmapData) {
+            _super.call(this);
+            this._pixelHitTest = false;
+            this.$renderRegion = new lark.sys.Region();
+            this.$Bitmap = {
+                0: null,
+                1: null,
+                2: 0,
+                3: 0,
+                4: 0,
+                5: 0,
+                6: 0,
+                7: 0,
+                8: 0,
+                9: 0,
+                10: true,
+            };
+            this.$setBitmapData(bitmapData);
+        }
+        var d = __define,c=Bitmap;p=c.prototype;
+        d(p, "bitmapData"
+            /**
+             * @language en_US
+             * The BitmapData object being referenced.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 被引用的 BitmapData 对象。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$Bitmap[0 /* bitmapData */];
+            }
+            ,function (value) {
+                this.$setBitmapData(value);
+            }
+        );
+        /**
+         * @private
+         */
+        p.$setBitmapData = function (value) {
+            var values = this.$Bitmap;
+            if (value == values[0 /* bitmapData */]) {
+                return;
+            }
+            values[0 /* bitmapData */] = value;
+            if (value) {
+                if (value instanceof lark.Texture) {
+                    var texture = value;
+                    this.setImageData(texture.$bitmapData, texture.$clipX, texture.$clipY, texture.$clipWidth, texture.$clipHeight, texture.$offsetX, texture.$offsetY, texture.$width, texture.$height);
+                }
+                else {
+                    this.setImageData(value, 0, 0, value.width, value.height, 0, 0, value.width, value.height);
+                }
+            }
+            else {
+                this.setImageData(null, 0, 0, 0, 0, 0, 0, 0, 0);
+            }
+            this.$invalidateContentBounds();
+        };
+        /**
+         * @private
+         */
+        p.setImageData = function (image, clipX, clipY, clipWidth, clipHeight, offsetX, offsetY, width, height) {
+            var values = this.$Bitmap;
+            values[1 /* image */] = image;
+            values[2 /* clipX */] = clipX;
+            values[3 /* clipY */] = clipY;
+            values[4 /* clipWidth */] = clipWidth;
+            values[5 /* clipHeight */] = clipHeight;
+            values[6 /* offsetX */] = offsetX;
+            values[7 /* offsetY */] = offsetY;
+            values[8 /* width */] = width;
+            values[9 /* height */] = height;
+        };
+        d(p, "smoothing"
+            /**
+             * @language en_US
+             * Whether or not the bitmap is smoothed when scaled.
+             * @default true。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 控制在缩放时是否对位图进行平滑处理。
+             * @default true。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$Bitmap[10 /* smoothing */];
+            }
+            ,function (value) {
+                value = !!value;
+                var values = this.$Bitmap;
+                if (value === values[10 /* smoothing */]) {
+                    return;
+                }
+                values[10 /* smoothing */] = value;
+                this.$invalidate();
+            }
+        );
+        d(p, "pixelHitTest"
+            /**
+             * @language en_US
+             * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
+             * is set to true,the transparent area of the bitmap will be touched through.
+             * Note:If the image is loaded from cross origin,that we can't access to the pixel data,so it might cause
+             * the pixelHitTest property invalid.
+             * @default false
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透。<br/>
+             * 注意：若图片资源是以跨域方式从外部服务器加载的，将无法访问图片的像素数据，而导致此属性失效。
+             * @default false
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this._pixelHitTest;
+            }
+            ,function (value) {
+                this._pixelHitTest = !!value;
+            }
+        );
+        p.$hitTest = function (stageX, stageY) {
+            var target = _super.prototype.$hitTest.call(this, stageX, stageY);
+            if (target && this._pixelHitTest) {
+                target = this.hitTestPixel(stageX, stageY);
+            }
+            return target;
+        };
+        /**
+         * @private
+         */
+        p.hitTestPixel = function (stageX, stageY) {
+            var m = this.$getInvertedConcatenatedMatrix();
+            var localX = m.a * stageX + m.c * stageY + m.tx;
+            var localY = m.b * stageX + m.d * stageY + m.ty;
+            var context;
+            var data;
+            var displayList = this.$displayList;
+            if (displayList) {
+                context = displayList.renderContext;
+                data = context.getImageData(localX - displayList.offsetX, localY - displayList.offsetY, 1, 1).data;
+            }
+            else {
+                context = lark.sys.sharedRenderContext;
+                context.surface.width = context.surface.height = 3;
+                context.translate(1 - localX, 1 - localY);
+                this.$render(context);
+                data = context.getImageData(1, 1, 1, 1).data;
+            }
+            if (data[3] === 0) {
+                return null;
+            }
+            return this;
+        };
+        /**
+         * @private
+         */
+        p.$measureContentBounds = function (bounds) {
+            var values = this.$Bitmap;
+            var image = values[1 /* image */];
+            if (image) {
+                var x = values[6 /* offsetX */];
+                if (x > 0) {
+                    x = 0;
+                }
+                var y = values[7 /* offsetY */];
+                if (y > 0) {
+                    y = 0;
+                }
+                bounds.setTo(x, y, values[8 /* width */], values[9 /* height */]);
+            }
+            else {
+                bounds.setEmpty();
+            }
+        };
+        /**
+         * @private
+         */
+        p.$render = function (context) {
+            var values = this.$Bitmap;
+            var image = values[1 /* image */];
+            if (image) {
+                context.imageSmoothingEnabled = values[10 /* smoothing */];
+                context.drawImage(image, values[2 /* clipX */], values[3 /* clipY */], values[4 /* clipWidth */], values[5 /* clipHeight */], values[6 /* offsetX */], values[7 /* offsetY */], values[4 /* clipWidth */], values[5 /* clipHeight */]);
+            }
+        };
+        return Bitmap;
+    })(lark.DisplayObject);
+    lark.Bitmap = Bitmap;
+    lark.registerClass(Bitmap,"lark.Bitmap");
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
+     * @language en_US
      * The Sprite class is a basic display list building block: a display list node that can contain children.
      * @version Lark 1.0
      * @platform Web,Native
@@ -10460,15 +12550,15 @@ var lark;
                 children[i].$propagateFlagsDown(flags);
             }
         };
-        d(p, "numChildren",
+        d(p, "numChildren"
             /**
              * @inheritDoc
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$children.length;
-            },undefined
+            }
         );
         /**
          * @inheritDoc
@@ -10819,16 +12909,16 @@ var lark;
             }
             bounds.setTo(xMin, yMin, xMax - xMin, yMax - yMin);
         };
-        d(p, "touchChildren",
+        d(p, "touchChildren"
             /**
              * @inheritDoc
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$touchChildren;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 this.$setTouchChildren(!!value);
             }
         );
@@ -11040,6 +13130,9 @@ var lark;
                  * 相对于显示列表根节点或位图缓存根节点的矩阵对象
                  */
                 this.$renderMatrix = new lark.Matrix();
+                this.$ratioMatrix = new lark.Matrix();
+                this.$ratioChanged = false;
+                this.$pixelRatio = 1;
                 /**
                  * @private
                  * 在显示列表根节点或位图缓存根节点上的显示区域
@@ -11097,10 +13190,13 @@ var lark;
              */
             DisplayList.release = function (displayList) {
                 sys.surfaceFactory.release(displayList.surface);
+                lark.Matrix.release(displayList.$renderMatrix);
+                lark.Matrix.release(displayList.$ratioMatrix);
                 displayList.surface = null;
                 displayList.renderContext = null;
                 displayList.root = null;
                 displayList.$renderMatrix = null;
+                displayList.$ratioMatrix = null;
                 displayList.needRedraw = false;
                 displayList.$isDirty = false;
                 displayListPool.push(displayList);
@@ -11120,6 +13216,14 @@ var lark;
                 }
                 displayList.surface = surface;
                 displayList.renderContext = surface.renderContext;
+                displayList.root = target;
+                displayList.$renderMatrix = lark.Matrix.create();
+                displayList.$renderMatrix.setTo(1, 0, 0, 1, 0, 0);
+                displayList.$pixelRatio = 1;
+                displayList.$ratioMatrix = lark.Matrix.create();
+                displayList.$ratioMatrix.setTo(1, 0, 0, 1, 0, 0);
+                displayList.needRedraw = true;
+                displayList.$isDirty = true;
                 return displayList;
             };
             /**
@@ -11128,12 +13232,22 @@ var lark;
              */
             p.$update = function () {
                 var target = this.root;
+                //当cache对象的显示列表已经加入dirtyList，对象又取消cache的时候，root为空
+                if (target == null) {
+                    return false;
+                }
                 target.$removeFlagsUp(768 /* Dirty */);
                 this.$renderAlpha = target.$getConcatenatedAlpha();
                 //必须在访问moved属性前调用以下两个方法，因为moved属性在以下两个方法内重置。
                 var concatenatedMatrix = target.$getConcatenatedMatrix();
                 var bounds = target.$getOriginalBounds();
                 var displayList = target.$parentDisplayList;
+                var pixelRatio = 1;
+                if (displayList)
+                    pixelRatio = displayList.$pixelRatio;
+                else if (target.stage && target.stage.$displayList)
+                    pixelRatio = target.stage.$displayList.$pixelRatio;
+                this.setDevicePixelRatio(pixelRatio);
                 var region = this.$renderRegion;
                 if (this.needRedraw) {
                     this.updateDirtyRegions();
@@ -11143,7 +13257,7 @@ var lark;
                     region.moved = false;
                     return false;
                 }
-                if (!region.moved) {
+                if (!region.moved && !displayList.$ratioChanged) {
                     return false;
                 }
                 region.moved = false;
@@ -11151,8 +13265,9 @@ var lark;
                 matrix.copyFrom(concatenatedMatrix);
                 var root = displayList.root;
                 if (root !== target.$stage) {
-                    root.$getInvertedConcatenatedMatrix().$preMultiplyInto(matrix, matrix);
+                    target.$getConcatenatedMatrixAt(root, matrix);
                 }
+                this.$ratioMatrix.$preMultiplyInto(matrix, matrix);
                 region.updateRegion(bounds, matrix);
                 return true;
             };
@@ -11164,7 +13279,7 @@ var lark;
             p.$render = function (context) {
                 var data = this.surface;
                 if (data) {
-                    context.drawImage(data, this.offsetX, this.offsetY);
+                    context.drawImage(data, this.offsetX, this.offsetY, data.width / this.$pixelRatio, data.height / this.$pixelRatio);
                 }
             };
             /**
@@ -11172,6 +13287,8 @@ var lark;
              * 设置剪裁边界，不再绘制完整目标对象，画布尺寸由外部决定，超过边界的节点将跳过绘制。
              */
             p.setClipRect = function (width, height) {
+                width *= this.$pixelRatio;
+                height *= this.$pixelRatio;
                 this.dirtyRegion.setClipRect(width, height);
                 this.rootMatrix = null; //只有舞台画布才能设置ClipRect
                 var surface = this.renderContext.surface;
@@ -11240,7 +13357,7 @@ var lark;
                 context.save();
                 context.beginPath();
                 if (m) {
-                    context.setTransform(1, 0, 0, 1, -this.offsetX, -this.offsetY);
+                    context.setTransform(1, 0, 0, 1, -this.offsetX * this.$pixelRatio, -this.offsetY * this.$pixelRatio);
                 }
                 var dirtyList = this.dirtyList;
                 this.dirtyList = null;
@@ -11260,6 +13377,7 @@ var lark;
                 context.restore();
                 this.dirtyRegion.clear();
                 this.needRedraw = false;
+                this.$ratioChanged = false;
                 return drawCalls;
             };
             /**
@@ -11302,7 +13420,7 @@ var lark;
                         if (rootMatrix) {
                             context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
                             node.$render(context);
-                            context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
+                            context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx * this.$pixelRatio, rootMatrix.ty * this.$pixelRatio);
                         }
                         else {
                             context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
@@ -11322,7 +13440,7 @@ var lark;
                         if (!child.$visible || child.$alpha <= 0 || child.$maskedObject) {
                             continue;
                         }
-                        if (child.$blendMode !== 0 || child.$mask) {
+                        if (child.$blendMode !== 0 || (child.$mask && child.$mask.$parentDisplayList)) {
                             drawCalls += this.drawWithClip(child, context, dirtyList, rootMatrix, clipRegion);
                         }
                         else if (child.$scrollRect) {
@@ -11354,6 +13472,9 @@ var lark;
                 }
                 var scrollRect = displayObject.$scrollRect;
                 var mask = displayObject.$mask;
+                if (mask && !mask.$parentDisplayList) {
+                    mask = null; //如果遮罩不在显示列表中，放弃绘制遮罩。
+                }
                 //计算scrollRect和mask的clip区域是否需要绘制，不需要就直接返回，跳过所有子项的遍历。
                 var maskRegion;
                 var displayMatrix = lark.Matrix.create();
@@ -11364,6 +13485,7 @@ var lark;
                     invertedMatrix = root.$getInvertedConcatenatedMatrix();
                     invertedMatrix.$preMultiplyInto(displayMatrix, displayMatrix);
                 }
+                this.$ratioMatrix.$preMultiplyInto(displayMatrix, displayMatrix);
                 if (mask) {
                     var bounds = mask.$getOriginalBounds();
                     maskRegion = sys.Region.create();
@@ -11372,6 +13494,7 @@ var lark;
                     if (invertedMatrix) {
                         invertedMatrix.$preMultiplyInto(m, m);
                     }
+                    this.$ratioMatrix.$preMultiplyInto(m, m);
                     maskRegion.updateRegion(bounds, m);
                     lark.Matrix.release(m);
                 }
@@ -11463,7 +13586,7 @@ var lark;
                     if (rootMatrix) {
                         context.translate(region.minX, region.minY);
                         context.drawImage(displayContext.surface, 0, 0);
-                        context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
+                        context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx * this.$pixelRatio, rootMatrix.ty * this.$pixelRatio);
                     }
                     else {
                         context.setTransform(1, 0, 0, 1, region.minX, region.minY);
@@ -11490,6 +13613,7 @@ var lark;
                 if (root !== displayObject.$stage) {
                     root.$getInvertedConcatenatedMatrix().$preMultiplyInto(m, m);
                 }
+                this.$ratioMatrix.$preMultiplyInto(m, m);
                 var region = sys.Region.create();
                 if (!scrollRect.isEmpty()) {
                     region.updateRegion(scrollRect, m);
@@ -11514,12 +13638,18 @@ var lark;
                 }
                 //绘制显示对象自身
                 context.save();
-                context.setTransform(m.a, m.b, m.c, m.d, m.tx - this.offsetX, m.ty - this.offsetY);
+                if (rootMatrix) {
+                    context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx * this.$pixelRatio, rootMatrix.ty * this.$pixelRatio);
+                    context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+                }
+                else {
+                    context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+                }
                 context.beginPath();
                 context.rect(scrollRect.x, scrollRect.y, scrollRect.width, scrollRect.height);
                 context.clip();
                 if (rootMatrix) {
-                    context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx, rootMatrix.ty);
+                    context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx * this.$pixelRatio, rootMatrix.ty * this.$pixelRatio);
                 }
                 drawCalls += this.drawDisplayObject(displayObject, context, dirtyList, rootMatrix, displayObject.$displayList, region);
                 context.restore();
@@ -11535,6 +13665,7 @@ var lark;
                 if (!surface) {
                     return null;
                 }
+                //在chrome里，小等于256*256的canvas会不启用GPU加速。
                 surface.width = Math.max(257, width);
                 surface.height = Math.max(257, height);
                 return surface.renderContext;
@@ -11548,14 +13679,16 @@ var lark;
                 var oldOffsetX = this.offsetX;
                 var oldOffsetY = this.offsetY;
                 var bounds = this.root.$getOriginalBounds();
+                var scaleX = this.$pixelRatio;
+                var scaleY = this.$pixelRatio;
                 this.offsetX = bounds.x;
                 this.offsetY = bounds.y;
                 var oldContext = this.renderContext;
                 var oldSurface = oldContext.surface;
                 if (this.sizeChanged) {
                     this.sizeChanged = false;
-                    oldSurface.width = bounds.width;
-                    oldSurface.height = bounds.height;
+                    oldSurface.width = bounds.width * scaleX;
+                    oldSurface.height = bounds.height * scaleY;
                 }
                 else {
                     var newContext = sys.sharedRenderContext;
@@ -11563,20 +13696,31 @@ var lark;
                     sys.sharedRenderContext = oldContext;
                     this.renderContext = newContext;
                     this.surface = newSurface;
-                    newSurface.width = bounds.width;
-                    newSurface.height = bounds.height;
+                    newSurface.width = bounds.width * scaleX;
+                    newSurface.height = bounds.height * scaleY;
                     if (oldSurface.width !== 0 && oldSurface.height !== 0) {
                         newContext.setTransform(1, 0, 0, 1, 0, 0);
-                        newContext.drawImage(oldSurface, oldOffsetX - bounds.x, oldOffsetY - bounds.y);
+                        newContext.drawImage(oldSurface, (oldOffsetX - this.offsetX) * scaleX, (oldOffsetY - this.offsetY) * scaleY);
                     }
                     oldSurface.height = 1;
                     oldSurface.width = 1;
                 }
-                this.rootMatrix.setTo(1, 0, 0, 1, -bounds.x, -bounds.y);
+                this.rootMatrix.setTo(1, 0, 0, 1, -this.offsetX, -this.offsetY);
                 this.renderContext.setTransform(1, 0, 0, 1, -bounds.x, -bounds.y);
             };
+            p.setDevicePixelRatio = function (ratio) {
+                if (ratio === void 0) { ratio = 1; }
+                if (this.$pixelRatio == ratio && this.$ratioMatrix)
+                    return;
+                if (!this.$ratioMatrix)
+                    this.$ratioMatrix = lark.Matrix.create();
+                this.$ratioChanged = true;
+                this.$pixelRatio = ratio;
+                this.$ratioMatrix.setTo(ratio, 0, 0, ratio, 0, 0);
+                this.root.$invalidate(true);
+            };
             return DisplayList;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         sys.DisplayList = DisplayList;
         lark.registerClass(DisplayList,"lark.sys.DisplayList",["lark.sys.Renderable"]);
     })(sys = lark.sys || (lark.sys = {}));
@@ -11615,6 +13759,8 @@ var lark;
      * @language en_US
      * The TextInput class is used to create display objects for text display and input.The methods of the TextInput class
      * let you set, select, and manipulate the text inputted by a user.
+     * @event lark.Event.FOCUS_IN Dispatched after a display object gains focus.
+     * @event lark.Event.FOCUS_OUT Dispatched after a display object loses focus.
      * @see lark.TextField
      * @version Lark 1.0
      * @platform Web,Native
@@ -11623,6 +13769,8 @@ var lark;
     /**
      * @language zh_CN
      * TextInput 类用于创建显示对象以显示和输入文本。TextInput 类的方法允许您设置、选择并操作用户输入的文本。
+     * @event lark.Event.FOCUS_IN 显示对象获得焦点后调度。
+     * @event lark.Event.FOCUS_OUT 显示对象失去焦点后调度。
      * @see lark.TextField
      * @version Lark 1.0
      * @platform Web,Native
@@ -11662,7 +13810,7 @@ var lark;
             this.on(lark.TouchEvent.TOUCH_BEGIN, this.handleTouchBegin, this);
         }
         var d = __define,c=TextInput;p=c.prototype;
-        d(p, "displayAsPassword",
+        d(p, "displayAsPassword"
             /**
              * @language en_US
              * Specifies whether the text input is a password text input. If the value of this property is true, the text input
@@ -11680,10 +13828,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$TextField[20 /* displayAsPassword */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this.$TextField[20 /* displayAsPassword */] == value)
                     return;
                 this.$TextField[20 /* displayAsPassword */] = value;
@@ -11692,7 +13840,7 @@ var lark;
                 this.$invalidateContentBounds();
             }
         );
-        d(p, "maxChars",
+        d(p, "maxChars"
             /**
              * @language en_US
              * The maximum number of characters that the text field can contain, as entered by a user. A script can insert more
@@ -11710,10 +13858,10 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$TextField[21 /* maxChars */];
-            },
-            function (value) {
+            }
+            ,function (value) {
                 var values = this.$TextField;
                 if (values[21 /* maxChars */] == value)
                     return;
@@ -11721,7 +13869,7 @@ var lark;
                 this.updateTextAdapter();
             }
         );
-        d(p, "selectionActivePosition",
+        d(p, "selectionActivePosition"
             /**
              * @language en_US
              * A character position, relative to the beginning of the text string, specifying the end of the selection that
@@ -11744,14 +13892,14 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 var begin = this.$TextField[22 /* selectionActivePosition */];
                 if (isNaN(begin))
                     begin = this.text.length;
                 return begin;
-            },undefined
+            }
         );
-        d(p, "selectionAnchorPosition",
+        d(p, "selectionAnchorPosition"
             /**
              * @language en_US
              * A character position, relative to the beginning of the text String, specifying the end of the selection that
@@ -11774,12 +13922,12 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 var end = this.$TextField[23 /* selectionAnchorPosition */];
                 if (isNaN(end))
                     end = this.text.length;
                 return end;
-            },undefined
+            }
         );
         /**
          * @language en_US
@@ -11951,6 +14099,424 @@ var lark;
 var lark;
 (function (lark) {
     /**
+     * @private
+     * @language en_US
+     * Bitmap array animation.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @private
+     * @language zh_CN
+     * 逐帧动画。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var Animation = (function (_super) {
+        __extends(Animation, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        function Animation(frames) {
+            _super.call(this);
+            /**
+             * @private
+             */
+            this._callBacks = {};
+            /**
+             * @private
+             */
+            this._callBacksThis = {};
+            /**
+             * @private
+             */
+            this._callBacksArgs = {};
+            /**
+             * @private
+             */
+            this.enterFrameFlag = false;
+            /**
+             * @private
+             */
+            this._currentFrame = -1;
+            /**
+             * @private
+             */
+            this.frames = [];
+            /**
+             * @private
+             */
+            this.$isPlaying = false;
+            this.setFrames(frames);
+            this.on(lark.Event.ADDED_TO_STAGE, this.onAddToStage, this);
+            this.on(lark.Event.REMOVED_FROM_STAGE, this.onRemoveFromStage, this);
+        }
+        var d = __define,c=Animation;p=c.prototype;
+        /**
+         * @private
+         */
+        p.onAddToStage = function (event) {
+            if (this.$isPlaying && !this.enterFrameFlag) {
+                this.on(lark.Event.ENTER_FRAME, this.onEnterFrame, this);
+            }
+        };
+        /**
+         * @private
+         */
+        p.onRemoveFromStage = function (event) {
+            if (this.enterFrameFlag) {
+                this.removeListener(lark.Event.ENTER_FRAME, this.onEnterFrame, this);
+            }
+        };
+        /**
+         * @language en_US
+         * Set the frames of animation. Every frame is a bitmap data. Reset process will point the player to the first frame, and automatically play. But if the frame count is less than 2 or null, it will automatically stop.
+         * @see BitmapData
+         * @see Texture
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设置序列帧内容。每一帧代表一个图片内容。重设过程会把播放头指向第一帧，并且自动开启播放。但是如果帧数小于 2 或者 设置 null，则会自动停止播放。
+         * @see BitmapData
+         * @see Texture
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.setFrames = function (frames) {
+            this.frames = frames;
+            if (frames && frames.length) {
+                this.setPlaying(true);
+                if (this._currentFrame != -1) {
+                    this._currentFrame = 0;
+                }
+                this.gotoFrame(0);
+            }
+            else {
+                this.setPlaying(false);
+                this._currentFrame = -1;
+            }
+        };
+        /**
+         * @language en_US
+         * Add a call-back-function at the frame.If a call-back-function has existed on the frame, it's will be replaced. To delete of the frame callback, callBack property is set to null.
+         * @param frame The frame to add call back.The number of first frame is 1.
+         * @param callBack The function to call back.
+         * @param args The arguments of the function to call back.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在对应的帧上添加回调函数。如果之前该帧上已经有回调函数，会被替换成新的回调函数。若要清除掉该帧回调函数， callBack 属性设置为 null 即可。
+         * @param frame 第几帧添加代码。起始帧编号为1。
+         * @param callBack 回调函数。
+         * @param args 回调函数参数。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.addFrameScript = function (frame, callBack, thisObject) {
+            var args = [];
+            for (var _i = 3; _i < arguments.length; _i++) {
+                args[_i - 3] = arguments[_i];
+            }
+            frame = +frame | 0;
+            if (frame < 0) {
+                frame = 0;
+            }
+            if (callBack) {
+                this._callBacks[frame] = callBack;
+                this._callBacksThis[frame] = thisObject;
+                this._callBacksArgs[frame] = args;
+            }
+            else {
+                delete this._callBacks[frame];
+                delete this._callBacksThis[frame];
+                delete this._callBacksArgs[frame];
+            }
+        };
+        /**
+         * @private
+         */
+        p.gotoFrame = function (frame) {
+            if (this._currentFrame == frame) {
+                return;
+            }
+            this._currentFrame = frame;
+            this.executeFrameScript();
+            if (this.bitmapData != this.frames[this._currentFrame]) {
+                this.bitmapData = this.frames[this._currentFrame];
+            }
+        };
+        d(p, "currentFrame"
+            /**
+             * @language en_US
+             * Current playhead frame sequence.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 当前播放头所在帧序列。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this._currentFrame;
+            }
+        );
+        /**
+         * @private
+         * 执行当前帧脚本逻辑
+         */
+        p.executeFrameScript = function () {
+            if (!this.frames.length) {
+                return;
+            }
+            var currentFrame = this._currentFrame;
+            var callBack = this._callBacks[currentFrame];
+            var callBackThis = this._callBacksThis[currentFrame];
+            var callBackArgs = this._callBacksArgs[currentFrame];
+            if (callBack) {
+                callBack.apply(callBackThis, callBackArgs);
+            }
+        };
+        /**
+         * @private
+         */
+        p.setPlaying = function (flag) {
+            this.$isPlaying = flag;
+            if (this.$isPlaying && this.stage && !this.enterFrameFlag) {
+                this.on(lark.Event.ENTER_FRAME, this.onEnterFrame, this);
+            }
+            if (!this.$isPlaying && this.enterFrameFlag) {
+                this.removeListener(lark.Event.ENTER_FRAME, this.onEnterFrame, this);
+            }
+        };
+        d(p, "isPlaying"
+            /**
+             * @language en_US
+             * The animation is playing or not.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * Animation 实例当前是否正在播放。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$isPlaying;
+            }
+        );
+        /**
+         * @private
+         */
+        p.onEnterFrame = function (event) {
+            if (!this.$isPlaying) {
+                return;
+            }
+            this.gotoFrame((this._currentFrame + 1) % this.frames.length);
+        };
+        /**
+         * @language en_US
+         * Starts playing the animation at the specified frame. This happens after all remaining actions in the frame have finished executing.
+         * @param frame A number representing the frame number, or a string representing the label of the frame, to which the playhead is sent.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从指定帧开始播放 Animation 。这会在帧中的所有剩余动作执行完毕后发生。
+         * @param frame 表示播放头转到的帧编号的数字，或者表示播放头转到的帧标签的字符串。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.gotoAndPlay = function (frame) {
+            var length = this.frames.length;
+            if (!length) {
+                return;
+            }
+            frame = +frame | 0;
+            frame = frame < 0 ? 0 : frame;
+            if (frame >= length) {
+                frame = length - 1;
+            }
+            this.setPlaying(true);
+            if (this._currentFrame == frame) {
+                return;
+            }
+            this.gotoFrame(frame);
+        };
+        /**
+         * @language en_US
+         * Brings the playhead to the specified frame of the animation and stops it there. This happens after all remaining actions in the frame have finished executing.
+         * @param frame A number representing the frame number, or a string representing the label of the frame, to which the playhead is sent.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将播放头移到 Animation 的指定帧并停在那里。这会在帧中的所有剩余动作执行完毕后发生。
+         * @param frame 表示播放头转到的帧编号的数字，或者表示播放头转到的帧标签的字符串。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.gotoAndStop = function (frame) {
+            var length = this.frames.length;
+            if (!length) {
+                return;
+            }
+            frame = +frame | 0;
+            frame = frame < 0 ? 0 : frame;
+            this.setPlaying(false);
+            if (frame >= length) {
+                frame = length - 1;
+            }
+            if (this._currentFrame == frame) {
+                return;
+            }
+            this.gotoFrame(frame);
+        };
+        /**
+         * @language en_US
+         * Sends the playhead to the next frame and stops it.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将播放头转到下一帧并停止。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.nextFrame = function () {
+            var length = this.frames.length;
+            this.setPlaying(false);
+            if (!length) {
+                return;
+            }
+            if (this._currentFrame == length - 1) {
+                return;
+            }
+            this.gotoFrame(this._currentFrame + 1);
+        };
+        /**
+         * @language en_US
+         * Moves the playhead in the timeline of the animation.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在 Animation 的时间轴中移动播放头。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.play = function () {
+            this.setPlaying(true);
+        };
+        /**
+         * @language en_US
+         * Sends the playhead to the last frame and stops it.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将播放头转到前一帧并停止。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.prevFrame = function () {
+            this.setPlaying(false);
+            if (!this.frames.length) {
+                return;
+            }
+            if (this._currentFrame == 0) {
+                return;
+            }
+            this.gotoFrame(this._currentFrame - 1);
+        };
+        /**
+         * @language en_US
+         * Stops the playhead in the animation.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 停止 Animation 中的播放头。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        p.stop = function () {
+            this.setPlaying(false);
+        };
+        d(p, "totalFrames"
+            /**
+             * @language en_US
+             * The totalFrames property returns the total number of frames in the animation.
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * totalFrames 属性会返回 Animation 帧的总数。
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.frames.length;
+            }
+        );
+        return Animation;
+    })(lark.Bitmap);
+    lark.Animation = Animation;
+    lark.registerClass(Animation,"lark.Animation");
+})(lark || (lark = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var lark;
+(function (lark) {
+    /**
      * @language en_US
      * The Stage class represents the main drawing area.The Stage object is not globally accessible. You need to access
      * it through the stage property of a DisplayObject instance.<br/>
@@ -11989,6 +14555,7 @@ var lark;
              */
             this.$stageHeight = 0;
             this.$scaleMode = "noScale";
+            this.$highResolutionMode = "default";
             /**
              * @private
              */
@@ -11997,7 +14564,7 @@ var lark;
             this.$nestLevel = 1;
         }
         var d = __define,c=Stage;p=c.prototype;
-        d(p, "frameRate",
+        d(p, "frameRate"
             /**
              * @language en_US
              * Gets and sets the frame rate of the stage. The frame rate is defined as frames per second. Valid range for the
@@ -12015,14 +14582,14 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return lark.sys.$ticker.$frameRate;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 lark.sys.$ticker.$setFrameRate(value);
             }
         );
-        d(p, "stageWidth",
+        d(p, "stageWidth"
             /**
              * @language en_US
              * Indicates the width of the stage, in pixels.
@@ -12035,11 +14602,11 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$stageWidth;
-            },undefined
+            }
         );
-        d(p, "stageHeight",
+        d(p, "stageHeight"
             /**
              * @language en_US
              * Indicates the height of the stage, in pixels.
@@ -12052,11 +14619,11 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$stageHeight;
-            },undefined
+            }
         );
-        d(p, "scaleMode",
+        d(p, "scaleMode"
             /**
              * @language en_US
              * A value from the StageScaleMode class that specifies which scale mode to use.
@@ -12071,14 +14638,44 @@ var lark;
              * @version Lark 1.0
              * @platform Web,Native
              */
-            function () {
+            ,function () {
                 return this.$scaleMode;
-            },
-            function (value) {
+            }
+            ,function (value) {
                 if (this.$scaleMode == value) {
                     return;
                 }
                 this.$scaleMode = value;
+                this.$screen.updateScreenSize();
+            }
+        );
+        d(p, "highResolutionMode"
+            /**
+             * @language en_US
+             * HighResolutionMode defines render modes for high resolution devices
+             *  HighResolutionMode.DEFAULT = "default" use device's logic resolution as the stage resolution and rendering resolution
+             *  HighResolutionMode.RETINA = "retina"   use device's logic resolution as the stage resolution but rendering with high resolution
+             *  HighResolutionMode.DEVICE = "device"   use device's phyical resolution as the stage resolution and rendering resolution
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * HighResolutionMode 类为高分辨率屏幕显示模式提供可选值。
+             * 可选值为<br/>
+             *  HighResolutionMode.DEFAULT = "default" 使用设备的逻辑分辨率作为舞台的尺寸和渲染分辨率。
+             *  HighResolutionMode.RETINA = "retina"   使用设备的逻辑分辨率作为舞台的尺寸，但使用高清分辨率来渲染。
+             *  HighResolutionMode.DEVICE = "device"   使用设备的物理分辨率作为舞台的尺寸
+             * @version Lark 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$highResolutionMode;
+            }
+            ,function (value) {
+                if (this.$highResolutionMode == value)
+                    return;
+                this.$highResolutionMode = value;
                 this.$screen.updateScreenSize();
             }
         );
@@ -12354,6 +14951,7 @@ var lark;
                 var displayList = new sys.DisplayList(stage);
                 displayList.renderContext = context;
                 stage.$displayList = displayList;
+                displayList.setClipRect(stage.$stageWidth, stage.$stageHeight);
                 return displayList;
             };
             /**
@@ -12455,20 +15053,24 @@ var lark;
              * @param stageWidth 舞台宽度（以像素为单位）
              * @param stageHeight 舞台高度（以像素为单位）
              */
-            p.updateStageSize = function (stageWidth, stageHeight) {
+            p.updateStageSize = function (stageWidth, stageHeight, pixelRatio) {
+                if (pixelRatio === void 0) { pixelRatio = 1; }
                 var stage = this.stage;
-                if (stageWidth !== stage.$stageWidth || stageHeight !== stage.$stageHeight) {
+                if (stageWidth !== stage.$stageWidth || stageHeight !== stage.$stageHeight || this.screenDisplayList.$pixelRatio !== pixelRatio) {
                     stage.$stageWidth = stageWidth;
                     stage.$stageHeight = stageHeight;
+                    this.screenDisplayList.setDevicePixelRatio(pixelRatio);
                     this.screenDisplayList.setClipRect(stageWidth, stageHeight);
                     if (DEBUG && this.stageDisplayList) {
+                        this.stageDisplayList.setDevicePixelRatio(pixelRatio);
                         this.stageDisplayList.setClipRect(stageWidth, stageHeight);
                     }
                     stage.emitWith(lark.Event.RESIZE);
+                    stage.$invalidate(true);
                 }
             };
             return Player;
-        })(lark.LarkObject);
+        })(lark.HashObject);
         sys.Player = Player;
         lark.registerClass(Player,"lark.sys.Player");
         /**
