@@ -2721,6 +2721,7 @@ var RES;
      * Check whether a resource group has been loaded.
      * @param name Group name。
      * @returns Is loading or not.
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2729,6 +2730,7 @@ var RES;
      * 检查某个资源组是否已经加载完成。
      * @param name 组名。
      * @returns 是否正在加载。
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2742,6 +2744,7 @@ var RES;
      * @param name Group name.
      * @returns The resource item array of group.
      * @see RES.ResourceItem
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2751,6 +2754,7 @@ var RES;
      * @param name 组名。
      * @returns 加载项列表。
      * @see RES.ResourceItem
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2766,6 +2770,7 @@ var RES;
      * @param keys To be included in the list of key keys, the corresponding configuration file in the name or sbuKeys property one or a resource group name.
      * @param override Is the default false for the same name resource group already exists.
      * @returns Create success or fail.
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2777,6 +2782,7 @@ var RES;
      * @param keys 要包含的键名列表，key 对应配置文件里的 name 属性或 sbuKeys 属性的一项或一个资源组名。
      * @param override 是否覆盖已经存在的同名资源组,默认 false。
      * @returns 是否创建成功。
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2789,6 +2795,7 @@ var RES;
      * @language en_US
      * Check whether the configuration file contains the specified resources.
      * @param key A sbuKeys attribute or name property in a configuration file.
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2796,6 +2803,7 @@ var RES;
      * @language zh_CN
      * 检查配置文件里是否含有指定的资源。
      * @param key 对应配置文件里的 name 属性或 sbuKeys 属性的一项。
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2808,6 +2816,7 @@ var RES;
      * Run time dynamic analysis of a configuration file.
      * @param data Configuration file data, please refer to the resource.json configuration file format. JSON object can be introduced into the corresponding.
      * @param folder Path prefix for load.
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2816,6 +2825,7 @@ var RES;
      * 运行时动态解析一个配置文件。
      * @param data 配置文件数据，请参考 resource.json 的配置文件格式。传入对应的 json 对象即可。
      * @param folder 加载项的路径前缀。
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2841,6 +2851,7 @@ var RES;
      * <br>RES.ResourceItem.TYPE_TEXT : string
      * @param key A sbuKeys attribute or name property in a configuration file.
      * @see RES.ResourceItem
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2860,6 +2871,7 @@ var RES;
      * <br>RES.ResourceItem.TYPE_TEXT : string
      * @param key 对应配置文件里的 name 属性或 sbuKeys 属性的一项。
      * @see RES.ResourceItem
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2873,6 +2885,7 @@ var RES;
      * @param key A sbuKeys attribute or name property in a configuration file.
      * @param compFunc Call back function. Example：compFunc(data,key):void.
      * @param thisObject This pointer of call back function.
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2882,6 +2895,7 @@ var RES;
      * @param key 对应配置文件里的 name 属性或 sbuKeys 属性的一项。
      * @param compFunc 回调函数。示例：compFunc(data,key):void。
      * @param thisObject 回调函数的 this 引用。
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2896,6 +2910,7 @@ var RES;
      * @param compFunc Call back function. Example：compFunc(data,url):void。
      * @param thisObject This pointer of call back function.
      * @param type File type (optional). Use the static constants defined in the ResourceItem class. If you do not set the file name extension.
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2906,6 +2921,7 @@ var RES;
      * @param compFunc 回调函数。示例：compFunc(data,url):void。
      * @param thisObject 回调函数的 this 引用。
      * @param type 文件类型(可选)。请使用 ResourceItem 类中定义的静态常量。若不设置将根据文件扩展名生成。
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2920,6 +2936,7 @@ var RES;
      * @param name Name attribute or resource group name of the load item in the configuration file.
      * @param force Destruction of a resource group when the other resources groups have the same resource situation whether the resources will be deleted, the default value true.
      * @returns Are successful destruction.
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2928,6 +2945,7 @@ var RES;
      * 销毁单个资源文件或一组资源的缓存数据,返回是否删除成功。
      * @param name 配置文件中加载项的name属性或资源组名。
      * @param force 销毁一个资源组时其他资源组有同样资源情况资源是否会被删除，默认值 true。
+     * @see #setMaxRetryTimes
      * @returns 是否销毁成功。
      * @version Lark 1.0
      * @platform Web,Native
@@ -2940,6 +2958,7 @@ var RES;
      * @language en_US
      * Sets the maximum number of concurrent load threads, the default value is 2.
      * @param thread The number of concurrent loads to be set.
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2947,6 +2966,7 @@ var RES;
      * @language zh_CN
      * 设置最大并发加载线程数量，默认值是 2。
      * @param thread 要设置的并发加载数。
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2958,6 +2978,7 @@ var RES;
      * @language en_US
      * Sets the number of retry times when the resource failed to load, and the default value is 3.
      * @param retry To set the retry count.
+     * @includeExample examples/Samples/src/extension/resource/ResourceExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -2965,6 +2986,7 @@ var RES;
      * @language zh_CN
      * 设置资源加载失败时的重试次数，默认值是 3。
      * @param retry 要设置的重试次数。
+     * @includeExample examples/Samples/src/extension/resource/ResourceExample.ts
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -3003,6 +3025,7 @@ var RES;
      * @param priority 事件侦听器的优先级。优先级由一个带符号的 32 位整数指定。数字越大，优先级越高。优先级为 n 的所有侦听器会在
      * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
      * @see RES.ResourceEvent
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
@@ -3033,6 +3056,7 @@ var RES;
      * @param useCapture 确定侦听器是运行于捕获阶段还是运行于目标和冒泡阶段。
      * @param priority 事件侦听器的优先级。优先级由一个带符号的 32 位整数指定。数字越大，优先级越高。
      * @see RES.ResourceEvent
+     * @see #setMaxRetryTimes
      * @version Lark 1.0
      * @platform Web,Native
      */
