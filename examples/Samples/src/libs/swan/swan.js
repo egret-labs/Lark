@@ -1676,7 +1676,12 @@ var swan;
              * 计算当前值并返回动画是否结束
              */
             p.doInterval = function (currentTime) {
+                //IF LARK
                 var runningTime = currentTime - this.startTime;
+                //END IF*/
+                /*//IF EGRET
+                var runningTime = egret.getTimer() - this.startTime;
+                 //END IF*/
                 if (!this.isPlaying) {
                     this.isPlaying = true;
                 }
@@ -2283,7 +2288,7 @@ var swan;
         /**
          * @language en_US
          * Creates and starts a Watcher instance.
-         * The Watcher can only watch the property of a Object which host is instance of IEventEmitter.
+         * The Watcher can only watch the property of a Object which host is instance of lark.IEventEmitter.
          * @param host The object that hosts the property or property chain to be watched.
          * You can use the use the <code>reset()</code> method to change the value of the <code>host</code> argument
          * after creating the Watcher instance.
@@ -2302,7 +2307,7 @@ var swan;
          */
         /**
          * @language zh_CN
-         * 创建并启动 Watcher 实例。注意：Watcher 只能监视 host 为 IEventEmitter 对象的属性改变。若属性链中某个属性所对应的实例不是 IEventEmitter，
+         * 创建并启动 Watcher 实例。注意：Watcher 只能监视 host 为 lark.IEventEmitter 对象的属性改变。若属性链中某个属性所对应的实例不是 lark.IEventEmitter，
          * 则属性链中在它之后的属性改变将无法检测到。
          * @param host 用于承载要监视的属性或属性链的对象。
          * 创建Watcher实例后，您可以利用<code>reset()</code>方法更改<code>host</code>参数的值。
@@ -2718,7 +2723,12 @@ var swan;
             loaderMap[loader.$hashCode] = source;
             loader.on(lark.Event.COMPLETE, this.onLoadFinish, this);
             loader.on(lark.Event.IO_ERROR, this.onLoadFinish, this);
+            //IF LARK
             loader.load(source);
+            //END IF*/
+            /*//IF EGRET
+            loader.load(new egret.URLRequest(source));
+             //END IF*/
         };
         /**
          * @private
@@ -3374,8 +3384,14 @@ var swan;
             var request = new lark.HttpRequest();
             request.on(lark.Event.COMPLETE, this.onConfigLoaded, this);
             request.on(lark.Event.IO_ERROR, this.onConfigLoaded, this);
+            //IF LARK
             request.open(url);
             request.send();
+            //END IF*/
+            /*//IF EGRET
+            request.dataFormat = egret.URLLoaderDataFormat.TEXT;
+            request.load(new egret.URLRequest(url));
+            //END IF*/
         };
         /**
          * @private
@@ -3385,6 +3401,7 @@ var swan;
         p.onConfigLoaded = function (event) {
             var request = event.target;
             try {
+                //IF LARK
                 var data = JSON.parse(request.response);
             }
             catch (e) {
@@ -3768,6 +3785,7 @@ var swan;
      *
      * @event swan.CollectionEvent.COLLECTION_CHANGE Emited when the ArrayCollection has been updated in some way.
      *
+     * @defaultProperty source
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -3780,6 +3798,7 @@ var swan;
      *
      * @event swan.CollectionEvent.COLLECTION_CHANGE 当 ArrayCollection 更新的的时候会派发此事件。
      *
+     * @defaultProperty source
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -5619,7 +5638,9 @@ var swan;
                 /**
                  * @private
                  */
+                //IF LARK
                 this.previousTime = 0;
+                //END IF*/
                 /**
                  * @private
                  */
@@ -5693,7 +5714,9 @@ var swan;
                 this.started = true;
                 this.velocity = 0;
                 this.previousVelocity.length = 0;
+                //IF LARK
                 this.previousTime = lark.getTimer();
+                //END IF*/
                 this.previousPosition = this.currentPosition = touchPoint;
                 this.offsetPoint = scrollValue + touchPoint;
                 lark.startTick(this.onTick, this);
@@ -5780,7 +5803,12 @@ var swan;
              * @returns
              */
             p.onTick = function (timeStamp) {
+                //IF LARK
                 var timeOffset = timeStamp - this.previousTime;
+                //END IF*/
+                /*//IF EGRET
+                var timeOffset = timeStamp;
+                 //END IF*/
                 if (timeOffset > 0) {
                     var previousVelocity = this.previousVelocity;
                     previousVelocity.push(this.velocity);
@@ -5788,7 +5816,9 @@ var swan;
                         previousVelocity.shift();
                     }
                     this.velocity = (this.currentPosition - this.previousPosition) / timeOffset;
+                    //IF LARK
                     this.previousTime = timeStamp;
+                    //END IF*/
                     this.previousPosition = this.currentPosition;
                 }
                 return true;
@@ -9747,8 +9777,13 @@ var EXML;
         requestMap[request.$hashCode] = url;
         request.on(lark.Event.COMPLETE, onLoadFinish, null);
         request.on(lark.Event.IO_ERROR, onLoadFinish, null);
+        //IF LARK
         request.open(url);
         request.send();
+        //END IF*/
+        /*//IF EGRET
+        request.load(new egret.URLRequest(url));
+         //END IF*/
     }
     EXML.load = load;
     /**
@@ -9760,7 +9795,12 @@ var EXML;
         var request = event.currentTarget;
         request.removeListener(lark.Event.COMPLETE, onLoadFinish, null);
         request.removeListener(lark.Event.IO_ERROR, onLoadFinish, null);
+        //IF LARK
         var text = event.type == lark.Event.COMPLETE ? request.response : "";
+        //END IF*/
+        /*//IF EGRET
+        var text:string = event.type == lark.Event.COMPLETE ? request.data : "";
+         //END IF*/
         if (text) {
             var clazz = parse(text);
         }
@@ -10736,6 +10776,9 @@ var swan;
                     29: false,
                 };
                 this.$includeInLayout = true;
+                /*//IF EGRET
+                this.$touchEnabled = true;
+                 //END IF*/
             };
             /**
              * @private
@@ -11799,12 +11842,19 @@ var swan;
          * @platform Web,Native
          */
         function Label(text) {
+            //IF LARK
             _super.call(this, text);
             /**
              * @private
              */
             this._widthConstraint = NaN;
             this.initializeUIValues();
+            //END IF*/
+            /*//IF EGRET
+            super();
+            this.initializeUIValues();
+            this.text = text;
+             //END IF*/
         }
         var d = __define,c=Label;p=c.prototype;
         /**
@@ -12110,7 +12160,7 @@ var swan;
          * Constructor.
          *
          * @param source The source used for the bitmap fill. the value can be
-         * a string or an instance of <code>BitmapData</code>
+         * a string or an instance of <code>lark.BitmapData</code>
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -12120,7 +12170,7 @@ var swan;
          * @language zh_CN
          * 构造函数。
          *
-         * @param source 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
+         * @param source 用于位图填充的源。可以是一个字符串或者 <code>lark.BitmapData</code> 对象
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -12132,10 +12182,17 @@ var swan;
              * @private
              */
             this._scale9Grid = null;
+            //IF LARK
             /**
              * @private
              */
             this._fillMode = "scale";
+            /*//IF EGRET
+            $setFillMode(value:string):void {
+                super.$setFillMode(value);
+                this.invalidateDisplayList();
+            }
+             //END IF*/
             /**
              * @private
              */
@@ -12171,11 +12228,23 @@ var swan;
              * @platform Web,Native
              */
             ,function () {
+                //IF LARK
                 return this._scale9Grid;
+                //END IF*/
+                /*//IF EGRET
+                return this.$scale9Grid;
+                //END IF*/
             }
             ,function (value) {
+                //IF LARK
                 this._scale9Grid = value;
                 this.invalidateDisplayList();
+                //END IF*/
+                /*//IF EGRET
+                this.$scale9Grid = value;
+                this.$invalidateContentBounds();
+                this.invalidateDisplayList();
+                //END IF*/
             }
         );
         d(p, "fillMode"
@@ -12211,11 +12280,20 @@ var swan;
             ,function () {
                 return this._fillMode;
             }
+            //END IF*/
             ,function (value) {
+                //IF LARK
                 if (value == this._fillMode) {
                     return;
                 }
                 this._fillMode = value;
+                //END IF*/
+                /*//IF EGRET
+                if (value == this.$fillMode) {
+                    return;
+                }
+                this.$fillMode = value;
+                 //END IF*/
                 this.invalidateDisplayList();
             }
         );
@@ -12223,7 +12301,7 @@ var swan;
             /**
              * @language en_US
              * The source used for the bitmap fill. the value can be
-             * a string or an instance of <code>BitmapData</code>
+             * a string or an instance of <code>lark.BitmapData</code>
              *
              * @version Lark 1.0
              * @version Swan 1.0
@@ -12231,7 +12309,7 @@ var swan;
              */
             /**
              * @language zh_CN
-             * 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
+             * 用于位图填充的源。可以是一个字符串或者 <code>lark.BitmapData</code> 对象
              *
              * @version Lark 1.0
              * @version Swan 1.0
@@ -12249,6 +12327,7 @@ var swan;
                 this.invalidateProperties();
             }
         );
+        //IF LARK
         /**
          * @private
          */
@@ -12262,6 +12341,18 @@ var swan;
             this.invalidateSize();
             this.invalidateDisplayList();
         };
+        //END IF*/
+        /*//IF EGRET
+        $setBitmapData(value:egret.Texture):void {
+            if (value == this.$bitmapData) {
+                return;
+            }
+            super.$setBitmapData(value);
+            this.sourceChanged = false;
+            this.invalidateSize();
+            this.invalidateDisplayList();
+        }
+         //END IF*/
         /**
          * @private
          * 解析source
@@ -12287,6 +12378,7 @@ var swan;
         p.contentChanged = function (data, source) {
             if (source !== this._source)
                 return;
+            //IF LARK
             if (!lark.is(data, "lark.BitmapData") && !(data instanceof lark.Texture)) {
                 return;
             }
@@ -12302,8 +12394,13 @@ var swan;
          * @private
          */
         p.$measureContentBounds = function (bounds) {
+            //IF LARK
             var values = this.$Bitmap;
             var image = values[1 /* image */];
+            //END IF*/
+            /*//IF EGRET
+            var image = this.$bitmapData;
+             //END IF*/
             if (image) {
                 var uiValues = this.$UIComponent;
                 var width = uiValues[10 /* width */];
@@ -12312,6 +12409,7 @@ var swan;
                     bounds.setEmpty();
                     return;
                 }
+                //IF LARK
                 if (this._fillMode == "clip") {
                     if (width > values[8 /* width */]) {
                         width = values[8 /* width */];
@@ -12332,8 +12430,13 @@ var swan;
          * @param context
          */
         p.$render = function (context) {
+            //IF LARK
             var values = this.$Bitmap;
             var image = values[1 /* image */];
+            //END IF*/
+            /*//IF EGRET
+            var image = this.$bitmapData;
+            //END IF*/
             if (!image) {
                 return;
             }
@@ -12370,7 +12473,12 @@ var swan;
                     }
                     break;
             }
+            //END IF*/
+            /*//IF EGRET
+            egret.Bitmap.$drawImage(context, image, width, height, this.$scale9Grid, this.$fillMode, this.$smoothing, 0, 0);
+            //END IF*/
         };
+        //IF LARK
         /**
          * @private
          * 绘制九宫格位图
@@ -12478,6 +12586,7 @@ var swan;
          * @platform Web,Native
          */
         p.measure = function () {
+            //IF LARK
             var values = this.$Bitmap;
             var image = values[1 /* image */];
             if (image) {
@@ -12486,6 +12595,16 @@ var swan;
             else {
                 this.setMeasuredSize(0, 0);
             }
+            //END IF*/
+            /*//IF EGRET
+            var bitmapData = this.$bitmapData;
+            if (bitmapData) {
+                this.setMeasuredSize(bitmapData._bitmapWidth, bitmapData._bitmapHeight);
+            }
+            else {
+                this.setMeasuredSize(0, 0);
+            }
+            //END IF*/
         };
         /**
          * @copy swan.UIComponent#updateDisplayList
@@ -12692,6 +12811,9 @@ var swan;
              */
             this._widthConstraint = NaN;
             this.initializeUIValues();
+            /*//IF EGRET
+            this.type = egret.TextFieldType.INPUT;
+             //END IF*/
         }
         var d = __define,c=EditableText;p=c.prototype;
         /**
@@ -12977,6 +13099,7 @@ var swan;
      *      </s:Skin>
      * </pre>
      *
+     * @defaultProperty elementsContent
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -12997,6 +13120,7 @@ var swan;
      *      </s:Skin>
      * </pre>
      *
+     * @defaultProperty elementsContent
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -13297,6 +13421,9 @@ var swan;
                 7: false,
                 8: null //skin
             };
+            /*//IF EGRET
+            this.$touchEnabled = true;
+             //END IF*/
         }
         var d = __define,c=Component;p=c.prototype;
         d(p, "hostComponentKey"
@@ -14049,6 +14176,7 @@ var swan;
      * group (Give the instance of Group to <code>viewport</code> property of Scroller component).
      * The scroller component can adds a scrolling touch operation for the Group.
      *
+     * @defaultProperty elementsContent
      * @includeExample examples/Samples/src/extension/swan/components/GroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
@@ -14059,6 +14187,7 @@ var swan;
      * Group 是自动布局的容器基类。如果包含的子项内容太大需要滚动显示，可以在在 Group 外部包裹一层 Scroller 组件
      * (将 Group 实例赋值给 Scroller 组件的 viewport 属性)。Scroller 会为 Group 添加滚动的触摸操作功能，并显示垂直或水平的滚动条。
      *
+     * @defaultProperty elementsContent
      * @includeExample examples/Samples/src/extension/swan/components/GroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
@@ -15753,6 +15882,7 @@ var swan;
      * @event swan.UIEvent.CLOSING Emitted when the close button is taped
      * you can use <code>event.preventDefault()</code> to prevent close.
      *
+     * @defaultProperty elementsContent
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -15765,6 +15895,7 @@ var swan;
      * @event swan.UIEvent.CLOSING 面板即将关闭事件，在关闭按钮被点击后抛出，
      * 监听此事件并调用<code>event.preventDefault()</code>能够阻止面板被关闭。
      *
+     * @defaultProperty elementsContent
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -16305,6 +16436,9 @@ var swan;
      * The Button component is a commonly used rectangular button.
      * The Button component looks like it can be pressed.
      * The default skin has a text label and a icon display object.
+     * @state up Button up state
+     * @state down Button down state
+     * @state disabled Button disabled state
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -16313,6 +16447,9 @@ var swan;
     /**
      * @language zh_CN
      * Button 组件是常用的矩形按钮。Button 组件看起来可以按压。默认外观具有一个文本标签和图标显示对象。
+     * @state up 按钮弹起状态
+     * @state down 按钮按下状态
+     * @state disabled 按钮禁用状态
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -17400,6 +17537,10 @@ var swan;
      * @language en_US
      * The ItemRenderer class is the base class for item renderers.
      *
+     * @state up Up state
+     * @state down Down state
+     * @state upAndSelected Up state when the button is selected
+     * @state downAndSelected Down state when the button is selected
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -17409,6 +17550,10 @@ var swan;
      * @language zh_CN
      * ItemRenderer 类是项呈示器的基类。
      *
+     * @state up 弹起状态
+     * @state down 按下状态
+     * @state upAndSelected 选择时的弹起状态
+     * @state downAndSelected 选择时的按下状态
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -17650,6 +17795,7 @@ var swan;
      * @event swan.UIEvent.CHANGE_START Emitted when the scroll position is going to change
      * @event swan.UIEvent.CHANGE_END Emitted when the scroll position changed complete
      *
+     * @defaultProperty viewport
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -17671,6 +17817,8 @@ var swan;
      *
      * @event swan.UIEvent.CHANGE_START 滚动位置改变开始
      * @event swan.UIEvent.CHANGE_END 滚动位置改变结束
+     *
+     * @defaultProperty viewport
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -18360,7 +18508,7 @@ var swan;
      * to hold data items as children.
      *
      * @see swan.Group
-     *
+     * @defaultProperty dataProvider
      * @includeExample examples/Samples/src/extension/swan/components/DataGroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
@@ -18372,7 +18520,7 @@ var swan;
      * 尽管此容器可以包含可视元素，但它通常仅用于包含作为子项的数据项目。
      *
      * @see swan.Group
-     *
+     * @defaultProperty dataProvider
      * @includeExample examples/Samples/src/extension/swan/components/DataGroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
@@ -19971,6 +20119,12 @@ var swan;
      * This event is emitted only when the
      * user interacts with the control by touching.
      *
+     * @state up Button up state
+     * @state down Button down state
+     * @state disabled Button disabled state
+     * @state upAndSelected Up state when the button is selected
+     * @state downAndSelected Down state when the button is selected
+     * @state disabledAndSelected Disabled state when the button is selected
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -19984,7 +20138,13 @@ var swan;
      *
      * @event lark.Event.CHANGE ToggleButtonBase 控件的 <code>selected</code> 属性更改时分派。
      * 仅当用户通过触摸与控件交互时，才分派此事件。
-
+     *
+     * @state up 按钮弹起状态
+     * @state down 按钮按下状态
+     * @state disabled 按钮禁用状态
+     * @state upAndSelected 按钮选择时的弹起状态
+     * @state downAndSelected 按钮选择时的按下状态
+     * @state disabledAndSelected 按钮选择时的禁用状态
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -21814,6 +21974,7 @@ var swan;
      * @language zh_CN
      * CheckBox 组件包含一个可选标签和一个小方框，该方框内可以包含/不包含复选标记。<p/>
      * 用户单击 CheckBox 组件或其关联文本时，CheckBox 组件会将其 selected 属性设置为 true（表示选中）或 false（表示取消选中）。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
