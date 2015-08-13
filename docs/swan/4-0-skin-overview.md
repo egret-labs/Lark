@@ -3,4 +3,5 @@
 
 * [皮肤分离机制](4-1-skin.md)
 * [皮肤部件](4-2-skin-part.md)
-* [配置主题](4-3-theme.md)
+* [视图状态](4-3-view-state.md)
+* [配置主题](4-4-theme.md)
