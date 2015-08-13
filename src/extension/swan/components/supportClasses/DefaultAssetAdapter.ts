@@ -82,13 +82,21 @@ module swan {
             var loader = loaderPool.pop();
             if (!loader) {
                 loader = new lark.ImageLoader();
+                /*//IF EGRET
+                loader.dataFormat = egret.URLLoaderDataFormat.TEXTURE;
+                //*/
             }
             callBackMap[source] = [[callBack, thisObject]];
             loaderMap[loader.$hashCode] = source;
 
             loader.on(lark.Event.COMPLETE, this.onLoadFinish, this);
             loader.on(lark.Event.IO_ERROR, this.onLoadFinish, this);
+            //IF LARK
             loader.load(source);
+            //*/
+            /*//IF EGRET
+            loader.load(new egret.URLRequest(source));
+            //*/
         }
 
         /**

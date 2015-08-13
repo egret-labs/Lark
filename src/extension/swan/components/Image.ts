@@ -66,7 +66,7 @@ module swan {
          * Constructor.
          *
          * @param source The source used for the bitmap fill. the value can be
-         * a string or an instance of <code>BitmapData</code>
+         * a string or an instance of <code>lark.BitmapData</code>
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -76,7 +76,7 @@ module swan {
          * @language zh_CN
          * 构造函数。
          *
-         * @param source 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
+         * @param source 用于位图填充的源。可以是一个字符串或者 <code>lark.BitmapData</code> 对象
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -179,7 +179,7 @@ module swan {
         /**
          * @language en_US
          * The source used for the bitmap fill. the value can be
-         * a string or an instance of <code>BitmapData</code>
+         * a string or an instance of <code>lark.BitmapData</code>
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -187,7 +187,7 @@ module swan {
          */
         /**
          * @language zh_CN
-         * 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
+         * 用于位图填充的源。可以是一个字符串或者 <code>lark.BitmapData</code> 对象
          *
          * @version Lark 1.0
          * @version Swan 1.0

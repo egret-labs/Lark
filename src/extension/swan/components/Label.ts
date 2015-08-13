@@ -95,8 +95,15 @@ module swan {
          * @platform Web,Native
          */
         public constructor(text?:string) {
+            //IF LARK
             super(text);
             this.initializeUIValues();
+            //*/
+            /*//IF EGRET
+            super();
+            this.initializeUIValues();
+            this.text = text;
+            //*/
         }
 
         /**

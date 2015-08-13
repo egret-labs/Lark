@@ -208,7 +208,7 @@ module RES {
      * <br>The type of resource and the corresponding return value types are as follows:
      * <br>RES.ResourceItem.TYPE_ANIMATION : (lark.Bitmap|lark.Texture)[]
      * <br>RES.ResourceItem.TYPE_BIN : ArrayBuffer JavaScript primary object
-     * <br>RES.ResourceItem.TYPE_IMAGE : img Html Object，or lark.BtimapData interface。
+     * <br>RES.ResourceItem.TYPE_IMAGE : img Html Object，or lark.BitmapData interface。
      * <br>RES.ResourceItem.TYPE_JSON : Object
      * <br>RES.ResourceItem.TYPE_SHEET : Object
      * <br>  1. If the incoming parameter is the name of the entire SpriteSheet is returned is {image1: Texture, "image2": Texture}.
@@ -229,7 +229,7 @@ module RES {
      * <br>资源类型和对应的返回值类型关系如下：
      * <br>RES.ResourceItem.TYPE_ANIMATION : (lark.Bitmap|lark.Texture)[]
      * <br>RES.ResourceItem.TYPE_BIN : ArrayBuffer JavaScript 原生对象
-     * <br>RES.ResourceItem.TYPE_IMAGE : img Html 对象，或者 lark.BtimapData 接口。
+     * <br>RES.ResourceItem.TYPE_IMAGE : img Html 对象，或者 lark.BitmapData 接口。
      * <br>RES.ResourceItem.TYPE_JSON : Object
      * <br>RES.ResourceItem.TYPE_SHEET : Object
      * <br>  1. 如果传入的参数是整个 SpriteSheet 的名称返回的是 {"image1":Texture,"image2":Texture} 这样的格式。
@@ -432,6 +432,7 @@ module RES {
 
     /**
      * @language en_US
+     * Remove resource event。
      * @param type Event name。
      * @param listener Listening function。
      * @param thisObject The this object that is bound to a function.
@@ -441,6 +442,7 @@ module RES {
      */
     /**
      * @language zh_CN
+     * 移除资源监听事件。
      * @param type 事件名。
      * @param listener 侦听函数。
      * @param thisObject 侦听函数绑定的this对象。

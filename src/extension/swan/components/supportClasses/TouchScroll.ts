@@ -287,7 +287,12 @@ module swan.sys {
          * @returns
          */
         private onTick(timeStamp:number):boolean {
+            //IF LARK
             var timeOffset = timeStamp - this.previousTime;
+            //*/
+            /*//IF EGRET
+            var timeOffset = timeStamp;
+            //*/
             if (timeOffset > 0) {
                 var previousVelocity = this.previousVelocity;
                 previousVelocity.push(this.velocity);
