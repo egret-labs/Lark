@@ -93,7 +93,9 @@ module swan {
         /**
          * @private
          */
+        //IF LARK
         private _scale9Grid:lark.Rectangle = null;
+        //END IF*/
 
         /**
          * @language en_US
@@ -135,11 +137,12 @@ module swan {
             //END IF*/
         }
 
-        //IF LARK
         /**
          * @private
          */
+        //IF LARK
         private _fillMode:string = "scale";
+        //END IF*/
         /**
          * @language en_US
          * Determines how the bitmap fills in the dimensions.
@@ -170,9 +173,13 @@ module swan {
          * @platform Web,Native
          */
         public get fillMode():string {
+            //IF LARK
             return this._fillMode;
+            //END IF*/
+            /*//IF EGRET
+            return this.$fillMode;
+            //END IF*/
         }
-        //END IF*/
 
         public set fillMode(value:string) {
             //IF LARK
@@ -235,10 +242,10 @@ module swan {
             this.invalidateProperties();
         }
 
-        //IF LARK
         /**
          * @private
          */
+        //IF LARK
         $setBitmapData(value:lark.BitmapData|lark.Texture):void {
             var values = this.$Bitmap;
             if (value == values[lark.sys.BitmapKeys.bitmapData]) {
@@ -309,14 +316,10 @@ module swan {
         /**
          * @private
          */
+        //IF LARK
         $measureContentBounds(bounds:lark.Rectangle):void {
-            //IF LARK
             var values = this.$Bitmap;
             var image = values[lark.sys.BitmapKeys.image];
-            //END IF*/
-            /*//IF EGRET
-            var image = this.$bitmapData;
-             //END IF*/
             if (image) {
                 var uiValues = this.$UIComponent;
                 var width = uiValues[sys.UIKeys.width];
@@ -325,12 +328,7 @@ module swan {
                     bounds.setEmpty();
                     return;
                 }
-                //IF LARK
                 if (this._fillMode == "clip")
-                //END IF*/
-                /*//IF EGRET
-                if (this.$fillMode == "clip")
-                 //END IF*/
                 {
                     if (width > values[lark.sys.BitmapKeys.width]) {
                         width = values[lark.sys.BitmapKeys.width];
@@ -345,6 +343,35 @@ module swan {
                 bounds.setEmpty();
             }
         }
+        //END IF*/
+        /*//IF EGRET
+        $measureContentBounds(bounds:lark.Rectangle):void {
+            var values = this.$Bitmap;
+            var image = this.$bitmapData;
+            if (image) {
+                var uiValues = this.$UIComponent;
+                var width = uiValues[sys.UIKeys.width];
+                var height = uiValues[sys.UIKeys.height];
+                if (isNaN(width) || isNaN(height)) {
+                    bounds.setEmpty();
+                    return;
+                }
+                if (this.$fillMode == "clip")
+                {
+                    if (width > image.$getTextureWidth()) {
+                        width = image.$getTextureWidth();
+                    }
+                    if (height > image.$getTextureHeight()) {
+                        height = image.$getTextureHeight();
+                    }
+                }
+                bounds.setTo(0, 0, width, height);
+            }
+            else {
+                bounds.setEmpty();
+            }
+        }
+         //END IF*/
 
         /**
          * @private
@@ -402,11 +429,11 @@ module swan {
             //END IF*/
         }
 
-        //IF LARK
         /**
          * @private
          * 绘制九宫格位图
          */
+        //IF LARK
         private drawScale9GridImage(context:lark.sys.RenderContext, image:lark.BitmapData,
                                     scale9Grid:lark.Rectangle, surfaceWidth?:number, surfaceHeight?:number):void {
 
@@ -547,7 +574,7 @@ module swan {
             /*//IF EGRET
             var bitmapData = this.$bitmapData;
             if (bitmapData) {
-                this.setMeasuredSize(bitmapData._bitmapWidth, bitmapData._bitmapHeight);
+                this.setMeasuredSize(bitmapData.$getTextureWidth(), bitmapData.$getTextureHeight());
             }
             else {
                 this.setMeasuredSize(0, 0);
