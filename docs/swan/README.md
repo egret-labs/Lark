@@ -12,7 +12,7 @@ Swan (UI库) 编程指南
 	* [EXML基本语法(二)](3-2-exml-syntax-2.md)（done)
 	* [启用EXML语法提示](3-4-exml-auto-complete.md)(done)
 4. [使用皮肤](4-0-skin-overview.md)(done)
-	* [皮肤分离机制](4-1-skin.md)（先用内部类定义自身皮肤，需要复用的情况才定义独立文件）
+	* [皮肤分离机制](4-1-skin.md)（done）
 	* [皮肤部件](4-2-skin-part.md)（如何跟逻辑组件通讯）
 	* [配置主题](4-3-theme.md)（配置默认皮肤）
 5. [自适应流式布局]()
