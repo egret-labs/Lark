@@ -115,14 +115,27 @@ module swan {
          * @platform Web,Native
          */
         public get scale9Grid():lark.Rectangle {
+            //IF LARK
             return this._scale9Grid;
+            //END IF*/
+            /*//IF EGRET
+            return this.$scale9Grid;
+            //END IF*/
         }
 
         public set scale9Grid(value:lark.Rectangle) {
+            //IF LARK
             this._scale9Grid = value;
             this.invalidateDisplayList();
+            //END IF*/
+            /*//IF EGRET
+            this.$scale9Grid = value;
+            this.$invalidateContentBounds();
+            this.invalidateDisplayList();
+            //END IF*/
         }
 
+        //IF LARK
         /**
          * @private
          */
@@ -159,14 +172,30 @@ module swan {
         public get fillMode():string {
             return this._fillMode;
         }
+        //END IF*/
 
         public set fillMode(value:string) {
+            //IF LARK
             if (value == this._fillMode) {
                 return;
             }
             this._fillMode = value;
+            //END IF*/
+            /*//IF EGRET
+            if (value == this.$fillMode) {
+                return;
+            }
+            this.$fillMode = value;
+             //END IF*/
             this.invalidateDisplayList();
         }
+
+        /*//IF EGRET
+        $setFillMode(value:string):void {
+            super.$setFillMode(value);
+            this.invalidateDisplayList();
+        }
+         //END IF*/
 
         /**
          * @private
@@ -206,6 +235,7 @@ module swan {
             this.invalidateProperties();
         }
 
+        //IF LARK
         /**
          * @private
          */
@@ -219,6 +249,18 @@ module swan {
             this.invalidateSize();
             this.invalidateDisplayList();
         }
+        //END IF*/
+        /*//IF EGRET
+        $setBitmapData(value:egret.Texture):void {
+            if (value == this.$bitmapData) {
+                return;
+            }
+            super.$setBitmapData(value);
+            this.sourceChanged = false;
+            this.invalidateSize();
+            this.invalidateDisplayList();
+        }
+         //END IF*/
 
         /**
          * @private
@@ -246,7 +288,13 @@ module swan {
         private contentChanged(data:any, source:any):void {
             if (source !== this._source)
                 return;
-            if (!lark.is(data, "lark.BitmapData")&&!(data instanceof lark.Texture)) {
+            //IF LARK
+            if (!lark.is(data, "lark.BitmapData") && !(data instanceof lark.Texture))
+            //END IF*/
+            /*//IF EGRET
+            if (!egret.is(data, "egret.Texture"))
+             //END IF*/
+            {
                 return;
             }
             this.$setBitmapData(data);
@@ -262,8 +310,13 @@ module swan {
          * @private
          */
         $measureContentBounds(bounds:lark.Rectangle):void {
+            //IF LARK
             var values = this.$Bitmap;
             var image = values[lark.sys.BitmapKeys.image];
+            //END IF*/
+            /*//IF EGRET
+            var image = this.$bitmapData;
+             //END IF*/
             if (image) {
                 var uiValues = this.$UIComponent;
                 var width = uiValues[sys.UIKeys.width];
@@ -272,7 +325,13 @@ module swan {
                     bounds.setEmpty();
                     return;
                 }
-                if (this._fillMode == "clip") {
+                //IF LARK
+                if (this._fillMode == "clip")
+                //END IF*/
+                /*//IF EGRET
+                if (this.$fillMode == "clip")
+                 //END IF*/
+                {
                     if (width > values[lark.sys.BitmapKeys.width]) {
                         width = values[lark.sys.BitmapKeys.width];
                     }
@@ -289,12 +348,17 @@ module swan {
 
         /**
          * @private
-         * 
-         * @param context 
+         *
+         * @param context
          */
         $render(context:lark.sys.RenderContext):void {
+            //IF LARK
             var values = this.$Bitmap;
             var image = values[lark.sys.BitmapKeys.image];
+            //END IF*/
+            /*//IF EGRET
+            var image = this.$bitmapData;
+            //END IF*/
             if (!image) {
                 return;
             }
@@ -304,6 +368,7 @@ module swan {
             if (width === 0 || height === 0) {
                 return;
             }
+            //IF LARK
             switch (this._fillMode) {
                 case "clip":
                     if (width > values[lark.sys.BitmapKeys.width]) {
@@ -331,8 +396,13 @@ module swan {
                     }
                     break;
             }
+            //END IF*/
+            /*//IF EGRET
+            egret.Bitmap.$drawImage(context, image, width, height, this.$scale9Grid, this.$fillMode, this.$smoothing, 0, 0);
+            //END IF*/
         }
 
+        //IF LARK
         /**
          * @private
          * 绘制九宫格位图
@@ -411,7 +481,7 @@ module swan {
             context.drawImage(image, sourceX1, sourceY2, sourceW1, sourceH2, targetX1, targetY2, targetW1, sourceH2);
             context.drawImage(image, sourceX2, sourceY2, sourceW2, sourceH2, targetX2, targetY2, sourceW2, sourceH2);
         }
-
+        //END IF*/
 
         //=======================UIComponent接口实现===========================
         /**
@@ -464,6 +534,7 @@ module swan {
          * @platform Web,Native
          */
         protected measure():void {
+            //IF LARK
             var values = this.$Bitmap;
             var image = values[lark.sys.BitmapKeys.image];
             if (image) {
@@ -472,7 +543,16 @@ module swan {
             else {
                 this.setMeasuredSize(0, 0);
             }
-
+            //END IF*/
+            /*//IF EGRET
+            var bitmapData = this.$bitmapData;
+            if (bitmapData) {
+                this.setMeasuredSize(bitmapData._bitmapWidth, bitmapData._bitmapHeight);
+            }
+            else {
+                this.setMeasuredSize(0, 0);
+            }
+            //END IF*/
         }
 
         /**
