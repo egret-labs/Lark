@@ -1,26 +1,24 @@
-class Main extends swan.Group {
+class Main extends swan.UILayer {
 
-    constructor() {
-        super();
-    }
-
-    protected childrenCreated(): void {
-        super.childrenCreated();
+    protected createChildren(): void {
+        super.createChildren();
         
-        // Load a theme and related EXML,then display MainGroup
-        // 加载一个主题和关联的 EXML 然后显示主场景 MainGroup
-        var theme = new swan.Theme(`resource/theme/blue-theme.json`, this.stage);
-        // components.MainGroup is defined in src/components/MainGroup.exml
-        // components.MainGroup 是在 src/components/MainGroup.exml 中定义的
-        theme.on(lark.Event.COMPLETE, e=> this.addChild(new components.MainGroup()), this)
+        var theme = new swan.Theme(`resource/default.thm.json`, this.stage);
         
-        this.resize();
-        this.stage.on(lark.Event.RESIZE, this.resize, this);
+        var button = new swan.Button();
+        button.label = "Click!";
+        button.horizontalCenter = 0;
+        button.verticalCenter = 0;
+        this.addChild(button);
+        button.on(lark.TouchEvent.TOUCH_TAP,this.onButtonClick,this);
     }
-
-    resize() {
-        this.height = this.stage.stageHeight;
-        this.width = this.stage.stageWidth;
+    
+    private onButtonClick(e:lark.TouchEvent) { 
+        var panel = new swan.Panel();
+        panel.title = "Title";
+        panel.horizontalCenter = 0;
+        panel.verticalCenter = 0;
+        this.addChild(panel);
     }
 }
 
