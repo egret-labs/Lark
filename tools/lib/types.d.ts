@@ -89,7 +89,7 @@ declare module lark {
 
     export interface ILarkProject {
         modules?: LarkModule[];
-        platforms?: LarkPlatform[];
+        platform?: string;
         port?: number;
         scaleMode?: string;
         contentWidth?: number;
@@ -148,6 +148,7 @@ declare module lark {
         configurations: CompileConfiguration[];
         scaleModes: LarkScaleMode[];
         orientationModes: LarkOrientationMode[];
+        templates: LarkProjectTemplate[]
     }
 
     export interface LarkScaleMode {
@@ -158,7 +159,11 @@ declare module lark {
         name: string;
         description: string;
     }
-
+    export interface LarkProjectTemplate {
+        name: string;
+        description: string;
+        modules: string[];
+    }
     
     
     export interface LarkModule {
