@@ -399,3 +399,9 @@ export function joinPath(dir:string, filename:string):string {
     path = escapePath(path);
     return path;
 }
+
+
+export function getRelativePath(dir: string, filename: string) {
+    var relative = Path.relative(dir, filename);
+    return escapePath(relative);;
+}

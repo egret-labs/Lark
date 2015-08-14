@@ -13,10 +13,6 @@ export var optionDeclarations: lark.CommandLineOption[] = [
         name: "action",
         type: "string"
     }, {
-        name: "includeLark",
-        type: "boolean",
-        shortName: "e"
-    }, {
         name: "sourceMap",
         type: "boolean"
     }, {
@@ -96,6 +92,7 @@ export function parseCommandLine(commandLine: string[]) {
 
     function parseStrings(args: string[]) {
         var i = 0;
+        var commands: string[] = [];
         while (i < args.length)
         {
             var s = args[i++];
@@ -142,14 +139,28 @@ export function parseCommandLine(commandLine: string[]) {
             }
             else
             {
-                if (options.action == null)
-                    options.action = s;
-                else if (options.projectDir == null)
-                    options.projectDir = s;
-                else
-                    filenames.push(s);
+                commands.push(s);
             }
         }
+
+        if (commands.length > 0) {
+            options.command = commands[0];
+            if (file.isDirectory(commands[1])) {
+                options.projectDir = commands[1];
+                commands.splice(1, 1);
+            }
+            switch (options.command) {
+                case "build":
+                case "run":
+                case "emulate":
+                    options.platform = commands[1];
+                    break;
+                case "platform":
+                case "plugin":
+                    options.params = commands.slice(1);
+            }
+        }
+
 
 
         if (options.projectDir == null)
@@ -185,7 +196,7 @@ export function parseJSON(json: lark.LarkToolArgs): lark.LarkToolArgs {
     var errors: string[] = [];
     options.larkRoot = json.larkRoot || utils.getLarkRoot();
     options.projectDir = json.projectDir || process.cwd();
-    options.action = json.action;
+    options.command = json.command;
     options.autoCompile = json.autoCompile;
     options.debug = json.debug;
     options.esTarget = json.esTarget;

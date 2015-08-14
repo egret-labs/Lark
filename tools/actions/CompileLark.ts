@@ -164,12 +164,14 @@ function listModuleFiles(m: lark.LarkModule) {
     if(m.noOtherTs!==true)
         tsFiles = FileUtil.search(FileUtil.joinPath(lark.options.larkRoot, m.root), "ts");
     var specFiles = {};
-    m.files.forEach(f=> {
+    m.files.forEach((f,i)=> {
         var fileName = typeof (f) == 'string' ? <string>f : (<lark.LarkSourceFile>f).path;
         fileName = FileUtil.joinPath(m.root, fileName);
         fileName = FileUtil.joinPath(lark.options.larkRoot, fileName);
         if (f['path'])
             f['path'] = fileName;
+        else
+            m.files[i] = fileName;
         specFiles[fileName] = true;
     });
     tsFiles.forEach(f=> {

@@ -5,6 +5,7 @@ import http = require("http");
 import utils = require('../lib/utils');
 import server = require('../server/server');
 import service = require('../service/index');
+import exml = require('../actions/EXMLAction');
 import ServiceSocket = require('../service/ServiceSocket');
 import FileUtil = require('../lib/FileUtil');
 import CopyFiles = require('../actions/CopyFiles');
@@ -54,6 +55,7 @@ class AutoCompileCommand implements lark.Command {
         var _scripts = this._scripts || [];
         var result = compileProject.compileProject(options);
         this.compileProject = compileProject;
+        exml.updateSetting(false);
         CopyFiles.copyProjectFiles();
         _scripts = result.files.length > 0 ? result.files : _scripts;
         CompileTemplate.compileTemplates(options, _scripts);
@@ -109,9 +111,7 @@ class AutoCompileCommand implements lark.Command {
 
         fileNames.forEach(fileName => { 
             if (fileName == proj) {
-                lark.options.includeLark = true;
                 this.buildProject();
-                lark.options.includeLark = false;
             }
             if (fileName.indexOf(src) < 0 && fileName.indexOf(temp) < 0 ) {
                 return;
@@ -130,6 +130,8 @@ class AutoCompileCommand implements lark.Command {
 
             if (fileName.indexOf(start) >= 0)
                 return this.onTemplateIndexChanged();
+            if (fileName.indexOf('.exml') >= 0)
+                exml.updateSetting(false);
         });
     }
 
@@ -139,6 +141,11 @@ class AutoCompileCommand implements lark.Command {
         index = FileUtil.escapePath(index);
         console.log('Compile Template: ' + index);
         CompileTemplate.compileTemplates(lark.options,this._scripts);
+        return 0;
+    }
+
+    private onEXMLChanged(): number {
+        exml.updateSetting(false);
         return 0;
     }
 

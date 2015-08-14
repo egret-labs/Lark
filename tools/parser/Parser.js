@@ -7,10 +7,6 @@ exports.optionDeclarations = [
         name: "action",
         type: "string"
     }, {
-        name: "includeLark",
-        type: "boolean",
-        shortName: "e"
-    }, {
         name: "sourceMap",
         type: "boolean"
     }, {
@@ -83,6 +79,7 @@ function parseCommandLine(commandLine) {
     return options;
     function parseStrings(args) {
         var i = 0;
+        var commands = [];
         while (i < args.length) {
             var s = args[i++];
             if (s.charAt(0) === '-') {
@@ -117,12 +114,24 @@ function parseCommandLine(commandLine) {
                 }
             }
             else {
-                if (options.action == null)
-                    options.action = s;
-                else if (options.projectDir == null)
-                    options.projectDir = s;
-                else
-                    filenames.push(s);
+                commands.push(s);
+            }
+        }
+        if (commands.length > 0) {
+            options.command = commands[0];
+            if (file.isDirectory(commands[1])) {
+                options.projectDir = commands[1];
+                commands.splice(1, 1);
+            }
+            switch (options.command) {
+                case "build":
+                case "run":
+                case "emulate":
+                    options.platform = commands[1];
+                    break;
+                case "platform":
+                case "plugin":
+                    options.params = commands.slice(1);
             }
         }
         if (options.projectDir == null)
@@ -157,7 +166,7 @@ function parseJSON(json) {
     var errors = [];
     options.larkRoot = json.larkRoot || utils.getLarkRoot();
     options.projectDir = json.projectDir || process.cwd();
-    options.action = json.action;
+    options.command = json.command;
     options.autoCompile = json.autoCompile;
     options.debug = json.debug;
     options.esTarget = json.esTarget;

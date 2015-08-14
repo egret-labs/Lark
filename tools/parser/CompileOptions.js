@@ -33,14 +33,20 @@ var CompileOptions = (function () {
     });
     Object.defineProperty(CompileOptions.prototype, "debugDir", {
         get: function () {
-            return FileUtil.joinPath(this.projectDir, "bin-debug/");
+            return this._debugDir || FileUtil.joinPath(this.projectDir, "bin-debug/");
+        },
+        set: function (value) {
+            this._debugDir = value;
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(CompileOptions.prototype, "releaseDir", {
         get: function () {
-            return FileUtil.joinPath(this.projectDir, "bin-release/");
+            return this._releaseDir || FileUtil.joinPath(this.projectDir, "bin-release/");
+        },
+        set: function (value) {
+            this._releaseDir = value;
         },
         enumerable: true,
         configurable: true
@@ -61,6 +67,13 @@ var CompileOptions = (function () {
         },
         set: function (value) {
             this._outDir = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CompileOptions.prototype, "manifestPath", {
+        get: function () {
+            return FileUtil.joinPath(this.projectDir, "manifest.json");
         },
         enumerable: true,
         configurable: true
