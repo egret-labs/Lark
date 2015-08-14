@@ -5,11 +5,13 @@
     <xs:attribute name="pixelHitTest" type="xs:boolean"/>
     <xs:attribute name="smoothing" type="xs:boolean"/>
   </xs:attributeGroup>
-  <xs:group name="lark.BitmapData">
-    <xs:choice/>
+  <xs:group name="any">
+    <xs:choice>
+      <xs:any/>
+    </xs:choice>
   </xs:group>
-  <xs:complexType name="lark.BitmapData">
-    <xs:group ref="lark.BitmapData"/>
+  <xs:complexType name="any">
+    <xs:group ref="any"/>
   </xs:complexType>
   <xs:group name="boolean">
     <xs:choice>
@@ -22,7 +24,7 @@
   <xs:group name="Bitmap_attributeElement">
     <xs:choice>
       <xs:group ref="DisplayObject_attributeElement"/>
-      <xs:element name="bitmapData" type="lark.BitmapData"/>
+      <xs:element name="bitmapData" type="any"/>
       <xs:element name="pixelHitTest" type="boolean"/>
       <xs:element name="smoothing" type="boolean"/>
     </xs:choice>
@@ -115,6 +117,7 @@
       <xs:element ref="TextInput"/>
       <xs:element ref="ToggleButton"/>
       <xs:element ref="ToggleSwitch"/>
+      <xs:element ref="UILayer"/>
       <xs:element ref="VScrollBar"/>
       <xs:element ref="VSlider"/>
       <xs:element ref="ViewStack"/>
@@ -174,20 +177,12 @@
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="lark.Event">
-    <xs:attributeGroup ref="lark.LarkObject"/>
+    <xs:attributeGroup ref="lark.HashObject"/>
     <xs:attribute name="data" type="xs:string"/>
   </xs:attributeGroup>
-  <xs:group name="any">
-    <xs:choice>
-      <xs:any/>
-    </xs:choice>
-  </xs:group>
-  <xs:complexType name="any">
-    <xs:group ref="any"/>
-  </xs:complexType>
   <xs:group name="Event_attributeElement">
     <xs:choice>
-      <xs:group ref="LarkObject_attributeElement"/>
+      <xs:group ref="HashObject_attributeElement"/>
       <xs:element name="data" type="any"/>
     </xs:choice>
   </xs:group>
@@ -201,11 +196,11 @@
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="lark.EventEmitter">
-    <xs:attributeGroup ref="lark.LarkObject"/>
+    <xs:attributeGroup ref="lark.HashObject"/>
   </xs:attributeGroup>
   <xs:group name="EventEmitter_attributeElement">
     <xs:choice>
-      <xs:group ref="LarkObject_attributeElement"/>
+      <xs:group ref="HashObject_attributeElement"/>
     </xs:choice>
   </xs:group>
   <xs:element name="EventEmitter">
@@ -235,7 +230,7 @@
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="lark.Graphics">
-    <xs:attributeGroup ref="lark.LarkObject"/>
+    <xs:attributeGroup ref="lark.HashObject"/>
     <xs:attribute name="fillStyle" type="xs:string"/>
     <xs:attribute name="lineCap" type="xs:string"/>
     <xs:attribute name="lineJoin" type="xs:string"/>
@@ -245,7 +240,7 @@
   </xs:attributeGroup>
   <xs:group name="Graphics_attributeElement">
     <xs:choice>
-      <xs:group ref="LarkObject_attributeElement"/>
+      <xs:group ref="HashObject_attributeElement"/>
       <xs:element name="fillStyle" type="any"/>
       <xs:element name="lineCap" type="string"/>
       <xs:element name="lineJoin" type="string"/>
@@ -263,25 +258,25 @@
       <xs:attributeGroup ref="lark.Graphics"/>
     </xs:complexType>
   </xs:element>
-  <xs:attributeGroup name="lark.LarkObject">
+  <xs:attributeGroup name="lark.HashObject">
     <xs:attribute name="id" type="xs:string"/>
   </xs:attributeGroup>
-  <xs:group name="LarkObject_attributeElement">
+  <xs:group name="HashObject_attributeElement">
     <xs:choice>
       <xs:element name="id" type="string"/>
     </xs:choice>
   </xs:group>
-  <xs:element name="LarkObject">
+  <xs:element name="HashObject">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:any namespace="##other"/>
-        <xs:group ref="LarkObject_attributeElement"/>
+        <xs:group ref="HashObject_attributeElement"/>
       </xs:choice>
-      <xs:attributeGroup ref="lark.LarkObject"/>
+      <xs:attributeGroup ref="lark.HashObject"/>
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="lark.Matrix">
-    <xs:attributeGroup ref="lark.LarkObject"/>
+    <xs:attributeGroup ref="lark.HashObject"/>
     <xs:attribute name="a" type="xs:decimal"/>
     <xs:attribute name="b" type="xs:decimal"/>
     <xs:attribute name="c" type="xs:decimal"/>
@@ -291,7 +286,7 @@
   </xs:attributeGroup>
   <xs:group name="Matrix_attributeElement">
     <xs:choice>
-      <xs:group ref="LarkObject_attributeElement"/>
+      <xs:group ref="HashObject_attributeElement"/>
       <xs:element name="a" type="number"/>
       <xs:element name="b" type="number"/>
       <xs:element name="c" type="number"/>
@@ -350,13 +345,13 @@
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="lark.Point">
-    <xs:attributeGroup ref="lark.LarkObject"/>
+    <xs:attributeGroup ref="lark.HashObject"/>
     <xs:attribute name="x" type="xs:decimal"/>
     <xs:attribute name="y" type="xs:decimal"/>
   </xs:attributeGroup>
   <xs:group name="Point_attributeElement">
     <xs:choice>
-      <xs:group ref="LarkObject_attributeElement"/>
+      <xs:group ref="HashObject_attributeElement"/>
       <xs:element name="x" type="number"/>
       <xs:element name="y" type="number"/>
     </xs:choice>
@@ -392,7 +387,7 @@
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="lark.Rectangle">
-    <xs:attributeGroup ref="lark.LarkObject"/>
+    <xs:attributeGroup ref="lark.HashObject"/>
     <xs:attribute name="bottom" type="xs:decimal"/>
     <xs:attribute name="height" type="xs:string"/>
     <xs:attribute name="left" type="xs:decimal"/>
@@ -404,7 +399,7 @@
   </xs:attributeGroup>
   <xs:group name="Rectangle_attributeElement">
     <xs:choice>
-      <xs:group ref="LarkObject_attributeElement"/>
+      <xs:group ref="HashObject_attributeElement"/>
       <xs:element name="bottom" type="number"/>
       <xs:element name="height" type="number"/>
       <xs:element name="left" type="number"/>
@@ -553,6 +548,23 @@
         <xs:group ref="TextInput_attributeElement"/>
       </xs:choice>
       <xs:attributeGroup ref="lark.TextInput"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="lark.Texture">
+    <xs:attributeGroup ref="lark.HashObject"/>
+  </xs:attributeGroup>
+  <xs:group name="Texture_attributeElement">
+    <xs:choice>
+      <xs:group ref="HashObject_attributeElement"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="Texture">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:any namespace="##other"/>
+        <xs:group ref="Texture_attributeElement"/>
+      </xs:choice>
+      <xs:attributeGroup ref="lark.Texture"/>
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="lark.Timer">
@@ -1202,6 +1214,7 @@
       <xs:element ref="List"/>
       <xs:element ref="ListBase"/>
       <xs:element ref="TabBar"/>
+      <xs:element ref="UILayer"/>
       <xs:element ref="ViewStack"/>
     </xs:choice>
   </xs:group>
@@ -1549,6 +1562,7 @@
       <xs:element ref="List"/>
       <xs:element ref="ListBase"/>
       <xs:element ref="TabBar"/>
+      <xs:element ref="UILayer"/>
       <xs:element ref="ViewStack"/>
     </xs:choice>
   </xs:group>
@@ -1667,7 +1681,7 @@
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="swan.Skin">
-    <xs:attributeGroup ref="lark.LarkObject"/>
+    <xs:attributeGroup ref="lark.HashObject"/>
     <xs:attribute name="class" type="xs:string"/>
     <xs:attribute name="currentState" type="xs:string"/>
     <xs:attribute name="elementsContent" type="xs:string"/>
@@ -1706,7 +1720,7 @@
   </xs:complexType>
   <xs:group name="Skin_attributeElement">
     <xs:choice>
-      <xs:group ref="LarkObject_attributeElement"/>
+      <xs:group ref="HashObject_attributeElement"/>
       <xs:element name="class" type="string"/>
       <xs:element name="currentState" type="string"/>
       <xs:element name="elementsContent" type="Array_lark.DisplayObject"/>
@@ -1761,14 +1775,14 @@
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="swan.State">
-    <xs:attributeGroup ref="lark.LarkObject"/>
+    <xs:attributeGroup ref="lark.HashObject"/>
     <xs:attribute name="name" type="xs:string"/>
     <xs:attribute name="overrides" type="xs:string"/>
     <xs:attribute name="stateGroups" type="xs:string"/>
   </xs:attributeGroup>
   <xs:group name="State_attributeElement">
     <xs:choice>
-      <xs:group ref="LarkObject_attributeElement"/>
+      <xs:group ref="HashObject_attributeElement"/>
       <xs:element name="name" type="string"/>
       <xs:element name="overrides" type="Array_any"/>
       <xs:element name="stateGroups" type="Array_any"/>
@@ -1937,6 +1951,23 @@
         <xs:group ref="UIEvent_attributeElement"/>
       </xs:choice>
       <xs:attributeGroup ref="swan.UIEvent"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="swan.UILayer">
+    <xs:attributeGroup ref="swan.Group"/>
+  </xs:attributeGroup>
+  <xs:group name="UILayer_attributeElement">
+    <xs:choice>
+      <xs:group ref="Group_attributeElement"/>
+    </xs:choice>
+  </xs:group>
+  <xs:element name="UILayer">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:any namespace="##other"/>
+        <xs:group ref="UILayer_attributeElement"/>
+      </xs:choice>
+      <xs:attributeGroup ref="swan.UILayer"/>
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="swan.VScrollBar">
