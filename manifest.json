@@ -87,7 +87,7 @@
         }
       ],
       "root": "src/lark",
-      "dependencies": []
+      "dependencies": [ ]
     },
     {
       "name": "swan",
@@ -139,6 +139,10 @@
   ],
   "templates": [
     {
+      "name": "swan",
+      "description": "使用 swan 扩展库创建友好的交互界面"
+    },
+    {
       "name": "Empty",
       "description": "空项目"
     }
@@ -186,9 +190,5 @@
       "name": "landscapeFlipped",
       "description": "强制旋转应用程序至横屏状态。此模式下，当屏幕高度大于屏幕宽度时，会自动将应用程序逆时针旋转90°。"
     }
-  ],
-  "themes": [
-    "default.thm"
-  ],
-  "defaultTheme": "default.thm"
+  ]
 }

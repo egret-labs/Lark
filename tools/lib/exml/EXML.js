@@ -92,7 +92,7 @@ function addDepends(file) {
     });
     file.usedEXML && file.usedEXML.forEach(function (path) {
         var it = allEXMLs[path];
-        if (!file.depends)
+        if (!it.depends)
             addDepends(it);
         for (var i in it.depends)
             depends[i] = true;
