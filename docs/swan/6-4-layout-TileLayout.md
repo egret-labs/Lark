@@ -1,6 +1,6 @@
-#Swan (UI库) 编程指南 - 格子布局 
+#Swan (UI库) 编程指南 - 网格布局 
 
-格子布局，则是既做横向排列，也做纵向排列，实现的效果像格子一样。可设置的属性主要包括：
+网格布局，则是既做横向排列，也做纵向排列，实现的效果像格子一样。可设置的属性主要包括：
 * horizontalGap属性，设置子项之间的水平间距
 * verticalGap属性，设置子项之间的垂直间距
 * columnAlign属性，指定如何将完全可见列与容器宽度对齐。
@@ -31,7 +31,7 @@ tLayout.paddingTop = 30;
 tLayout.paddingRight = 30;
 tLayout.paddingLeft = 30;
 tLayout.requestedColumnCount = 2;  /// 设置两列显示
-this.myGroup.layout = tLayout;    /// 格子布局
+this.myGroup.layout = tLayout;    /// 网格布局
 ```    
 效果如图：
 ![][6-4-layout-TLayout]     
