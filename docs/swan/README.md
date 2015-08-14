@@ -17,11 +17,12 @@ Swan (UI库) 编程指南
 	* [视图状态](4-3-view-state.md)（done）
 	* [配置主题](4-4-theme.md)（done）
 5. [自动布局](5-0-auto-layout-overview.md)（done）
-	* [屏幕适配示例](5-1-screen-adapt.md)（done）
+	* [屏幕适配](5-1-screen-adapt.md)（done）
 	* [失效验证机制](5-2-invalidate.md)（done）
-	* [自动布局原理](5-3-auto-layout.md)
-	* [组件布局属性](5-4-layout-property.md)
-	* [调试技巧](5-5-layout-debug.md)	
+	* [自动布局原理](5-3-auto-layout.md)(done)
+	* [解决异步问题](5-4-fix-async.md)(done)
+	* [组件布局属性](5-5-layout-property.md)
+	* [调试技巧](5-6-layout-debug.md)	
 6. [使用布局类](6-0-layout-overview.md)(done) 
 	* [基本布局](6-1-layout-BasicLayout.md)(done) 
 	* [水平布局](6-2-layout-HorizontalLayout.md)(done)

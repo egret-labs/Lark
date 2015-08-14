@@ -1,1 +1,39 @@
-#Swan (UI¿â) ±à³ÌÖ¸ÄÏ - ¸ñ×Ó²¼¾Ö¸ñ×Ó²¼¾Ö£¬ÔòÊÇ¼È×öºáÏòÅÅÁĞ£¬Ò²×ö×İÏòÅÅÁĞ£¬ÊµÏÖµÄĞ§¹ûÏñ¸ñ×ÓÒ»Ñù¡£¿ÉÉèÖÃµÄÊôĞÔÖ÷Òª°üÀ¨£º* horizontalGapÊôĞÔ£¬ÉèÖÃ×ÓÏîÖ®¼äµÄË®Æ½¼ä¾à* verticalGapÊôĞÔ£¬ÉèÖÃ×ÓÏîÖ®¼äµÄ´¹Ö±¼ä¾à* columnAlignÊôĞÔ£¬Ö¸¶¨ÈçºÎ½«ÍêÈ«¿É¼ûÁĞÓëÈİÆ÷¿í¶È¶ÔÆë¡£* rowAlignÊôĞÔ£¬Ö¸¶¨ÈçºÎ½«ÍêÈ«¿É¼ûĞĞÓëÈİÆ÷¸ß¶È¶ÔÆë¡£* paddingÊôĞÔ£¬ÉèÖÃÈİÆ÷ÄÚ¼ä¾à£¬Èç¹ûĞèÒª·Ö¿ªÉèÖÃ¿ÉÒÔÊ¹ÓÃpaddingTop,paddingBottom,paddingLeft,paddingRight* requestedColumnCountÊôĞÔ£¬Ã÷È·Ö¸¶¨ÒªÏÔÊ¾µÄÁĞÊı> ÆäÖĞcolumnAlignºÍrowAlignµÄÉèÖÃ¶ÔÓÚ±ß½ç¶ÔÆëÆğÖØÒª×÷ÓÃ£¬²»Í¬µÄÉèÖÃĞÎ³ÉµÄĞ§¹ûÒ²²»¾¡ÏàÍ¬ÈÔÈ»ÓÃ 3 ¸ö°´Å¥½øĞĞ²¼¾ÖÉèÖÃÊ¾Àı£º``` TypeScript   var btn1:swan.Button = new swan.Button();btn1.label = "Lark °´Å¥ A";var btn2:swan.Button = new swan.Button();btn2.label = "Lark °´Å¥ B";var btn3:swan.Button = new swan.Button();btn3.label = "Lark °´Å¥ C";this.myGroup.addChild( btn1 );this.myGroup.addChild( btn2 );this.myGroup.addChild( btn3 );var tLayout:swan.TileLayout = new swan.TileLayout();tLayout.horizontalGap = 10;tLayout.verticalGap = 10;tLayout.columnAlign = swan.ColumnAlign.JUSTIFY_USING_WIDTH;tLayout.rowAlign = swan.RowAlign.JUSTIFY_USING_HEIGHT;tLayout.paddingTop = 30;tLayout.paddingRight = 30;tLayout.paddingLeft = 30;tLayout.requestedColumnCount = 2;  /// ÉèÖÃÁ½ÁĞÏÔÊ¾this.myGroup.layout = tLayout;    /// ¸ñ×Ó²¼¾Ö```    Ğ§¹ûÈçÍ¼£º![][6-4-layout-TLayout]     [6-4-layout-TLayout]: image/6/6-4-layout-TLayout.jpg
+#Swan (UIåº“) ç¼–ç¨‹æŒ‡å— - æ ¼å­å¸ƒå±€ 
+
+æ ¼å­å¸ƒå±€ï¼Œåˆ™æ˜¯æ—¢åšæ¨ªå‘æ’åˆ—ï¼Œä¹Ÿåšçºµå‘æ’åˆ—ï¼Œå®ç°çš„æ•ˆæœåƒæ ¼å­ä¸€æ ·ã€‚å¯è®¾ç½®çš„å±æ€§ä¸»è¦åŒ…æ‹¬ï¼š
+* horizontalGapå±æ€§ï¼Œè®¾ç½®å­é¡¹ä¹‹é—´çš„æ°´å¹³é—´è·
+* verticalGapå±æ€§ï¼Œè®¾ç½®å­é¡¹ä¹‹é—´çš„å‚ç›´é—´è·
+* columnAlignå±æ€§ï¼ŒæŒ‡å®šå¦‚ä½•å°†å®Œå…¨å¯è§åˆ—ä¸å®¹å™¨å®½åº¦å¯¹é½ã€‚
+* rowAlignå±æ€§ï¼ŒæŒ‡å®šå¦‚ä½•å°†å®Œå…¨å¯è§è¡Œä¸å®¹å™¨é«˜åº¦å¯¹é½ã€‚
+* paddingå±æ€§ï¼Œè®¾ç½®å®¹å™¨å†…é—´è·ï¼Œå¦‚æœéœ€è¦åˆ†å¼€è®¾ç½®å¯ä»¥ä½¿ç”¨paddingTop,paddingBottom,paddingLeft,paddingRight
+* requestedColumnCountå±æ€§ï¼Œæ˜ç¡®æŒ‡å®šè¦æ˜¾ç¤ºçš„åˆ—æ•°
+
+> å…¶ä¸­columnAlignå’ŒrowAlignçš„è®¾ç½®å¯¹äºè¾¹ç•Œå¯¹é½èµ·é‡è¦ä½œç”¨ï¼Œä¸åŒçš„è®¾ç½®å½¢æˆçš„æ•ˆæœä¹Ÿä¸å°½ç›¸åŒ
+
+ä»ç„¶ç”¨ 3 ä¸ªæŒ‰é’®è¿›è¡Œå¸ƒå±€è®¾ç½®ç¤ºä¾‹ï¼š
+``` TypeScript   
+var btn1:swan.Button = new swan.Button();
+btn1.label = "Lark æŒ‰é’® A";
+var btn2:swan.Button = new swan.Button();
+btn2.label = "Lark æŒ‰é’® B";
+var btn3:swan.Button = new swan.Button();
+btn3.label = "Lark æŒ‰é’® C";
+this.myGroup.addChild( btn1 );
+this.myGroup.addChild( btn2 );
+this.myGroup.addChild( btn3 );
+
+var tLayout:swan.TileLayout = new swan.TileLayout();
+tLayout.horizontalGap = 10;
+tLayout.verticalGap = 10;
+tLayout.columnAlign = swan.ColumnAlign.JUSTIFY_USING_WIDTH;
+tLayout.rowAlign = swan.RowAlign.JUSTIFY_USING_HEIGHT;
+tLayout.paddingTop = 30;
+tLayout.paddingRight = 30;
+tLayout.paddingLeft = 30;
+tLayout.requestedColumnCount = 2;  /// è®¾ç½®ä¸¤åˆ—æ˜¾ç¤º
+this.myGroup.layout = tLayout;    /// æ ¼å­å¸ƒå±€
+```    
+æ•ˆæœå¦‚å›¾ï¼š
+![][6-4-layout-TLayout]     
+
+[6-4-layout-TLayout]: image/6/6-4-layout-TLayout.jpg
