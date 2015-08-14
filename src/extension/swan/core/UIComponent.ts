@@ -883,9 +883,9 @@ module swan.sys {
                 29: false,          //initialized
             };
             this.$includeInLayout = true;
-            /*//IF EGRET
+            /*//if egret
             this.$touchEnabled = true;
-             //END IF*/
+             //endif*/
         }
 
 

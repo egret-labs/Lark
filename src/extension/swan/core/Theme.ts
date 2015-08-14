@@ -94,14 +94,14 @@ module swan {
             var request = new lark.HttpRequest();
             request.on(lark.Event.COMPLETE, this.onConfigLoaded, this);
             request.on(lark.Event.IO_ERROR, this.onConfigLoaded, this);
-            //IF LARK
+            //if lark
             request.open(url);
             request.send();
-            //END IF*/
-            /*//IF EGRET
+            //endif*/
+            /*//if egret
             request.dataFormat = egret.URLLoaderDataFormat.TEXT;
             request.load(new egret.URLRequest(url));
-            //END IF*/
+            //endif*/
         }
 
         /**
@@ -112,12 +112,12 @@ module swan {
         private onConfigLoaded(event:lark.Event):void {
             var request:lark.HttpRequest = event.target;
             try {
-                //IF LARK
+                //if lark
                 var data = JSON.parse(request.response);
-                //END IF*/
-                /*//IF EGRET
+                //endif*/
+                /*//if egret
                 var data = JSON.parse(request.data);
-                 //END IF*/
+                 //endif*/
             }
             catch (e) {
                 if (DEBUG) {

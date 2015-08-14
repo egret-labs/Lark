@@ -1676,12 +1676,12 @@ var swan;
              * 计算当前值并返回动画是否结束
              */
             p.doInterval = function (currentTime) {
-                //IF LARK
+                //if lark
                 var runningTime = currentTime - this.startTime;
-                //END IF*/
-                /*//IF EGRET
+                //endif*/
+                /*//if egret
                 var runningTime = egret.getTimer() - this.startTime;
-                 //END IF*/
+                 //endif*/
                 if (!this.isPlaying) {
                     this.isPlaying = true;
                 }
@@ -2723,12 +2723,12 @@ var swan;
             loaderMap[loader.$hashCode] = source;
             loader.on(lark.Event.COMPLETE, this.onLoadFinish, this);
             loader.on(lark.Event.IO_ERROR, this.onLoadFinish, this);
-            //IF LARK
+            //if lark
             loader.load(source);
-            //END IF*/
-            /*//IF EGRET
+            //endif*/
+            /*//if egret
             loader.load(new egret.URLRequest(source));
-             //END IF*/
+             //endif*/
         };
         /**
          * @private
@@ -3384,14 +3384,14 @@ var swan;
             var request = new lark.HttpRequest();
             request.on(lark.Event.COMPLETE, this.onConfigLoaded, this);
             request.on(lark.Event.IO_ERROR, this.onConfigLoaded, this);
-            //IF LARK
+            //if lark
             request.open(url);
             request.send();
-            //END IF*/
-            /*//IF EGRET
+            //endif*/
+            /*//if egret
             request.dataFormat = egret.URLLoaderDataFormat.TEXT;
             request.load(new egret.URLRequest(url));
-            //END IF*/
+            //endif*/
         };
         /**
          * @private
@@ -3401,7 +3401,7 @@ var swan;
         p.onConfigLoaded = function (event) {
             var request = event.target;
             try {
-                //IF LARK
+                //if lark
                 var data = JSON.parse(request.response);
             }
             catch (e) {
@@ -5638,9 +5638,9 @@ var swan;
                 /**
                  * @private
                  */
-                //IF LARK
+                //if lark
                 this.previousTime = 0;
-                //END IF*/
+                //endif*/
                 /**
                  * @private
                  */
@@ -5714,9 +5714,9 @@ var swan;
                 this.started = true;
                 this.velocity = 0;
                 this.previousVelocity.length = 0;
-                //IF LARK
+                //if lark
                 this.previousTime = lark.getTimer();
-                //END IF*/
+                //endif*/
                 this.previousPosition = this.currentPosition = touchPoint;
                 this.offsetPoint = scrollValue + touchPoint;
                 lark.startTick(this.onTick, this);
@@ -5803,12 +5803,12 @@ var swan;
              * @returns
              */
             p.onTick = function (timeStamp) {
-                //IF LARK
+                //if lark
                 var timeOffset = timeStamp - this.previousTime;
-                //END IF*/
-                /*//IF EGRET
+                //endif*/
+                /*//if egret
                 var timeOffset = timeStamp;
-                 //END IF*/
+                 //endif*/
                 if (timeOffset > 0) {
                     var previousVelocity = this.previousVelocity;
                     previousVelocity.push(this.velocity);
@@ -5816,9 +5816,9 @@ var swan;
                         previousVelocity.shift();
                     }
                     this.velocity = (this.currentPosition - this.previousPosition) / timeOffset;
-                    //IF LARK
+                    //if lark
                     this.previousTime = timeStamp;
-                    //END IF*/
+                    //endif*/
                     this.previousPosition = this.currentPosition;
                 }
                 return true;
@@ -9777,13 +9777,13 @@ var EXML;
         requestMap[request.$hashCode] = url;
         request.on(lark.Event.COMPLETE, onLoadFinish, null);
         request.on(lark.Event.IO_ERROR, onLoadFinish, null);
-        //IF LARK
+        //if lark
         request.open(url);
         request.send();
-        //END IF*/
-        /*//IF EGRET
+        //endif*/
+        /*//if egret
         request.load(new egret.URLRequest(url));
-         //END IF*/
+         //endif*/
     }
     EXML.load = load;
     /**
@@ -9795,12 +9795,12 @@ var EXML;
         var request = event.currentTarget;
         request.removeListener(lark.Event.COMPLETE, onLoadFinish, null);
         request.removeListener(lark.Event.IO_ERROR, onLoadFinish, null);
-        //IF LARK
+        //if lark
         var text = event.type == lark.Event.COMPLETE ? request.response : "";
-        //END IF*/
-        /*//IF EGRET
+        //endif*/
+        /*//if egret
         var text:string = event.type == lark.Event.COMPLETE ? request.data : "";
-         //END IF*/
+         //endif*/
         if (text) {
             var clazz = parse(text);
         }
@@ -10776,9 +10776,9 @@ var swan;
                     29: false,
                 };
                 this.$includeInLayout = true;
-                /*//IF EGRET
+                /*//if egret
                 this.$touchEnabled = true;
-                 //END IF*/
+                 //endif*/
             };
             /**
              * @private
@@ -11842,19 +11842,19 @@ var swan;
          * @platform Web,Native
          */
         function Label(text) {
-            //IF LARK
+            //if lark
             _super.call(this, text);
             /**
              * @private
              */
             this._widthConstraint = NaN;
             this.initializeUIValues();
-            //END IF*/
-            /*//IF EGRET
+            //endif*/
+            /*//if egret
             super();
             this.initializeUIValues();
             this.text = text;
-             //END IF*/
+             //endif*/
         }
         var d = __define,c=Label;p=c.prototype;
         /**
@@ -12181,18 +12181,19 @@ var swan;
             /**
              * @private
              */
+            //if lark
             this._scale9Grid = null;
-            //IF LARK
             /**
              * @private
              */
+            //if lark
             this._fillMode = "scale";
-            /*//IF EGRET
+            /*//if egret
             $setFillMode(value:string):void {
                 super.$setFillMode(value);
                 this.invalidateDisplayList();
             }
-             //END IF*/
+             //endif*/
             /**
              * @private
              */
@@ -12208,6 +12209,7 @@ var swan;
         }
         var d = __define,c=Image;p=c.prototype;
         d(p, "scale9Grid"
+            //endif*/
             /**
              * @language en_US
              * Represent a Rectangle Area that the 9 scale area of Image.
@@ -12228,26 +12230,27 @@ var swan;
              * @platform Web,Native
              */
             ,function () {
-                //IF LARK
+                //if lark
                 return this._scale9Grid;
-                //END IF*/
-                /*//IF EGRET
+                //endif*/
+                /*//if egret
                 return this.$scale9Grid;
-                //END IF*/
+                //endif*/
             }
             ,function (value) {
-                //IF LARK
+                //if lark
                 this._scale9Grid = value;
                 this.invalidateDisplayList();
-                //END IF*/
-                /*//IF EGRET
+                //endif*/
+                /*//if egret
                 this.$scale9Grid = value;
                 this.$invalidateContentBounds();
                 this.invalidateDisplayList();
-                //END IF*/
+                //endif*/
             }
         );
         d(p, "fillMode"
+            //endif*/
             /**
              * @language en_US
              * Determines how the bitmap fills in the dimensions.
@@ -12278,22 +12281,26 @@ var swan;
              * @platform Web,Native
              */
             ,function () {
+                //if lark
                 return this._fillMode;
+                //endif*/
+                /*//if egret
+                return this.$fillMode;
+                //endif*/
             }
-            //END IF*/
             ,function (value) {
-                //IF LARK
+                //if lark
                 if (value == this._fillMode) {
                     return;
                 }
                 this._fillMode = value;
-                //END IF*/
-                /*//IF EGRET
+                //endif*/
+                /*//if egret
                 if (value == this.$fillMode) {
                     return;
                 }
                 this.$fillMode = value;
-                 //END IF*/
+                 //endif*/
                 this.invalidateDisplayList();
             }
         );
@@ -12327,10 +12334,10 @@ var swan;
                 this.invalidateProperties();
             }
         );
-        //IF LARK
         /**
          * @private
          */
+        //if lark
         p.$setBitmapData = function (value) {
             var values = this.$Bitmap;
             if (value == values[0 /* bitmapData */]) {
@@ -12341,8 +12348,8 @@ var swan;
             this.invalidateSize();
             this.invalidateDisplayList();
         };
-        //END IF*/
-        /*//IF EGRET
+        //endif*/
+        /*//if egret
         $setBitmapData(value:egret.Texture):void {
             if (value == this.$bitmapData) {
                 return;
@@ -12352,7 +12359,7 @@ var swan;
             this.invalidateSize();
             this.invalidateDisplayList();
         }
-         //END IF*/
+         //endif*/
         /**
          * @private
          * 解析source
@@ -12378,7 +12385,7 @@ var swan;
         p.contentChanged = function (data, source) {
             if (source !== this._source)
                 return;
-            //IF LARK
+            //if lark
             if (!lark.is(data, "lark.BitmapData") && !(data instanceof lark.Texture)) {
                 return;
             }
@@ -12393,14 +12400,10 @@ var swan;
         /**
          * @private
          */
+        //if lark
         p.$measureContentBounds = function (bounds) {
-            //IF LARK
             var values = this.$Bitmap;
             var image = values[1 /* image */];
-            //END IF*/
-            /*//IF EGRET
-            var image = this.$bitmapData;
-             //END IF*/
             if (image) {
                 var uiValues = this.$UIComponent;
                 var width = uiValues[10 /* width */];
@@ -12409,7 +12412,6 @@ var swan;
                     bounds.setEmpty();
                     return;
                 }
-                //IF LARK
                 if (this._fillMode == "clip") {
                     if (width > values[8 /* width */]) {
                         width = values[8 /* width */];
@@ -12424,19 +12426,48 @@ var swan;
                 bounds.setEmpty();
             }
         };
+        //endif*/
+        /*//if egret
+        $measureContentBounds(bounds:lark.Rectangle):void {
+            var values = this.$Bitmap;
+            var image = this.$bitmapData;
+            if (image) {
+                var uiValues = this.$UIComponent;
+                var width = uiValues[sys.UIKeys.width];
+                var height = uiValues[sys.UIKeys.height];
+                if (isNaN(width) || isNaN(height)) {
+                    bounds.setEmpty();
+                    return;
+                }
+                if (this.$fillMode == "clip")
+                {
+                    if (width > image.$getTextureWidth()) {
+                        width = image.$getTextureWidth();
+                    }
+                    if (height > image.$getTextureHeight()) {
+                        height = image.$getTextureHeight();
+                    }
+                }
+                bounds.setTo(0, 0, width, height);
+            }
+            else {
+                bounds.setEmpty();
+            }
+        }
+         //endif*/
         /**
          * @private
          *
          * @param context
          */
         p.$render = function (context) {
-            //IF LARK
+            //if lark
             var values = this.$Bitmap;
             var image = values[1 /* image */];
-            //END IF*/
-            /*//IF EGRET
+            //endif*/
+            /*//if egret
             var image = this.$bitmapData;
-            //END IF*/
+             //endif*/
             if (!image) {
                 return;
             }
@@ -12473,16 +12504,16 @@ var swan;
                     }
                     break;
             }
-            //END IF*/
-            /*//IF EGRET
+            //endif*/
+            /*//if egret
             egret.Bitmap.$drawImage(context, image, width, height, this.$scale9Grid, this.$fillMode, this.$smoothing, 0, 0);
-            //END IF*/
+            //endif*/
         };
-        //IF LARK
         /**
          * @private
          * 绘制九宫格位图
          */
+        //if lark
         p.drawScale9GridImage = function (context, image, scale9Grid, surfaceWidth, surfaceHeight) {
             var imageWidth = image.width;
             var imageHeight = image.height;
@@ -12586,7 +12617,7 @@ var swan;
          * @platform Web,Native
          */
         p.measure = function () {
-            //IF LARK
+            //if lark
             var values = this.$Bitmap;
             var image = values[1 /* image */];
             if (image) {
@@ -12595,16 +12626,16 @@ var swan;
             else {
                 this.setMeasuredSize(0, 0);
             }
-            //END IF*/
-            /*//IF EGRET
+            //endif*/
+            /*//if egret
             var bitmapData = this.$bitmapData;
             if (bitmapData) {
-                this.setMeasuredSize(bitmapData._bitmapWidth, bitmapData._bitmapHeight);
+                this.setMeasuredSize(bitmapData.$getTextureWidth(), bitmapData.$getTextureHeight());
             }
             else {
                 this.setMeasuredSize(0, 0);
             }
-            //END IF*/
+            //endif*/
         };
         /**
          * @copy swan.UIComponent#updateDisplayList
@@ -12811,9 +12842,9 @@ var swan;
              */
             this._widthConstraint = NaN;
             this.initializeUIValues();
-            /*//IF EGRET
+            /*//if egret
             this.type = egret.TextFieldType.INPUT;
-             //END IF*/
+             //endif*/
         }
         var d = __define,c=EditableText;p=c.prototype;
         /**
@@ -13421,9 +13452,9 @@ var swan;
                 7: false,
                 8: null //skin
             };
-            /*//IF EGRET
+            /*//if egret
             this.$touchEnabled = true;
-             //END IF*/
+             //endif*/
         }
         var d = __define,c=Component;p=c.prototype;
         d(p, "hostComponentKey"

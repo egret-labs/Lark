@@ -123,9 +123,9 @@ module swan.sys {
         /**
          * @private
          */
-        //IF LARK
+        //if lark
         private previousTime:number = 0;
-        //END IF*/
+        //endif*/
         /**
          * @private
          */
@@ -198,9 +198,9 @@ module swan.sys {
             this.started = true;
             this.velocity = 0;
             this.previousVelocity.length = 0;
-            //IF LARK
+            //if lark
             this.previousTime = lark.getTimer();
-            //END IF*/
+            //endif*/
             this.previousPosition = this.currentPosition = touchPoint;
             this.offsetPoint = scrollValue + touchPoint;
             lark.startTick(this.onTick, this);
@@ -291,12 +291,12 @@ module swan.sys {
          * @returns
          */
         private onTick(timeStamp:number):boolean {
-            //IF LARK
+            //if lark
             var timeOffset = timeStamp - this.previousTime;
-            //END IF*/
-            /*//IF EGRET
+            //endif*/
+            /*//if egret
             var timeOffset = timeStamp;
-             //END IF*/
+             //endif*/
             if (timeOffset > 0) {
                 var previousVelocity = this.previousVelocity;
                 previousVelocity.push(this.velocity);
@@ -304,9 +304,9 @@ module swan.sys {
                     previousVelocity.shift();
                 }
                 this.velocity = (this.currentPosition - this.previousPosition) / timeOffset;
-                //IF LARK
+                //if lark
                 this.previousTime = timeStamp;
-                //END IF*/
+                //endif*/
                 this.previousPosition = this.currentPosition;
             }
             return true;

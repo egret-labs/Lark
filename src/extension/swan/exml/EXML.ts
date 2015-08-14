@@ -108,21 +108,21 @@ module EXML {
         var request = requestPool.pop();
         if (!request) {
             request = new lark.HttpRequest();
-            /*//IF EGRET
+            /*//if egret
             request.dataFormat = egret.URLLoaderDataFormat.TEXT;
-             //END IF*/
+             //endif*/
         }
         callBackMap[url] = [[callBack, thisObject]];
         requestMap[request.$hashCode] = url;
         request.on(lark.Event.COMPLETE, onLoadFinish, null);
         request.on(lark.Event.IO_ERROR, onLoadFinish, null);
-        //IF LARK
+        //if lark
         request.open(url);
         request.send();
-        //END IF*/
-        /*//IF EGRET
+        //endif*/
+        /*//if egret
         request.load(new egret.URLRequest(url));
-         //END IF*/
+         //endif*/
     }
 
     /**
@@ -134,12 +134,12 @@ module EXML {
         var request:lark.HttpRequest = event.currentTarget;
         request.removeListener(lark.Event.COMPLETE, onLoadFinish, null);
         request.removeListener(lark.Event.IO_ERROR, onLoadFinish, null);
-        //IF LARK
+        //if lark
         var text:string = event.type == lark.Event.COMPLETE ? request.response : "";
-        //END IF*/
-        /*//IF EGRET
+        //endif*/
+        /*//if egret
         var text:string = event.type == lark.Event.COMPLETE ? request.data : "";
-         //END IF*/
+         //endif*/
         if (text) {
             var clazz = parse(text);
         }

@@ -147,12 +147,12 @@ module swan.sys {
          * 计算当前值并返回动画是否结束
          */
         private doInterval(currentTime:number):boolean {
-            //IF LARK
+            //if lark
             var runningTime = currentTime - this.startTime;
-            //END IF*/
-            /*//IF EGRET
+            //endif*/
+            /*//if egret
             var runningTime = egret.getTimer() - this.startTime;
-             //END IF*/
+             //endif*/
             if (!this.isPlaying) {
                 this.isPlaying = true;
             }
