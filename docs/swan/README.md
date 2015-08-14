@@ -17,7 +17,7 @@ Swan (UI库) 编程指南
 	* [视图状态](4-3-view-state.md)（done）
 	* [配置主题](4-4-theme.md)（done）
 5. [自动布局](5-0-auto-layout-overview.md)（done）
-	* [屏幕适应原理](5-1-screen-adapt.md)
+	* [屏幕适配示例](5-1-screen-adapt.md)（done）
 	* [自动布局原理](5-2-auto-layout.md)
 	* [组件布局属性](5-3-layout-property.md)
 	* [调试技巧](5-4-layout-debug.md)	
@@ -36,7 +36,7 @@ Swan (UI库) 编程指南
 	* [切换按钮](7-6-toggle.md)(done)
 	* [滑动选择器](7-7-slider.md)(done)
 	* [进度条](7-8-progressbar.md)(done)
-	* [输入文本](7-9-editabletext.md)(done)				
+	* [输入文本](7-9-editabletext.md)(done)		
 8. [容器]()	
 	* [简单容器]()
 	* [层叠容器]()	
