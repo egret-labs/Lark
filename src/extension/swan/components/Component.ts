@@ -101,6 +101,9 @@ module swan {
                 7: false,        //explicitTouchEnabled
                 8: null          //skin
             };
+            /*//IF EGRET
+            this.$touchEnabled = true;
+             //END IF*/
         }
 
         $Component:Object;

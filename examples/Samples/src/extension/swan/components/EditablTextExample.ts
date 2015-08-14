@@ -10,11 +10,11 @@ class EditablTextExample extends lark.Sprite {
                 </s:layout>
                 <s:Group>
                     <s:Label text="Accout：" fontSize="16" textColor="0xFFFFFF"/>
-                    <s:EditableText x="60" fontSize="16" text="input accout" textColor="0xAAAAFF"/>
+                    <s:EditableText x="100" fontSize="16" text="input accout" textColor="0xAAAAFF"/>
                 </s:Group>
                 <s:Group>
                     <s:Label text="Password：" fontSize="16" textColor="0xFFFFFF"/>
-                    <s:EditableText x="60" text="input password" displayAsPassword="true" fontSize="16" textColor="0xAAAAFF"/>
+                    <s:EditableText x="100" text="input password" displayAsPassword="true" fontSize="16" textColor="0xAAAAFF"/>
                 </s:Group>
             </s:Group>`;
 

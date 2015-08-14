@@ -113,7 +113,7 @@ module EXML {
         }
         callBackMap[url] = [[callBack, thisObject]];
         request(url, $parseURLContent);
-    }
+        }
     
     
     /**
@@ -171,13 +171,13 @@ module EXML {
         if (url) {
             parsedClasses[url] = clazz;
             var list: any[] = callBackMap[url];
-            delete callBackMap[url];
+        delete callBackMap[url];
             var length = list ? list.length : 0;
-            for (var i = 0; i < length; i++) {
-                var arr = list[i];
-                if (arr[0] && arr[1])
-                    arr[0].call(arr[1], clazz, url);
-            }
+        for (var i = 0; i < length; i++) {
+            var arr = list[i];
+            if (arr[0] && arr[1])
+                arr[0].call(arr[1], clazz, url);
+        }
         }
         return clazz;
     }
@@ -190,20 +190,34 @@ module EXML {
         var request = requestPool.pop();
         if (!request) {
             request = new lark.HttpRequest();
+            /*//IF EGRET
+            request.dataFormat = egret.URLLoaderDataFormat.TEXT;
+            //END IF*/
         }
         
         var onRequestLoaded = e => {
             request.removeListener(lark.Event.COMPLETE, onRequestLoaded, null);
             request.removeListener(lark.Event.IO_ERROR, onRequestLoaded, null);
+            //IF LARK
             var text: string = e.type == lark.Event.COMPLETE ? request.response : "";
+            //END IF*/
+            /*//IF EGRET
+            var text: string = e.type == lark.Event.COMPLETE ? request.data : "";
+            //END IF*/
             requestPool.push(request);
             callback(url,text);
         };
 
         request.on(lark.Event.COMPLETE, onRequestLoaded, null);
         request.on(lark.Event.IO_ERROR, onRequestLoaded, null);
+        //IF LARK
         request.open(url);
         request.send();
+        //END IF*/
+        /*//IF EGRET
+        request.load(new egret.URLRequest(url));
+        //END IF*/
+
     }
 
 }

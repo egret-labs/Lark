@@ -9,17 +9,18 @@ Swan (UI库) 编程指南
 3. [EXML](3-0-exml-overview.md)（done）
 	* [如何使用EXML](3-1-use-exml.md)（done）
 	* [EXML基本语法(一)](3-2-exml-syntax-1.md)（done)
-	* [EXML基本语法(二)](3-2-exml-syntax-2.md)
-	* [启用EXML语法提示](3-4-exml-auto-complete.md)
-4. [皮肤机制]()
-	* [自定义皮肤]()（先用内部类定义自身皮肤，需要复用的情况才定义独立文件）
-	* [皮肤部件]()（如何跟逻辑组件通讯）
-	* [配置主题]()（配置默认皮肤）
-5. [自适应流式布局]()
-	* [如何让界面适应不同分辨率]()
-	* [自动布局原理]()
-	* [组件布局属性]()
-	* [调试技巧]()	
+	* [EXML基本语法(二)](3-2-exml-syntax-2.md)（done)
+	* [启用EXML语法提示](3-4-exml-auto-complete.md)(done)
+4. [皮肤](4-0-skin-overview.md)(done)
+	* [皮肤分离机制](4-1-skin.md)（done）
+	* [皮肤部件](4-2-skin-part.md)（done）
+	* [视图状态](4-3-view-state.md)（done）
+	* [配置主题](4-4-theme.md)（done）
+5. [自动布局](5-0-auto-layout-overview.md)（done）
+	* [屏幕适配示例](5-1-screen-adapt.md)（done）
+	* [自动布局原理](5-2-auto-layout.md)
+	* [组件布局属性](5-3-layout-property.md)
+	* [调试技巧](5-4-layout-debug.md)	
 6. [使用布局类](6-0-layout-overview.md)(done) 
 	* [基本布局](6-1-layout-BasicLayout.md)(done) 
 	* [水平布局](6-2-layout-HorizontalLayout.md)(done)
@@ -35,7 +36,7 @@ Swan (UI库) 编程指南
 	* [切换按钮](7-6-toggle.md)(done)
 	* [滑动选择器](7-7-slider.md)(done)
 	* [进度条](7-8-progressbar.md)(done)
-	* [输入文本](7-9-editabletext.md)(done)				
+	* [输入文本](7-9-editabletext.md)(done)		
 8. [容器]()	
 	* [简单容器]()
 	* [层叠容器]()	

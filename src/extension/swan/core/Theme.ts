@@ -108,8 +108,14 @@ module swan {
             var request = new lark.HttpRequest();
             request.on(lark.Event.COMPLETE, this.onConfigLoaded, this);
             request.on(lark.Event.IO_ERROR, this.onConfigLoaded, this);
+            //IF LARK
             request.open(url);
             request.send();
+            //END IF*/
+            /*//IF EGRET
+            request.dataFormat = egret.URLLoaderDataFormat.TEXT;
+            request.load(new egret.URLRequest(url));
+            //END IF*/
         }
 
         /**
@@ -120,7 +126,12 @@ module swan {
         private onConfigLoaded(event:lark.Event):void {
             var request:lark.HttpRequest = event.target;
             try {
-                var data: ThemeData = JSON.parse(request.response);
+                //IF LARK
+                var data = JSON.parse(request.response);
+                //END IF*/
+                /*//IF EGRET
+                var data = JSON.parse(request.data);
+                //END IF*/
             }
             catch (e) {
                 if (DEBUG) {
@@ -147,9 +158,9 @@ module swan {
             }
             else {
                 EXML.$loadAll(<string[]>data.exmls, this.onLoaded, this, true);
-            }
+                }
 
-        }
+            }
 
         private onLoaded(classes?:any[],urls?:string[]) {
             this.initialized = true;

@@ -93,6 +93,32 @@ rect.height = 35;
 image.scale9Grid = rect;
 this.addChild(image);
 ```
+###ID属性
+
+我们可以在节点上声明一个id属性，注意这个id属性与HTML中的id并不是一回事，它的结果相当于给解析后的类声明了一个公开变量。例如：
+
+```
+<s:Group class="app.MyGroup" xmlns:s="http://ns.egret.com/swan">
+    <s:Image id="iconDisplay"/> 
+</s:Group>
+```
+等价于：
+
+```
+module skins {    
+    export class ButtonSkin extends swan.Skin { 
+    
+    	public iconDisplay:swan.Image;       
+    	
+        public constructor(){
+            super();
+            var image = new swan.Image();
+            this.addChild(image);
+            this.iconDisplay = image;
+        }
+    }
+}
+```
 
 ###属性语法糖
 

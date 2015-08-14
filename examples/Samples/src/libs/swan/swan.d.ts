@@ -1836,7 +1836,7 @@ declare module swan {
         /**
          * @language en_US
          * Creates and starts a Watcher instance.
-         * The Watcher can only watch the property of a Object which host is instance of IEventEmitter.
+         * The Watcher can only watch the property of a Object which host is instance of lark.IEventEmitter.
          * @param host The object that hosts the property or property chain to be watched.
          * You can use the use the <code>reset()</code> method to change the value of the <code>host</code> argument
          * after creating the Watcher instance.
@@ -1855,7 +1855,7 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * 创建并启动 Watcher 实例。注意：Watcher 只能监视 host 为 IEventEmitter 对象的属性改变。若属性链中某个属性所对应的实例不是 IEventEmitter，
+         * 创建并启动 Watcher 实例。注意：Watcher 只能监视 host 为 lark.IEventEmitter 对象的属性改变。若属性链中某个属性所对应的实例不是 lark.IEventEmitter，
          * 则属性链中在它之后的属性改变将无法检测到。
          * @param host 用于承载要监视的属性或属性链的对象。
          * 创建Watcher实例后，您可以利用<code>reset()</code>方法更改<code>host</code>参数的值。
@@ -2727,6 +2727,7 @@ declare module swan {
      *
      * @event swan.CollectionEvent.COLLECTION_CHANGE Emited when the ArrayCollection has been updated in some way.
      *
+     * @defaultProperty source
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -2739,6 +2740,7 @@ declare module swan {
      *
      * @event swan.CollectionEvent.COLLECTION_CHANGE 当 ArrayCollection 更新的的时候会派发此事件。
      *
+     * @defaultProperty source
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -7058,7 +7060,7 @@ declare module swan {
          * Constructor.
          *
          * @param source The source used for the bitmap fill. the value can be
-         * a string or an instance of <code>BitmapData</code>
+         * a string or an instance of <code>lark.BitmapData</code>
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -7068,7 +7070,7 @@ declare module swan {
          * @language zh_CN
          * 构造函数。
          *
-         * @param source 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
+         * @param source 用于位图填充的源。可以是一个字符串或者 <code>lark.BitmapData</code> 对象
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -7144,7 +7146,7 @@ declare module swan {
         /**
          * @language en_US
          * The source used for the bitmap fill. the value can be
-         * a string or an instance of <code>BitmapData</code>
+         * a string or an instance of <code>lark.BitmapData</code>
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -7152,7 +7154,7 @@ declare module swan {
          */
         /**
          * @language zh_CN
-         * 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
+         * 用于位图填充的源。可以是一个字符串或者 <code>lark.BitmapData</code> 对象
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -7772,6 +7774,7 @@ declare module swan {
      *      </s:Skin>
      * </pre>
      *
+     * @defaultProperty elementsContent
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -7792,6 +7795,7 @@ declare module swan {
      *      </s:Skin>
      * </pre>
      *
+     * @defaultProperty elementsContent
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -8646,6 +8650,7 @@ declare module swan {
      * group (Give the instance of Group to <code>viewport</code> property of Scroller component).
      * The scroller component can adds a scrolling touch operation for the Group.
      *
+     * @defaultProperty elementsContent
      * @includeExample examples/Samples/src/extension/swan/components/GroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
@@ -8656,6 +8661,7 @@ declare module swan {
      * Group 是自动布局的容器基类。如果包含的子项内容太大需要滚动显示，可以在在 Group 外部包裹一层 Scroller 组件
      * (将 Group 实例赋值给 Scroller 组件的 viewport 属性)。Scroller 会为 Group 添加滚动的触摸操作功能，并显示垂直或水平的滚动条。
      *
+     * @defaultProperty elementsContent
      * @includeExample examples/Samples/src/extension/swan/components/GroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
@@ -9402,6 +9408,7 @@ declare module swan {
      * @event swan.UIEvent.CLOSING Emitted when the close button is taped
      * you can use <code>event.preventDefault()</code> to prevent close.
      *
+     * @defaultProperty elementsContent
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -9414,6 +9421,7 @@ declare module swan {
      * @event swan.UIEvent.CLOSING 面板即将关闭事件，在关闭按钮被点击后抛出，
      * 监听此事件并调用<code>event.preventDefault()</code>能够阻止面板被关闭。
      *
+     * @defaultProperty elementsContent
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -9793,6 +9801,9 @@ declare module swan {
      * The Button component is a commonly used rectangular button.
      * The Button component looks like it can be pressed.
      * The default skin has a text label and a icon display object.
+     * @state up Button up state
+     * @state down Button down state
+     * @state disabled Button disabled state
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -9801,6 +9812,9 @@ declare module swan {
     /**
      * @language zh_CN
      * Button 组件是常用的矩形按钮。Button 组件看起来可以按压。默认外观具有一个文本标签和图标显示对象。
+     * @state up 按钮弹起状态
+     * @state down 按钮按下状态
+     * @state disabled 按钮禁用状态
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -10488,6 +10502,10 @@ declare module swan {
      * @language en_US
      * The ItemRenderer class is the base class for item renderers.
      *
+     * @state up Up state
+     * @state down Down state
+     * @state upAndSelected Up state when the button is selected
+     * @state downAndSelected Down state when the button is selected
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -10497,6 +10515,10 @@ declare module swan {
      * @language zh_CN
      * ItemRenderer 类是项呈示器的基类。
      *
+     * @state up 弹起状态
+     * @state down 按下状态
+     * @state upAndSelected 选择时的弹起状态
+     * @state downAndSelected 选择时的按下状态
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -10659,6 +10681,7 @@ declare module swan {
      * @event swan.UIEvent.CHANGE_START Emitted when the scroll position is going to change
      * @event swan.UIEvent.CHANGE_END Emitted when the scroll position changed complete
      *
+     * @defaultProperty viewport
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -10680,6 +10703,8 @@ declare module swan {
      *
      * @event swan.UIEvent.CHANGE_START 滚动位置改变开始
      * @event swan.UIEvent.CHANGE_END 滚动位置改变结束
+     *
+     * @defaultProperty viewport
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -10980,7 +11005,7 @@ declare module swan {
      * to hold data items as children.
      *
      * @see swan.Group
-     *
+     * @defaultProperty dataProvider
      * @includeExample examples/Samples/src/extension/swan/components/DataGroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
@@ -10992,7 +11017,7 @@ declare module swan {
      * 尽管此容器可以包含可视元素，但它通常仅用于包含作为子项的数据项目。
      *
      * @see swan.Group
-     *
+     * @defaultProperty dataProvider
      * @includeExample examples/Samples/src/extension/swan/components/DataGroupExample.ts
      * @version Lark 1.0
      * @version Swan 1.0
@@ -11749,6 +11774,12 @@ declare module swan {
      * This event is emitted only when the
      * user interacts with the control by touching.
      *
+     * @state up Button up state
+     * @state down Button down state
+     * @state disabled Button disabled state
+     * @state upAndSelected Up state when the button is selected
+     * @state downAndSelected Down state when the button is selected
+     * @state disabledAndSelected Disabled state when the button is selected
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -11762,7 +11793,13 @@ declare module swan {
      *
      * @event lark.Event.CHANGE ToggleButtonBase 控件的 <code>selected</code> 属性更改时分派。
      * 仅当用户通过触摸与控件交互时，才分派此事件。
-
+     *
+     * @state up 按钮弹起状态
+     * @state down 按钮按下状态
+     * @state disabled 按钮禁用状态
+     * @state upAndSelected 按钮选择时的弹起状态
+     * @state downAndSelected 按钮选择时的按下状态
+     * @state disabledAndSelected 按钮选择时的禁用状态
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -12895,6 +12932,7 @@ declare module swan {
      * @language zh_CN
      * CheckBox 组件包含一个可选标签和一个小方框，该方框内可以包含/不包含复选标记。<p/>
      * 用户单击 CheckBox 组件或其关联文本时，CheckBox 组件会将其 selected 属性设置为 true（表示选中）或 false（表示取消选中）。
+     *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
