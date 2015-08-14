@@ -1,1 +1,83 @@
-#Swan (UI¿â) ±à³ÌÖ¸ÄÏ - ×Ô¶¨Òå²¼¾ÖLark swan¿âÄÚÖÃµÄ4¸ö²¼¾ÖÀà»ù±¾ÉÏ¿ÉÒÔÂú×ãÎÒÃÇ´ó²¿·ÖµÄĞèÇóÁË£¬²»¹ıÔÚÒ»Ğ©ÌØÊâÇé¿öÏÂ£¬ÎÒÃÇ¿ÉÄÜ»áĞèÒªÒ»Ğ©ÌØÊâµÄ²¼¾Ö·½Ê½¡£¼ÙÈçÄúµÄÀÏ°åËµ£¬ÕâĞ©°´Å¥ºá×ÅÅÅ²»ºÃ¿´£¬¸øÎÒÅÅ³ÉÒ»¸ö»·ĞÎµÄ¡£ÄÇÄú¾Í¿ÉÒÔÕû¸ö×Ô¶¨ÒåµÄ²¼¾ÖÀà£¬À´´úÌæÄ¬ÈÏµÄ²¼¾ÖÀà¾Í¿ÉÒÔÁË¡£   ĞÂ½¨Ò»¸öMyLayout.ts£¬À©Õ¹×Ô swan.LayoutBase:   ``` TypeScriptmodule uilayout {    var UIComponentClass = "swan.UIComponent";        /**×Ô¶¨ÒåµÄ»·ĞÎ²¼¾ÖÀà*/    export class RingLayout extends swan.LayoutBase{        public constructor(){            super();        }        /**¼ÆËãtargetµÄ³ß´ç         * ÒòÎª»·ĞÎ²¼¾Ö£¬ÒÀÀµÈİÆ÷³ß´çÀ´¶¨Òå°ë¾¶£¬ËùÒÔĞèÒªÈİÆ÷ÏÔÊ½µÄÉèÖÃwidthºÍheight,ÔÚÕâÖÖÇé¿öÏÂmeasure·½·¨½«Ê§È¥×÷ÓÃ         * ËùÒÔÔÚÕâ¸öÀı×ÓÀïÃæ£¬²»ĞèÒªÖØĞ´measure·½·¨         * Èç¹ûÄúµÄ×Ô¶¨Òå²¼¾ÖĞèÒª¸ù¾İÄÚ²¿×ÓÏî¼ÆËã³ß´ç£¬ÇëÖØĞ´Õâ¸ö·½·¨         **/        public measure():void{            super.measure();        }        /**ÖØĞ´ÏÔÊ¾ÁĞ±í¸üĞÂ*/        public updateDisplayList(unscaledWidth:number, unscaledHeight:number):void{            super.updateDisplayList(unscaledWidth, unscaledHeight);            if (this.target==null)                return;            console.log("fuck you");            var centerX:number = unscaledWidth/2;// »ñµÃÈİÆ÷ÖĞĞÄµÄX×ø±ê            var centerY:number = unscaledHeight/2;// »ñµÃÈİÆ÷ÖĞĞÄµÄY×ø±ê            var horizon:number = centerX/2;// »ñµÃË®Æ½¿ÉÓÃ³¤¶ÈµÄÒ»°ë            var vertical:number = centerY/2;// »ñµÃ´¹Ö±¿ÉÓÃ³¤¶ÈµÄÒ»°ë            var radius = horizon > vertical ? vertical : horizon;// È¡Ğ¡µÄÎªÔ²ĞÎ°ë¾¶            var count:number = this.target.numElements;            var maxX:number = 0;            var maxY:number = 0;            for (var i:number = 0; i < count; i++){                var layoutElement:swan.UIComponent = <swan.UIComponent> ( this.target.getElementAt(i) );                if ( !lark.is(layoutElement,UIComponentClass) || !layoutElement.includeInLayout ) {                    continue;                }                                var elementWidth:number = 0;                var elementHeight:number = 0;                var angle:number = 2 * Math.PI * i / count;// »ñµÃ½Ç¶ÈµÄ´óĞ¡                var childX:number = centerX + radius * Math.sin(angle) - elementWidth/2;// »ñµÃÔ²ÖÜµãµÄX×ø±ê                var childY:number = centerY - radius * Math.cos(angle) - elementHeight/2;// »ñµÃÔ²ÖÜµãµÄY×ø±ê                layoutElement.setLayoutBoundsPosition(childX, childY);                maxX = Math.max(maxX,childX+elementWidth);                maxY = Math.max(maxY,childY+elementHeight);            }            this.target.setContentSize(maxX,maxY);        }    }}```    È»ºóĞŞ¸ÄÇ°¼¸½ÚÖĞµÄÀı×Ó£¬¸ÄÎªÊ¹ÓÃ×Ô¶¨Òå²¼¾ÖÀà(Í¨¹ıÉèÖÃgroup.layoutÊôĞÔ)£º    ``` TypeScriptthis.myGroup = new swan.Group();this.myGroup.width = 400;this.myGroup.height = 400;this.myGroup.horizontalCenter = 0;this.myGroup.layout = new uilayout.RingLayout();//×Ô¶¨Òå²¼¾Öthis.addChild( this.myGroup );//ÄÚ²¿¶ÔÏófor(var i:number=0;i<20;i++) {   var btn:swan.Button = new swan.Button();   btn.width = 40;   btn.height = 40;   btn.label = "Button"+i;   this.myGroup.addChild( btn );}```   ÔËĞĞÉú³ÉĞ§¹û£º![][6-5-layout-Custom]     [6-5-layout-Custom]: image/6/6-5-layout-Custom.jpg
+#Swan (UIåº“) ç¼–ç¨‹æŒ‡å— - è‡ªå®šä¹‰å¸ƒå±€
+
+Lark swanåº“å†…ç½®çš„4ä¸ªå¸ƒå±€ç±»åŸºæœ¬ä¸Šå¯ä»¥æ»¡è¶³æˆ‘ä»¬å¤§éƒ¨åˆ†çš„éœ€æ±‚äº†ï¼Œä¸è¿‡åœ¨ä¸€äº›ç‰¹æ®Šæƒ…å†µä¸‹ï¼Œæˆ‘ä»¬å¯èƒ½ä¼šéœ€è¦ä¸€äº›ç‰¹æ®Šçš„å¸ƒå±€æ–¹å¼ã€‚å‡å¦‚æ‚¨çš„è€æ¿è¯´ï¼Œè¿™äº›æŒ‰é’®æ¨ªç€æ’ä¸å¥½çœ‹ï¼Œç»™æˆ‘æ’æˆä¸€ä¸ªç¯å½¢çš„ã€‚é‚£æ‚¨å°±å¯ä»¥æ•´ä¸ªè‡ªå®šä¹‰çš„å¸ƒå±€ç±»ï¼Œæ¥ä»£æ›¿é»˜è®¤çš„å¸ƒå±€ç±»å°±å¯ä»¥äº†ã€‚   
+
+æ–°å»ºä¸€ä¸ªMyLayout.tsï¼Œæ‰©å±•è‡ª swan.LayoutBase:   
+``` TypeScript
+module uilayout {
+
+    var UIComponentClass = "swan.UIComponent";
+    
+    /**è‡ªå®šä¹‰çš„ç¯å½¢å¸ƒå±€ç±»*/
+    export class RingLayout extends swan.LayoutBase{
+        public constructor(){
+            super();
+        }
+        /**è®¡ç®—targetçš„å°ºå¯¸
+         * å› ä¸ºç¯å½¢å¸ƒå±€ï¼Œä¾èµ–å®¹å™¨å°ºå¯¸æ¥å®šä¹‰åŠå¾„ï¼Œæ‰€ä»¥éœ€è¦å®¹å™¨æ˜¾å¼çš„è®¾ç½®widthå’Œheight,åœ¨è¿™ç§æƒ…å†µä¸‹measureæ–¹æ³•å°†å¤±å»ä½œç”¨
+         * æ‰€ä»¥åœ¨è¿™ä¸ªä¾‹å­é‡Œé¢ï¼Œä¸éœ€è¦é‡å†™measureæ–¹æ³•
+         * å¦‚æœæ‚¨çš„è‡ªå®šä¹‰å¸ƒå±€éœ€è¦æ ¹æ®å†…éƒ¨å­é¡¹è®¡ç®—å°ºå¯¸ï¼Œè¯·é‡å†™è¿™ä¸ªæ–¹æ³•
+         **/
+        public measure():void{
+            super.measure();
+        }
+        /**é‡å†™æ˜¾ç¤ºåˆ—è¡¨æ›´æ–°*/
+        public updateDisplayList(unscaledWidth:number, unscaledHeight:number):void{
+            super.updateDisplayList(unscaledWidth, unscaledHeight);
+            if (this.target==null)
+                return;
+            console.log("fuck you");
+            var centerX:number = unscaledWidth/2;// è·å¾—å®¹å™¨ä¸­å¿ƒçš„Xåæ ‡
+            var centerY:number = unscaledHeight/2;// è·å¾—å®¹å™¨ä¸­å¿ƒçš„Yåæ ‡
+            var horizon:number = centerX/2;// è·å¾—æ°´å¹³å¯ç”¨é•¿åº¦çš„ä¸€åŠ
+            var vertical:number = centerY/2;// è·å¾—å‚ç›´å¯ç”¨é•¿åº¦çš„ä¸€åŠ
+            var radius = horizon > vertical ? vertical : horizon;// å–å°çš„ä¸ºåœ†å½¢åŠå¾„
+            var count:number = this.target.numElements;
+            var maxX:number = 0;
+            var maxY:number = 0;
+            for (var i:number = 0; i < count; i++){
+
+                var layoutElement:swan.UIComponent = <swan.UIComponent> ( this.target.getElementAt(i) );
+                if ( !lark.is(layoutElement,UIComponentClass) || !layoutElement.includeInLayout ) {
+                    continue;
+                }
+                
+                var elementWidth:number = 0;
+                var elementHeight:number = 0;
+                var angle:number = 2 * Math.PI * i / count;// è·å¾—è§’åº¦çš„å¤§å°
+                var childX:number = centerX + radius * Math.sin(angle) - elementWidth/2;// è·å¾—åœ†å‘¨ç‚¹çš„Xåæ ‡
+                var childY:number = centerY - radius * Math.cos(angle) - elementHeight/2;// è·å¾—åœ†å‘¨ç‚¹çš„Yåæ ‡
+                layoutElement.setLayoutBoundsPosition(childX, childY);
+                maxX = Math.max(maxX,childX+elementWidth);
+                maxY = Math.max(maxY,childY+elementHeight);
+            }
+            this.target.setContentSize(maxX,maxY);
+        }
+    }
+}
+```    
+
+ç„¶åä¿®æ”¹å‰å‡ èŠ‚ä¸­çš„ä¾‹å­ï¼Œæ”¹ä¸ºä½¿ç”¨è‡ªå®šä¹‰å¸ƒå±€ç±»(é€šè¿‡è®¾ç½®group.layoutå±æ€§)ï¼š    
+
+``` TypeScript
+this.myGroup = new swan.Group();
+this.myGroup.width = 400;
+this.myGroup.height = 400;
+this.myGroup.horizontalCenter = 0;
+this.myGroup.layout = new uilayout.RingLayout();//è‡ªå®šä¹‰å¸ƒå±€
+this.addChild( this.myGroup );
+//å†…éƒ¨å¯¹è±¡
+for(var i:number=0;i<20;i++) {
+   var btn:swan.Button = new swan.Button();
+   btn.width = 40;
+   btn.height = 40;
+   btn.label = "Button"+i;
+   this.myGroup.addChild( btn );
+}
+```   
+
+è¿è¡Œç”Ÿæˆæ•ˆæœï¼š
+
+![][6-5-layout-Custom]     
+
+[6-5-layout-Custom]: image/6/6-5-layout-Custom.jpg

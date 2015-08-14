@@ -1,16 +1,31 @@
 #Swan (UI库) 编程指南 - 自动布局原理
 
-###解决异步问题
 
-失效验证机制能够很好的解决性能问题，但是却会带来新的异步问题，大部分情况下我们并不会感受到失效验证的异步存在，因为它总是在本帧屏幕刷新前验证失效列表的，只有小部分在验证失效过程中又产生了新失效的情况，才会延迟到下一帧去处理。这种情况会导致的结果通常就是在初始化面板时会闪一下。解决这个问题有好几种方案，可以一开始将面板添加到显示列表时设置visible为false，延迟一段时间后再显示它。我们这里再讨论另一种方案，提前处理失效验证：
+自动布局本质上就是封装了各种更加便捷的相对布局属性，结合[失效验证机制](5-2-invalidate.md)，在合适的触发条件下(如尺寸发生改变时)，自动设置相关对象的x，y,width,height等属性。所以无论过程是怎么样的，最终结果都是直接体现在x,y,width,height这些最原始的属性上，并没有脱离显示对象原始的API。
 
-1.首先你要确定闪一下的异步问题是否是自动布局的失效验证引起的。如果是由于异步加载图片引起的，这种情况属于IO异步，必须先预加载图片资源。
+在上一节内容中，我们简单介绍了跟布局有关的两个方法：measure()和updateDisplayList()。现在我们来详细说明这个两个方法：
 
-2.将面板添加到显示列表后，调用面板组件上的 `validateNow()` 方法即可。注意一定要先将面板添加到显示列表在调用立即验证的方法。
+updateDisplayList()方法负责布局子项(即设置子项的x,y,width,height),或做一些矢量重绘操作。这个方法很好理解，具体的布局功能就是在这里实现的。那为什么要measure()呢？举个例子，你有一个容器(Group)，里面放了一个单行文本(Label)，你想要文本始终在容器中水平居中(horizotalCenter=0)。那么你不显式设置文本的width即可，这时measure()方法就派上用场了，它会在文本内容改变时，自动测量出当前合适的width，父级就会根据这个width，重新布局它的xy。
 
-还有一种使用情景，不过很少会遇到，就是我们给一个组件设置了自动布局属性，比如 `left` 和 `right`，想要获得它布局后的准确宽度。这种情况也同样有两种思路：
+Swan里所有的组件都是这样：如果你不显式设置它的宽高，它就调用measure()方法给自己测量出一个最佳尺寸，在没有被父级强制布局情况下，这个值最终赋值给width和height属性。反之，如果你显式设置了组件的width或height属性，width或height就使用你显式设置的值。若组件同时被设置了width和height，measure()方法将不会再被调用。至于何为测量的”最佳尺寸”？不同的组件有自己的测量方式，容器是能刚好放下所有子项的尺寸，文本是能完整显式文本内容的尺寸，而Image则是内部要显示的位图素材的尺寸。还有其他的组件，具体在各自的measure()方法里实现。多个组件都需要测量的时候，会按照显式列表深度，从内向外测量。而布局阶段正好相反，从外向内。具体细节参考[失效验证机制](5-2-invalidate.md)的内容。
 
-1.延迟到帧末失效验证结束时访问宽度。可以使用swan.callLater()方法来实现延迟回调，具体用法请参考API文档。
+总之，如果你希望你自定义的组件像框架里的标准组件一样，能加入自动布局体系，就必须要同时复写measure()和updateDisplayList()这两个方法。我们就先来看Group这个容器基类。它就一个类，是如何实现的多种多样的布局方式的呢？答案是：它不负责具体的布局规则，而是做了一个解耦处理。增加了一个layout的属性，类型为LayoutBase。我们先看下Group的那两个方法体里写了什么：
 
-2.调用组件父级容器的 `validateNow()` 方法，这里请务必注意是"父级容器"的validateNow()方法，不是自身的，因为组件的布局是由父级容器决定的。
+```
+protected measure():void {
+    if (!this.$layout) {
+        this.setMeasuredSize(0, 0);
+        return;
+    }
+    this.$layout.measure();
+}
+
+protected updateDisplayList(unscaledWidth:number, unscaledHeight:number):void {
+    if (this.$layout) {
+        this.$layout.updateDisplayList(unscaledWidth, unscaledHeight);
+    }
+    this.updateScrollRect();
+}
+```
+Group把自己的measure()方法交给了layout.measure()去实现，updateDisplayList()交给了layout.updateDisplayList()去实现。也就是把具体的布局方式解耦了出来，成了独立的一个LayoutBase类。这样所有的容器都可以采用Group+LayoutBase的组合的方式，为自己设置任意的布局。
 
