@@ -33,7 +33,7 @@ module EXML {
 
     var requestPool:lark.HttpRequest[] = [];
     var callBackMap:any = {};
-    var requestMap:any = {};
+    var parsedClasses: any = {};
 
     /**
      * @language en_US
@@ -76,6 +76,7 @@ module EXML {
      * @param callBack method to invoke with an argument of the result when load and parse completed or failed. The argument will be
      * <code>undefined</code> if load or parse failed.
      * @param thisObject <code>this</code> object of callBack
+     * @param useCache use cached EXML
      *
      * @version Lark 1.0
      * @version Swan 1.0
@@ -89,58 +90,120 @@ module EXML {
      * @param url 要加载的 EXML 文件路径
      * @param callBack 加载并解析完成后的回调函数，无论加载成功还是失败，此函数均会被回调。失败时将传入 undefined 作为回调函数参数。
      * @param thisObject 回调函数的 this 引用。
+     * @param useCache 使用缓存的EXML
      *
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
      */
-    export function load(url:string, callBack?:(clazz:any, url:string)=>void, thisObject?:any):void {
+    export function load(url: string, callBack?: (clazz: any, url: string) => void, thisObject?: any, useCache = false): void {
         if (DEBUG) {
             if (!url) {
                 lark.$error(1003, "url");
             }
+        }
+        if (useCache &&(url in parsedClasses)) {
+            callBack && callBack.call(thisObject, parsedClasses[url], url);
+            return;
         }
         var list = callBackMap[url];
         if (list) {
             list.push([callBack, thisObject]);
             return;
         }
-        var request = requestPool.pop();
-        if (!request) {
-            request = new lark.HttpRequest();
-        }
         callBackMap[url] = [[callBack, thisObject]];
-        requestMap[request.$hashCode] = url;
-        request.on(lark.Event.COMPLETE, onLoadFinish, null);
-        request.on(lark.Event.IO_ERROR, onLoadFinish, null);
-        request.open(url);
-        request.send();
+        request(url, $parseURLContent);
+    }
+    
+    
+    /**
+     * @private
+     */
+    export function $loadAll(urls: string[], callBack?: (clazz: any[], url: string[]) => void, thisObject?: any, useCache = false): void {
+        var exmlContents: any = {};
+
+        urls.forEach(url=> {
+
+            if (useCache && (url in parsedClasses)) {
+                exmlContents[url] = "";
+                return;
+            }
+            
+            var loaded = (url: string, text: string) => {
+                exmlContents[url] = text;
+                if (Object.keys(exmlContents).length == urls.length)
+                    onLoadAllFinished(urls, exmlContents, callBack, thisObject);
+            };
+            
+            request(url, loaded);
+        });
+        
+    }
+    
+    /**
+     * @private
+     */
+    function onLoadAllFinished(urls: string[], exmlContents: any, callBack?: (clazz: any[], url: string[]) => void, thisObject?: any) {
+        var clazzes = [];
+        urls.forEach((url,i)=> {
+
+            if ((url in parsedClasses) && !exmlContents[url]) {
+                clazzes[i] = parsedClasses[url];
+                return;
+            }
+
+            var text = exmlContents[url];
+            var clazz = $parseURLContent(url, text);
+            clazzes[i] = clazz;
+
+        });
+
+        callBack && callBack.call(thisObject, clazzes, urls);
     }
 
     /**
      * @private
-     * 
-     * @param event 
      */
-    function onLoadFinish(event:lark.Event):void {
-        var request:lark.HttpRequest = event.currentTarget;
-        request.removeListener(lark.Event.COMPLETE, onLoadFinish, null);
-        request.removeListener(lark.Event.IO_ERROR, onLoadFinish, null);
-        var text:string = event.type == lark.Event.COMPLETE ? request.response : "";
+    export function $parseURLContent(url: string, text: string): any {
         if (text) {
             var clazz = parse(text);
         }
-        requestPool.push(request);
-        var url = requestMap[request.$hashCode];
-        delete requestMap[request.$hashCode];
-        var list:any[] = callBackMap[url];
-        delete callBackMap[url];
-        var length = list.length;
-        for (var i = 0; i < length; i++) {
-            var arr = list[i];
-            if (arr[0] && arr[1])
-                arr[0].call(arr[1], clazz, url);
+        if (url) {
+            parsedClasses[url] = clazz;
+            var list: any[] = callBackMap[url];
+            delete callBackMap[url];
+            var length = list ? list.length : 0;
+            for (var i = 0; i < length; i++) {
+                var arr = list[i];
+                if (arr[0] && arr[1])
+                    arr[0].call(arr[1], clazz, url);
+            }
         }
+        return clazz;
+    }
+    
+    /**
+     * @private
+     */
+    function request(url: string, callback: (url: string, text: string) => void) {
+
+        var request = requestPool.pop();
+        if (!request) {
+            request = new lark.HttpRequest();
+        }
+        
+        var onRequestLoaded = e => {
+            request.removeListener(lark.Event.COMPLETE, onRequestLoaded, null);
+            request.removeListener(lark.Event.IO_ERROR, onRequestLoaded, null);
+            var text: string = e.type == lark.Event.COMPLETE ? request.response : "";
+            requestPool.push(request);
+            callback(url,text);
+        };
+
+        request.on(lark.Event.COMPLETE, onRequestLoaded, null);
+        request.on(lark.Event.IO_ERROR, onRequestLoaded, null);
+        request.open(url);
+        request.send();
     }
 
 }

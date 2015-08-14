@@ -1,5 +1,6 @@
 ﻿/// <reference path="node.d.ts" />
 /// <reference path="totaljs/totaljs.d.ts" />
+/// <reference path="xml/xml.ts" />
 
 
 
@@ -38,7 +39,8 @@ declare module lark {
         projectDir: string;
         getTmpDir(): string;
         srcDir: string;
-        projManifest: any;
+        manifest: IProjectManifest;
+        manifestPath: string;
         larkPropertiesFile: string;
         debugDir: string;
         releaseDir: string;
@@ -72,6 +74,17 @@ declare module lark {
         toJSON: () => any;
         getProject(empty?:boolean): lark.ILarkProject;
         //工具用
+    }
+
+    export interface ILarkTheme {
+        skins?: { [host: string]: string };
+        exmls?: Array<any>;
+    }
+
+    export interface IProjectManifest {
+        themes?: string[];
+        defaultTheme?: string;
+        platform?: string;
     }
 
     export interface ILarkProject {
@@ -177,3 +190,4 @@ declare module lark {
     }
 }
 
+declare var DEBUG: boolean;

@@ -29,9 +29,14 @@
 
 /// <reference path="./lib/types.d.ts" />
 
+global.DEBUG = true;
+global.lark = global.lark || {};
+
 require('./locales/zh_CN');
+import EXML = require("./commands/EXMLCommand");
 import Run = require("./commands/RunCommand");
 import Make = require("./commands/MakeCommand");
+import CreateResource = require("./commands/CreateResource");
 import Build = require("./commands/BuildCommand");
 import Clean = require("./commands/CleanCommand");
 import Shutdown = require("./commands/ShutdownCommand");
@@ -49,8 +54,6 @@ import FileUtil = require('./lib/FileUtil');
 
 import http = require('http');
 import childProcess = require('child_process');
-
-global.lark = global.lark || {};
 
 export var DontExitCode = -0xF000;
 
@@ -89,6 +92,10 @@ class Entry {
                 run.execute();
                 exitCode = DontExitCode;
                 break;
+            case "exml":
+                var exml = new EXML();
+                exitCode = exml.execute();
+                break;
             case "make":
                 var build = new Make();
                 build.execute();
@@ -115,6 +122,9 @@ class Entry {
                 break;
             case "designservice":
                 exitCode = new DesignService().execute();
+                break;
+            case "createresource":
+                exitCode = new CreateResource().execute();
                 break;
             case "info":
             default:

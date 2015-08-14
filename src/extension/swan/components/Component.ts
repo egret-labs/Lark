@@ -47,7 +47,6 @@ module swan.sys {
 
 module swan {
 
-    var parsedClasses:any = {};
 
     /**
      * @language en_US
@@ -180,12 +179,8 @@ module swan {
                         clazz = EXML.parse(text);
                     }
                     else if (text.substr(text.length - 5, 5).toLowerCase() == ".exml") {
-                        clazz = parsedClasses[skinName];
-                        if(!clazz){
-                            EXML.load(skinName,this.onExmlLoaded,this);
-                            return;
-                        }
-                        this.emitWith(lark.Event.COMPLETE);
+                        EXML.load(skinName, this.onExmlLoaded, this, true);
+                        return;
                     }
                     else{
                         clazz = lark.getDefinitionByName(skinName);
@@ -210,7 +205,6 @@ module swan {
          * @param url 
          */
         private onExmlLoaded(clazz:any,url:string):void {
-            parsedClasses[url] = clazz;
             if(this.skinName!=url){
                 return;
             }

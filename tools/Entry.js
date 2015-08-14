@@ -27,9 +27,13 @@
 //
 //////////////////////////////////////////////////////////////////////////////////////
 /// <reference path="./lib/types.d.ts" />
+global.DEBUG = true;
+global.lark = global.lark || {};
 require('./locales/zh_CN');
+var EXML = require("./commands/EXMLCommand");
 var Run = require("./commands/RunCommand");
 var Make = require("./commands/MakeCommand");
+var CreateResource = require("./commands/CreateResource");
 var Build = require("./commands/BuildCommand");
 var Clean = require("./commands/CleanCommand");
 var Shutdown = require("./commands/ShutdownCommand");
@@ -41,7 +45,6 @@ var Help = require("./commands/HelpCommand");
 var Create = require("./commands/CreateCommand");
 var Publish = require("./commands/PublishCommand");
 var service = require("./service/index");
-global.lark = global.lark || {};
 exports.DontExitCode = -0xF000;
 function executeCommandLine(args) {
     var options = Parser.parseCommandLine(args);
@@ -77,6 +80,10 @@ var Entry = (function () {
                 run.execute();
                 exitCode = exports.DontExitCode;
                 break;
+            case "exml":
+                var exml = new EXML();
+                exitCode = exml.execute();
+                break;
             case "make":
                 var build = new Make();
                 build.execute();
@@ -103,6 +110,9 @@ var Entry = (function () {
                 break;
             case "designservice":
                 exitCode = new DesignService().execute();
+                break;
+            case "createresource":
+                exitCode = new CreateResource().execute();
                 break;
             case "info":
             default:

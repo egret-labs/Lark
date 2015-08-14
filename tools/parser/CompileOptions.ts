@@ -11,7 +11,7 @@ class CompileOptions implements lark.LarkToolArgs {
     params: string[];
     platform: string;
     projectDir: string;
-    projManifest: any;
+    manifest: lark.IProjectManifest;
 
     get dirName(): string {
         return FileUtil.getFileName(this.projectDir);
@@ -58,6 +58,9 @@ class CompileOptions implements lark.LarkToolArgs {
         this._outDir = value;
     }
 
+    get manifestPath(): string {
+        return FileUtil.joinPath(this.projectDir, "manifest.json");
+    }
 
     get templateDir(): string {
         return FileUtil.joinPath(this.projectDir, "template/");
