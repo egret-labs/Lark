@@ -9,7 +9,6 @@ var DoCreateCommand = (function () {
     }
     DoCreateCommand.prototype.execute = function () {
         var proj = this.project;
-        console.log(proj);
         var options = lark.options;
         var template = FileUtil.joinPath(options.larkRoot, "tools/templates/" + proj.template);
         FileUtil.copy(template, options.projectDir);
@@ -41,7 +40,7 @@ function copyTemplate(project) {
         });
     });
     var scripts = larkFiles.map(function (f) { return utils.format('<script src="{0}.js" src-release="{0}.min.js"></script>', f); }).join('\r\n    ');
-    var files = FileUtil.searchByFunction(options.projectDir, function (f) { return true; });
+    var files = FileUtil.searchByFunction(options.projectDir, function (f) { return f.indexOf("html") > 0; });
     files.forEach(function (file) {
         var content = FileUtil.read(file);
         content = content.replace('<script id="lark"></script>', scripts);

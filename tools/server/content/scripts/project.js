@@ -19,7 +19,7 @@ var lark;
                 this.contentWidth = 480;
                 this.contentHeight = 800;
                 this.showPaintRects = false;
-                this.template = "Empty";
+                this.template = "swan";
                 this.port = 3000;
                 this.isConfig = location.pathname.indexOf("/$/config") >= 0;
                 this.isConfirmed = true;

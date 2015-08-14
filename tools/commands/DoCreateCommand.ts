@@ -12,7 +12,6 @@ class DoCreateCommand implements lark.Command {
     project:lark.ILarkProject;
     execute():number {
         var proj = this.project;
-        console.log(proj);
         var options = lark.options;
         var template = FileUtil.joinPath(options.larkRoot, "tools/templates/" + proj.template);
         FileUtil.copy(template, options.projectDir);
@@ -46,7 +45,7 @@ function copyTemplate(project:lark.ILarkProject) {
     });
     var scripts = larkFiles.map(f=> utils.format('<script src="{0}.js" src-release="{0}.min.js"></script>', f)).join('\r\n    ');
 
-    var files = FileUtil.searchByFunction(options.projectDir, f=> true);
+    var files = FileUtil.searchByFunction(options.projectDir, f=> f.indexOf("html")>0);
     files.forEach(file=> {
 
 

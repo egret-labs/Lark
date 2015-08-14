@@ -26,7 +26,7 @@ module lark.portal {
         contentWidth: number = 480;
         contentHeight: number = 800;
         showPaintRects: boolean = false;
-        template: string = "Empty";
+        template: string = "swan";
         port: number = 3000;
         isConfig = location.pathname.indexOf("/$/config") >= 0;
         isConfirmed = true;
