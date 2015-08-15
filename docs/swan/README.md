@@ -2,10 +2,7 @@ Swan (UI库) 编程指南
 ==================================
 
 1. [概述](1-0-intro.md)(done)
-2. [项目初始化]()
-	* [引用Swan库]()
-	* [注入素材适配器]()
-	* [UI显示列表最佳实践]()
+2. [快速入门](2-0-getting-started.md)(done)
 3. [EXML](3-0-exml-overview.md)（done）
 	* [如何使用EXML](3-1-use-exml.md)（done）
 	* [EXML基本语法(一)](3-2-exml-syntax-1.md)（done)
