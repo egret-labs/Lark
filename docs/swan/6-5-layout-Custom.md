@@ -13,7 +13,8 @@ module uilayout {
         public constructor(){
             super();
         }
-        /**计算target的尺寸
+        /**
+         * 计算target的尺寸
          * 因为环形布局，依赖容器尺寸来定义半径，所以需要容器显式的设置width和height,在这种情况下measure方法将失去作用
          * 所以在这个例子里面，不需要重写measure方法
          * 如果您的自定义布局需要根据内部子项计算尺寸，请重写这个方法
@@ -21,7 +22,9 @@ module uilayout {
         public measure():void{
             super.measure();
         }
-        /**重写显示列表更新*/
+        /**
+         * 重写显示列表更新
+         */
         public updateDisplayList(unscaledWidth:number, unscaledHeight:number):void{
             super.updateDisplayList(unscaledWidth, unscaledHeight);
             if (this.target==null)

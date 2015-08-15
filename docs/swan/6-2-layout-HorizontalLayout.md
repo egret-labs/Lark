@@ -1,6 +1,6 @@
-#Swan (UI库) 编程指南 - 横向布局 
+#Swan (UI库) 编程指南 - 水平布局 
 
-在横向布局，以及下面将要讲的垂直布局，格子布局中，都会忽略您在子项上的坐标设置，所有子项的位置将由布局类统一管理。
+在横向布局，以及下面将要讲的垂直布局，网格布局中，都会忽略您在子项上的坐标设置，所有子项的位置将由布局类统一管理。
 
 横向布局会自动将所有的子项横着排列，您可以做以下的设置：
 * gap属性，设置子项之间的间距
@@ -35,8 +35,7 @@ var hLayout:swan.HorizontalLayout = new swan.HorizontalLayout();
 hLayout.gap = 10;
 hLayout.paddingTop = 30;
 hLayout.horizontalAlign = lark.HorizontalAlign.CENTER;
-this.myGroup.layout = hLayout;   /// 横向布局
-```              
+this.myGroup.layout = hLayout;   /// 水平布局```              
 效果如图：
 ![][6-2-layout-HLayout]     
 

@@ -11,7 +11,7 @@ this.myGroup.layout = new swan.BasicLayout();
 ``` TypeScript
 /// 绘制矩形用于显示 myGroup 的轮廓
 var outline:lark.Shape = new lark.Shape;
-outline.graphics.strokeStyle = "#00ff00";
+outline.graphics.strokeStyle = 0x00ff00;
 outline.graphics.beginPath();
 outline.graphics.strokeRect( 0, 0, 500, 300 );
 this.myGroup.addChild( outline );
