@@ -1,24 +1,24 @@
 Swan (UI库) 编程指南
 ==================================
 
-1. [概述](1-0-intro.md)(done)
-2. [快速入门](2-0-getting-started.md)(done)
-3. [EXML](3-0-exml-overview.md)（done）
-	* [如何使用EXML](3-1-use-exml.md)（done）
-	* [EXML基本语法(一)](3-2-exml-syntax-1.md)（done)
-	* [EXML基本语法(二)](3-2-exml-syntax-2.md)（done)
-	* [启用EXML语法提示](3-4-exml-auto-complete.md)(done)
-4. [皮肤](4-0-skin-overview.md)(done)
-	* [皮肤分离机制](4-1-skin.md)（done）
-	* [皮肤部件](4-2-skin-part.md)（done）
-	* [视图状态](4-3-view-state.md)（done）
-	* [配置主题](4-4-theme.md)（done）
-5. [自动布局](5-0-auto-layout-overview.md)（done）
-	* [屏幕适配](5-1-screen-adapt.md)（done）
-	* [失效验证机制](5-2-invalidate.md)（done）
-	* [自动布局原理](5-3-auto-layout.md)(done)
-	* [解决异步问题](5-4-fix-async.md)(done)
-	* [自动布局调试](5-5-layout-debug.md)(done)
+1. [概述](1-0-intro.md)(review)
+2. [快速入门](2-0-getting-started.md)(review)
+3. [EXML](3-0-exml-overview.md)（review）
+	* [如何使用EXML](3-1-use-exml.md)（review）
+	* [EXML基本语法(一)](3-2-exml-syntax-1.md)（review)
+	* [EXML基本语法(二)](3-2-exml-syntax-2.md)（review)
+	* [启用EXML语法提示](3-4-exml-auto-complete.md)(review)
+4. [皮肤](4-0-skin-overview.md)(review)
+	* [皮肤分离机制](4-1-skin.md)（review）
+	* [皮肤部件](4-2-skin-part.md)（review）
+	* [视图状态](4-3-view-state.md)（review）
+	* [配置主题](4-4-theme.md)（review）
+5. [自动布局](5-0-auto-layout-overview.md)（review）
+	* [屏幕适配](5-1-screen-adapt.md)（review）
+	* [失效验证机制](5-2-invalidate.md)（review）
+	* [自动布局原理](5-3-auto-layout.md)(review)
+	* [解决异步问题](5-4-fix-async.md)(review)
+	* [自动布局调试](5-5-layout-debug.md)(review)
 6. [使用布局类](6-0-layout-overview.md)(done) 
 	* [基本布局](6-1-layout-BasicLayout.md)(done) 
 	* [水平布局](6-2-layout-HorizontalLayout.md)(done)
