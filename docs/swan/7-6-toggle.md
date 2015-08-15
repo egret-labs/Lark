@@ -34,34 +34,28 @@ class ToggleDemo extends swan.Group{
     private myToggleSwitcher: swan.ToggleSwitch = new swan.ToggleSwitch(); //新建一个开关
 }
 ```
-跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用 skinName 属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。若是外部文件资源可以监听其加载完成。修改上面的代码如下：
+跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用 skinName 属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。修改上面的代码如下：
 
 ``` TypeScript
 class ToggleDemo extends swan.Group{
     public constructor() {
         super();
         this.myToggleSwitcher.skinName = "skins/ToggleSwitchSkin.exml";  //加载上面的皮肤资源
-        this.myToggleSwitcher.once(lark.Event.COMPLETE,this.loaded,this); //监听其加载完成s
-    }
-    private myToggleSwitcher: swan.ToggleSwitch = new swan.ToggleSwitch();
-
-    private loaded():void{
-        console.log(" myToggleSwitcher skin is loaded");  //皮肤资源加载完成 
         this.addChild(this.myToggleSwitcher);             //将我们的开关添加到显示列表中
     }
+    private myToggleSwitcher: swan.ToggleSwitch = new swan.ToggleSwitch();
 }
 ```
 
-需要注意的是，我们的 ToggleDemo 类的实例需要被添加至舞台，具体可参见其他章节。编译运行项目我们可以看到 ToggleDemo 已经显示出来了。
+需要注意的是，我们的 ToggleDemo 类的实例需要被添加至舞台才可以显示出来。编译运行项目我们可以看到 ToggleDemo 已经显示出来了。
 
 ![](image/7-6-toggle-1.png)
 
-跟其他ToggleButton一样，我们可以监听其 CHANGE 事件来获得 selected 的改变。在上面代码 loaded() 中添加监听：
+跟其他ToggleButton一样，我们可以监听其 CHANGE 事件来获得 selected 的改变。在上面代码 constructor() 中添加监听：
 
 ``` TypeScript
 
-this.myToggleSwitcher.on(lark.Event.CHANGE,this.onChange,this); //添加在loaded当中
- 
+this.myToggleSwitcher.on(lark.Event.CHANGE,this.onChange,this);  
 ```
 
 添加处理函数，在 ToggleDemo 类里添加 onChange 函数，代码如下：
@@ -76,5 +70,3 @@ this.myToggleSwitcher.on(lark.Event.CHANGE,this.onChange,this); //添加在loade
 
 ![](image/7-6-toggle-2.png)
 
-* 上一节 [单选按钮](7-5-radiobutton.md)
-* 下一节 [滑动选择器](7-7-slider.md)

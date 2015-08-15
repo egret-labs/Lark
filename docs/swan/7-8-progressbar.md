@@ -31,22 +31,13 @@ class ProgressDemo extends swan.Group {
 }
 ```
 
-跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用 skinName 属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。若是外部文件资源可以监听其加载完成。
-
-需要注意的是，我们需要指定进度条控件的宽度才能让他很好的显示出来，例如我们在下面添加他的属性，宽度为500，最大值1024，最小值0。修改上面的代码如下：
+跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用 skinName 属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定类名。接下来我们设置它的属性，宽度为500，最大值1024，最小值0。修改上面的代码如下：
 
 ``` TypeScript
 class ProgressDemo extends swan.Group {
     public constructor() {
         super();
         this.myProgress.skinName = "skins/ProgressBarSkin.exml";        //定义外部皮肤文件
-        this.myProgress.once(lark.Event.COMPLETE, this.loaded, this);   //监听加载完成
-    }
-    private myProgress:swan.ProgressBar = new swan.ProgressBar();
-    private loaded(e:lark.Event){
-
-        console.log("my progress loaded");
-
         this.myProgress.maximum = 1024;                                 //设置进度条的最大值
         this.myProgress.minimum = 0;                                    //设置进度条的最小值
 
@@ -56,16 +47,17 @@ class ProgressDemo extends swan.Group {
 
         this.myProgress.value = 50;                                     //设置进度条的初始值
     }
+    private myProgress:swan.ProgressBar = new swan.ProgressBar();
 }
 ```
 
-需要注意的是，我们的 ProgressDemo 类的实例需要被添加至舞台，具体可参见其他章节。编译运行项目我们可以看到 ProgressDemo 已经显示出来了。
+需要注意的是，我们的 ProgressDemo 类的实例需要被添加至舞台才可以显示出来。编译运行项目我们可以看到 ProgressDemo 已经显示出来了。
 
 ![](image/7-8-progressbar-1.png)
 
 下面我们模拟一下时间进度事件，在 myProgress 上面监听 swan.ENTER_FRAME 事件，让他每一帧增加给 value 的值 1。
 
-在 loaded() 中添加如下监听：
+在 constructor() 中添加如下监听：
 
 ``` TypeScript
 this.myProgress.on(lark.Event.ENTER_FRAME,this.onFrame,this);
@@ -83,5 +75,3 @@ this.myProgress.on(lark.Event.ENTER_FRAME,this.onFrame,this);
 
 ![](image/7-8-progressbar-2.png)
 
-* 上一节 [滑动选择器](7-7-slider.md)
-* 下一节 [输入文本](7-9-editabletext.md)
