@@ -29,6 +29,7 @@
 /// <reference path="./lib/types.d.ts" />
 global.DEBUG = true;
 global.lark = global.lark || {};
+global.registerClass = "lark";
 require('./locales/zh_CN');
 var EXML = require("./commands/EXMLCommand");
 var Run = require("./commands/RunCommand");

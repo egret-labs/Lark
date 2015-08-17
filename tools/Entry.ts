@@ -31,6 +31,7 @@
 
 global.DEBUG = true;
 global.lark = global.lark || {};
+global.registerClass = "lark";
 
 require('./locales/zh_CN');
 import EXML = require("./commands/EXMLCommand");
