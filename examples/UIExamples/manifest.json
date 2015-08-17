@@ -1,7 +1,0 @@
-{
-  "themes": [
-    "resource/theme/green-theme.json",
-    "resource/theme/blue-theme.json"
-  ],
-  "defaultTheme": "resource/theme/blue-theme.json"
-}

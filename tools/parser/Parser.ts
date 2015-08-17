@@ -5,14 +5,13 @@ import file = require('../lib/FileUtil');
 import CompileOptions = require("./CompileOptions");
 
 
-export var optionDeclarations:lark.CommandLineOption[] = [
+
+
+
+export var optionDeclarations: lark.CommandLineOption[] = [
     {
         name: "action",
         type: "string"
-    }, {
-        name: "includeLark",
-        type: "boolean",
-        shortName: "e"
     }, {
         name: "sourceMap",
         type: "boolean"
@@ -66,58 +65,62 @@ export var optionDeclarations:lark.CommandLineOption[] = [
     }, {
         name: 'modified',
         type: 'array'
+    }, {
+        name: 'manifest',
+        type: 'string'
     }
 ];
 
-var shortOptionNames:lark.Map<string> = {};
-var optionNameMap:lark.Map<lark.CommandLineOption> = {};
+var shortOptionNames: lark.Map<string> = {};
+var optionNameMap: lark.Map<lark.CommandLineOption> = {};
 
 optionDeclarations.forEach(option => {
     optionNameMap[option.name.toLowerCase()] = option;
 
-    if (option.shortName) {
+    if (option.shortName)
+    {
         shortOptionNames[option.shortName] = option.name;
     }
 });
 
 
-export function parseCommandLine(commandLine:string[]) {
+export function parseCommandLine(commandLine: string[]) {
     // Set default compiler option values
     var options = new CompileOptions();
-    var filenames:string[] = [];
-    var errors:string[] = [];
+    var filenames: string[] = [];
+    var errors: string[] = [];
     options.larkRoot = utils.getLarkRoot();
     parseStrings(commandLine);
     return options;
 
-    function parseStrings(args:string[]) {
-        var minefestBefore = "";
-        for (var i = 0; i < args.length; i++) {
-            if (args[i] == "-manifest") {
-                minefestBefore = args[i + 1];
-                i++;
-            }
-        }
-        i = 0;
-        while (i < args.length) {
+    function parseStrings(args: string[]) {
+        var i = 0;
+        var commands: string[] = [];
+        while (i < args.length)
+        {
             var s = args[i++];
-            if (s.charAt(0) === '-') {
+            if (s.charAt(0) === '-')
+            {
                 s = s.slice(s.charAt(1) === '-' ? 2 : 1).toLowerCase();
                 // Try to translate short option names to their full equivalents.
-                if (s in shortOptionNames) {
+                if (s in shortOptionNames)
+                {
                     s = shortOptionNames[s].toLowerCase();
                 }
 
 
-                if (s in optionNameMap) {
+                if (s in optionNameMap)
+                {
                     var opt = optionNameMap[s];
 
                     // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
-                    if (!args[i] && opt.type !== "boolean") {
+                    if (!args[i] && opt.type !== "boolean")
+                    {
                         errors.push(utils.tr(10001, opt.name));
                     }
 
-                    switch (opt.type) {
+                    switch (opt.type)
+                    {
                         case "number":
                             options[opt.name] = parseInt(args[i++]);
                             break;
@@ -131,60 +134,72 @@ export function parseCommandLine(commandLine:string[]) {
                             options[opt.name] = (args[i++] || "").split(',').map(p=> decodeURIComponent(p));
                     }
                 }
-                else {
+                else
+                {
                     //Unknown option
                     errors.push(utils.tr(10002, s));
                 }
             }
-            else {
-                if (options.action == null)
-                    options.action = s;
-                else if (options.projectDir == null)
-                    options.projectDir = s;
-                else
-                    filenames.push(s);
+            else
+            {
+                commands.push(s);
             }
         }
+
+        if (commands.length > 0) {
+            options.command = commands[0];
+            if (file.isDirectory(commands[1])) {
+                options.projectDir = commands[1];
+                commands.splice(1, 1);
+            }
+            switch (options.command) {
+                case "build":
+                case "run":
+                case "emulate":
+                    options.platform = commands[1];
+                    break;
+                case "platform":
+                case "plugin":
+                    options.params = commands.slice(1);
+            }
+        }
+
 
 
         if (options.projectDir == null)
             options.projectDir = process.cwd()
         else {
             var absPath = file.joinPath(process.cwd(), options.projectDir);
-            if (file.isDirectory(absPath)) {
+            if(file.isDirectory(absPath)){
                 options.projectDir = absPath;
                 process.chdir(absPath);
             }
-            else if (file.isDirectory(options.projectDir)) {
+            else if(file.isDirectory(options.projectDir)){
                 process.chdir(options.projectDir);
             }
         }
         options.projectDir = file.joinPath(options.projectDir, "/");
 
 
-        var manifestPath = file.joinPath(options.larkRoot, minefestBefore + "manifest.json");
+        var manifestPath = file.joinPath(options.larkRoot, (options["manifest"]||"")+ "manifest.json");
         var content = file.read(manifestPath);
-        var manifest:lark.LarkManifest = lark.manifest;
-        try {
-            manifest = JSON.parse(content)
-        }
-        catch (e) {
-            utils.exit(10009)
-        }
+        var manifest: lark.LarkManifest = lark.manifest;
+        try { manifest = JSON.parse(content) }
+        catch (e) { utils.exit(10009) }
         lark.manifest = manifest;
     }
 
 }
 
 
-export function parseJSON(json:lark.LarkToolArgs):lark.LarkToolArgs {
+export function parseJSON(json: lark.LarkToolArgs): lark.LarkToolArgs {
 
     var options = new CompileOptions();
-    var filenames:string[] = [];
-    var errors:string[] = [];
+    var filenames: string[] = [];
+    var errors: string[] = [];
     options.larkRoot = json.larkRoot || utils.getLarkRoot();
     options.projectDir = json.projectDir || process.cwd();
-    options.action = json.action;
+    options.command = json.command;
     options.autoCompile = json.autoCompile;
     options.debug = json.debug;
     options.esTarget = json.esTarget;

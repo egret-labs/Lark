@@ -43,10 +43,10 @@ var AutoCompileCommand = (function () {
         var _scripts = this._scripts || [];
         var result = compileProject.compileProject(options);
         this.compileProject = compileProject;
-        exml.updateSetting(false);
         CopyFiles.copyProjectFiles();
         _scripts = result.files.length > 0 ? result.files : _scripts;
         CompileTemplate.compileTemplates(options, _scripts);
+        exml.updateSetting(false);
         this._scripts = result.files;
         this._lastExitCode = result.exitStatus;
         this._lastMessages = result.messages;

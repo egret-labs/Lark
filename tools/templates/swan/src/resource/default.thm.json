@@ -12,6 +12,7 @@
     "swan.VScrollBar": "skins/VScrollBarSkin.exml",
     "swan.VSlider": "skins/VSliderSkin.exml"
   },
+  "autoGenerateExmlsList": true,
   "exmls": [
     "skins/ButtonSkin.exml",
     "skins/CheckBoxSkin.exml",

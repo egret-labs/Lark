@@ -21,11 +21,10 @@ var PublishCommand = (function () {
         var result = compileProject.compileProject(options);
         if (result.exitStatus)
             return result.exitStatus;
-        exml.updateSetting(true);
         utils.minify(options.out, options.out);
         CopyFiles.copyProjectFiles();
+        exml.updateSetting(true);
         CompileTemplate.compileTemplates(options, result.files);
-        exml.updateSetting(false);
         return result.exitStatus;
     };
     return PublishCommand;

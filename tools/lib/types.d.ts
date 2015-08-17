@@ -79,6 +79,7 @@ declare module lark {
     export interface ILarkTheme {
         skins?: { [host: string]: string };
         exmls?: Array<any>;
+        autoGenerateExmlsList?: boolean;
     }
 
     export interface IProjectManifest {

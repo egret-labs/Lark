@@ -7,7 +7,6 @@ var CompileLark = (function () {
     function CompileLark() {
         this.dtsFiles = [];
     }
-
     CompileLark.prototype.make = function () {
         var self = this;
         var code = 0;
@@ -15,12 +14,13 @@ var CompileLark = (function () {
         var manifest = lark.manifest;
         var penddings = [];
         var currentPlatform, currentConfig;
+        global.registerClass = manifest.registerClass;
         var outputDir = this.getModuleOutputPath();
         this.compiler = new Compiler();
         global.registerClass = manifest.registerClass;
         var configurations = [
-            {name: "debug", declaration: true},
-            {name: "release", minify: true}
+            { name: "debug", declaration: true },
+            { name: "release", minify: true }
         ];
         utils.clean(outputDir);
         for (var i = 0; i < manifest.modules.length; i++) {
@@ -55,13 +55,11 @@ var CompileLark = (function () {
         if (configuration.minify) {
             fileName += ".min";
         }
-        var depends = m.dependencies.map(function (name) {
-            return _this.getModuleOutputPath(name, name + '.d.ts');
-        });
+        var depends = m.dependencies.map(function (name) { return _this.getModuleOutputPath(name, name + '.d.ts'); });
         if (platform.name != ANY) {
             depends.push(this.getModuleOutputPath(m.name, name + '.d.ts'));
         }
-        var outDir = this.getModuleOutputPath(null,null, m.outFile);
+        var outDir = this.getModuleOutputPath(null, null, m.outFile);
         var declareFile = this.getModuleOutputPath(m.name, fileName + ".d.ts", m.outFile);
         var singleFile = this.getModuleOutputPath(m.name, fileName + ".js", m.outFile);
         var moduleRoot = FileUtil.joinPath(larkRoot, m.root);
@@ -88,11 +86,9 @@ var CompileLark = (function () {
             return 0;
         tss = depends.concat(tss);
         var dts = platform.declaration && configuration.declaration;
-        var result = this.compiler.compile({args: options, def: dts, out: singleFile, files: tss, outDir: null});
+        var result = this.compiler.compile({ args: options, def: dts, out: singleFile, files: tss, outDir: null });
         if (result.exitStatus != 0) {
-            result.messages.forEach(function (m) {
-                return console.log(m);
-            });
+            result.messages.forEach(function (m) { return console.log(m); });
             return result.exitStatus;
         }
         if (dts) {
@@ -104,12 +100,8 @@ var CompileLark = (function () {
         return 0;
     };
     CompileLark.prototype.getModuleOutputPath = function (m, filePath, outFile) {
-        if (filePath === void 0) {
-            filePath = "";
-        }
-        if (outFile === void 0) {
-            outFile = "build/";
-        }
+        if (filePath === void 0) { filePath = ""; }
+        if (outFile === void 0) { outFile = "build/"; }
         var path = FileUtil.joinPath(lark.options.larkRoot, outFile);
         if (m)
             path += m + '/';
@@ -134,9 +126,7 @@ var CompileLark = (function () {
                 outDir: null
             });
             if (result.messages && result.messages.length) {
-                result.messages.forEach(function (m) {
-                    return console.log(m);
-                });
+                result.messages.forEach(function (m) { return console.log(m); });
             }
             FileUtil.remove(singleFile);
             FileUtil.remove(tempDtsName);
@@ -180,7 +170,6 @@ function listModuleFiles(m) {
             m.files.push(f);
     });
 }
-
 function delSwanTemp(m) {
     if (m.name != "swan" || !m.sourceRoot) {
         return;
@@ -188,12 +177,10 @@ function delSwanTemp(m) {
     var pathBefore = FileUtil.joinPath(lark.options.larkRoot, m.root);
     FileUtil.remove(pathBefore);
 }
-
 function preduceSwanModule(m) {
     if (m.name != "swan" || !m.sourceRoot) {
         return;
     }
-
     var replaces = [
         ["Lark 1.0", "Egret 2.4"],
         ["lark.", "egret."],
@@ -211,7 +198,6 @@ function preduceSwanModule(m) {
         [".ImageLoader", ".URLLoader"],
         [".HttpRequest", ".URLLoader"],
     ];
-
     var tsFiles = [];
     if (m.noOtherTs !== true)
         tsFiles = FileUtil.search(FileUtil.joinPath(lark.options.larkRoot, m.sourceRoot), "ts");
@@ -222,7 +208,6 @@ function preduceSwanModule(m) {
         var currenFile = tsFiles[i];
         var resultFile = currenFile.slice(pathBefore.length, currenFile.length);
         saveFile += resultFile;
-
         for (var r = 0; r < replaces.length; r++) {
             if (!replaces[r]) {
                 console.log("r = ", r);
@@ -230,11 +215,9 @@ function preduceSwanModule(m) {
             content = replaceAll(content, replaces[r][0], replaces[r][1]);
         }
         content = changeDefine(content, "lark", "egret");
-
         FileUtil.save(saveFile, content);
     }
 }
-
 function replaceAll(content, search, replace) {
     var slen = search.length;
     var rlen = replace.length;
@@ -246,7 +229,6 @@ function replaceAll(content, search, replace) {
     }
     return content;
 }
-
 function changeDefine(content, current, change) {
     var cuIF = "//if " + current;
     var chIF = "//if " + change;
@@ -276,5 +258,4 @@ function changeDefine(content, current, change) {
     }
     return content;
 }
-
 module.exports = CompileLark;

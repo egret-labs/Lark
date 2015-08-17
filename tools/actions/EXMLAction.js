@@ -14,24 +14,12 @@ function getSortedEXML() {
 exports.getSortedEXML = getSortedEXML;
 function updateSetting(merge) {
     if (merge === void 0) { merge = false; }
-    var manifest;
-    if (file.exists(lark.options.manifestPath)) {
-        manifest = JSON.parse(file.read(lark.options.manifestPath));
-    }
-    else {
-        manifest = {};
-    }
     var themeDatas = [];
-    if (!manifest.themes || manifest.themes.length == 0) {
-        var themes = searchTheme();
-        if (themes.length == 0) {
-            themes.push("default.thm");
-            themeDatas.push({});
-        }
-        manifest.themes = themes;
-        manifest.defaultTheme = manifest.themes[0];
+    var themes = searchTheme();
+    if (themes.length == 0) {
+        return;
     }
-    themeDatas = manifest.themes.map(function (t) {
+    themeDatas = themes.map(function (t) {
         try {
             var data = JSON.parse(file.read(file.joinPath(lark.options.srcDir, t)));
             return data || {};
@@ -45,12 +33,12 @@ function updateSetting(merge) {
         thm.exmls && thm.exmls.forEach(function (e) {
             var path = e.path ? e.path : e;
             if (oldEXMLS[path]) {
-                oldEXMLS[path].theme += manifest.themes[i] + ",";
+                oldEXMLS[path].theme += themes[i] + ",";
                 return;
             }
             var exmlFile = {
                 path: path,
-                theme: "," + manifest.themes[i] + ","
+                theme: "," + themes[i] + ","
             };
             oldEXMLS[path] = exmlFile;
             oldEXMLS.push(exmlFile);
@@ -63,7 +51,7 @@ function updateSetting(merge) {
         var exmlEl = merge ? { path: e.path, content: e.content } : epath;
         themeDatas.forEach(function (thm, i) {
             if (epath in oldEXMLS) {
-                var thmPath = manifest.themes[i];
+                var thmPath = themes[i];
                 var exmlFile = oldEXMLS[epath];
                 if (exmlFile.theme.indexOf("," + thmPath + ",") >= 0)
                     thm.exmls.push(exmlEl);
@@ -72,18 +60,19 @@ function updateSetting(merge) {
                 thm.exmls.push(exmlEl);
         });
     });
-    manifest.themes.forEach(function (thm, i) {
-        var path = file.joinPath(lark.options.srcDir, thm);
+    themes.forEach(function (thm, i) {
+        if (themeDatas[i].autoGenerateExmlsList == false)
+            return;
+        var path = file.joinPath(lark.options.outDir, thm);
         var thmData = JSON.stringify(themeDatas[i], null, "  ");
         file.save(path, thmData);
     });
-    var manifestText = JSON.stringify(manifest, null, "  ");
-    file.save(lark.options.manifestPath, manifestText);
 }
 exports.updateSetting = updateSetting;
 function searchTheme() {
-    var files = file.search(lark.options.srcDir, "thm");
+    var files = file.searchByFunction(lark.options.srcDir, function (f) { return f.indexOf('.thm.json') > 0; });
     files = files.map(function (it) { return file.getRelativePath(lark.options.srcDir, it); });
+    console.log(files);
     return files;
 }
 function sort(exmls) {

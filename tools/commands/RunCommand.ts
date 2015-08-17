@@ -12,7 +12,9 @@ import CompileProject = require('../actions/CompileProject');
 import CompileTemplate = require('../actions/CompileTemplate');
 
 class RunCommand implements lark.Command {
-	
+
+    private serverStarted = false;
+
     execute(): number {
         var build = new Build();
         build.execute(this.onBuildFinish);
@@ -20,7 +22,8 @@ class RunCommand implements lark.Command {
     }
 
     private onBuildFinish = (exitCode: number) => {
-
+        if (this.serverStarted)
+            return;
         if (exitCode != 0) {
             process.exit(exitCode);
         }
@@ -39,6 +42,7 @@ class RunCommand implements lark.Command {
         if (addresses.length > 0) {
             lark.options.host = addresses[0];
         }
+        this.serverStarted = true;
         server.startServer(lark.options, lark.options.startUrl);
         console.log("    " + utils.tr(10013, ''));
         console.log('\n');

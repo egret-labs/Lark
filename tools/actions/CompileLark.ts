@@ -198,8 +198,8 @@ function delSwanTemp(m) {
     FileUtil.remove(pathBefore);
 }
 
-function preduceSwanModule(m:lark.LarkModule) {
-    if (m.name != "swan" && m.sourceRoot) {
+function preduceSwanModule(m: lark.LarkModule) {
+    if (m.name != "swan" || !m.sourceRoot) {
         return;
     }
 
