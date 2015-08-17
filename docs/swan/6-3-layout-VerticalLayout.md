@@ -1,1 +1,27 @@
-#Swan (UI¿â) ±à³ÌÖ¸ÄÏ - ´¹Ö±²¼¾Ö´¹Ö±²¼¾ÖµÄĞĞÎªºÍºáÏò²¼¾ÖÀàËÆ£¬Ö»²»¹ı·½Ïò±äÁË£¬´ÓË®Æ½·½Ïò±äÎªÊúÖ±·½Ïò¡£     ÎÒÃÇÈÔÈ»Ê¹ÓÃË®Æ½²¼¾ÖËùÓÃµÄ´úÂë£¬½«²¼¾Ö·½Ê½¸Ä±äÎª´¹Ö±£º    ``` TypeScript   var btn1:swan.Button = new swan.Button();btn1.label = "Lark °´Å¥ A";var btn2:swan.Button = new swan.Button();btn2.label = "Lark °´Å¥ B";var btn3:swan.Button = new swan.Button();btn3.label = "Lark °´Å¥ C";this.myGroup.addChild( btn1 );this.myGroup.addChild( btn2 );this.myGroup.addChild( btn3 );var vLayout:swan.VerticalLayout = new swan.VerticalLayout();vLayout.gap = 10;vLayout.paddingTop = 30;vLayout.horizontalAlign = lark.HorizontalAlign.CENTER;this.myGroup.layout = vLayout;      /// ´¹Ö±²¼¾Ö```    Ğ§¹ûÈçÍ¼£º![][6-3-layout-VLayout]     ¶Ô±ÈË®Æ½²¼¾Ö¿ÉÒÔ¿´µ½£¬ÈİÆ÷ÄÚµÄUI¿Ø¼şÊÇ×÷ÎªÒ»¸öÕûÌå²ÎÓë²¼¾ÖµÄ¡£   [6-3-layout-VLayout]: image/6/6-3-layout-VLayout.jpg
+#Swan (UIåº“) ç¼–ç¨‹æŒ‡å— - å‚ç›´å¸ƒå±€
+ 
+å‚ç›´å¸ƒå±€çš„è¡Œä¸ºå’Œæ°´å¹³å¸ƒå±€ç±»ä¼¼ï¼Œåªä¸è¿‡æ–¹å‘å˜äº†ï¼Œä»æ°´å¹³æ–¹å‘å˜ä¸ºç«–ç›´æ–¹å‘ã€‚     
+
+æˆ‘ä»¬ä»ç„¶ä½¿ç”¨æ°´å¹³å¸ƒå±€æ‰€ç”¨çš„ä»£ç ï¼Œå°†å¸ƒå±€æ–¹å¼æ”¹å˜ä¸ºå‚ç›´ï¼š    
+``` TypeScript   
+var btn1:swan.Button = new swan.Button();
+btn1.label = "Lark æŒ‰é’® A";
+var btn2:swan.Button = new swan.Button();
+btn2.label = "Lark æŒ‰é’® B";
+var btn3:swan.Button = new swan.Button();
+btn3.label = "Lark æŒ‰é’® C";
+this.myGroup.addChild( btn1 );
+this.myGroup.addChild( btn2 );
+this.myGroup.addChild( btn3 );
+
+var vLayout:swan.VerticalLayout = new swan.VerticalLayout();
+vLayout.gap = 10;
+vLayout.paddingTop = 30;
+vLayout.horizontalAlign = lark.HorizontalAlign.CENTER;
+this.myGroup.layout = vLayout;      /// å‚ç›´å¸ƒå±€
+```    
+æ•ˆæœå¦‚å›¾ï¼š
+![][6-3-layout-VLayout]     
+å¯¹æ¯”æ°´å¹³å¸ƒå±€å¯ä»¥çœ‹åˆ°ï¼Œå®¹å™¨å†…çš„UIæ§ä»¶æ˜¯ä½œä¸ºä¸€ä¸ªæ•´ä½“å‚ä¸å¸ƒå±€çš„ã€‚   
+
+[6-3-layout-VLayout]: image/6/6-3-layout-VLayout.jpg

@@ -12,7 +12,6 @@ class DoCreateCommand implements lark.Command {
     project:lark.ILarkProject;
     execute():number {
         var proj = this.project;
-        console.log(proj);
         var options = lark.options;
         var template = FileUtil.joinPath(options.larkRoot, "tools/templates/" + proj.template);
         FileUtil.copy(template, options.projectDir);
@@ -35,18 +34,16 @@ function copyTemplate(project:lark.ILarkProject) {
     var larkFiles: string[] = [];
 
     var modules = project.modules;
-    var platforms = project.platforms;
+    var platform = project.platform;
     modules.forEach(m=> {
         larkFiles.push(utils.format("libs/{0}/{0}", m.name));
-        platforms.forEach(p=> {
-            var scriptName = utils.format("libs/{0}/{0}.{1}", m.name, p.name);
-            if (FileUtil.exists(FileUtil.joinPath(options.srcDir, scriptName + ".js")))
-                larkFiles.push(scriptName);
-        });
+        var scriptName = utils.format("libs/{0}/{0}.{1}", m.name, platform);
+        if (FileUtil.exists(FileUtil.joinPath(options.srcDir, scriptName + ".js")))
+            larkFiles.push(scriptName);
     });
     var scripts = larkFiles.map(f=> utils.format('<script src="{0}.js" src-release="{0}.min.js"></script>', f)).join('\r\n    ');
 
-    var files = FileUtil.searchByFunction(options.projectDir, f=> true);
+    var files = FileUtil.searchByFunction(options.projectDir, f=> f.indexOf("html")>0);
     files.forEach(file=> {
 
 

@@ -1,6 +1,6 @@
 #Swan (UI库) 编程指南 - 输入文本
 
-在 Swan 中为我们提供了输入文本控件，使用 swan.EditableText 可以创建可供用户输入的文本控件。 swan.EditableText 继承自 lark.TextInput ,也就是说使用它也可以使用 lark.TextFild 和 lark.TextInput 的属性和方法。具体可以参照前面的章节.
+在 Swan 中为我们提供了输入文本控件，使用 swan.EditableText 可以创建可供用户输入的文本控件。 swan.EditableText 继承自 lark.TextInput ,也就是说使用它也可以使用 lark.TextFild 和 lark.TextInput 的属性和方法。文本对象的用法可以参考：[Lark Core 编程指南 - 处理文本](../core/11-0-text.md).
 
 这里我们准备一张图片作为背景素材:
 
@@ -33,8 +33,6 @@ class EditableTextDemo extends swan.Group {
         this.background.height = 200;
         this.addChild(this.background);                                    //将背景添加到显示列表
 
-        console.log('text demo');
-
         this.myEditableText.text = "my EditableText";                      //指定默认文本，用户可以自己输入，也可以将其删除
         this.myEditableText.textColor = 0x2233cc;                          //指定文本的颜色。
 
@@ -51,7 +49,7 @@ class EditableTextDemo extends swan.Group {
 }
 ```
 
-需要注意的是，我们的 EditableTextDemo 类的实例需要被添加至舞台，具体可参见其他章节。编译运行项目我们可以看到 EditableTextDemo 已经显示出来了。
+需要注意的是，我们的 EditableTextDemo 类的实例需要被添加至舞台才可以显示出来。编译运行项目我们可以看到 EditableTextDemo 已经显示出来了。
 
 ![](image/7-9-editabletext-1.png)
 
@@ -70,7 +68,7 @@ this.myEditableText.displayAsPassword = true;                             //添�
 
 ``` TypeScript
 this.myEditableText.displayAsPassword = fale;                            //让文本能被显示出来.
-this.myEditableText.wordWrap = true;                                     //添加自动换行.
+this.myEditableText.wordWrap = true;                                     //设置自动换行后要同时设置文本宽度，才会换行。
 
 this.myEditableText.on(lark.Event.CHANGE,this.onChang,this);             //添加监听，监听用户的输入
 ```
@@ -86,6 +84,3 @@ private onChang(e:lark.Event){
 
 ![](image/7-9-editabletext-3.png)
 
-当然，我们也可以使用EXML文件制作皮肤，然后使用 EXML.parse() 解析成程序里的类。可以参考相关章节.
-
-* 上一节 [进度条](7-8-progressbar.md)

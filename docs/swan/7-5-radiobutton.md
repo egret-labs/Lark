@@ -41,17 +41,12 @@ class RadioButtonDemo extends swan.Group {
 }
 ```
 
-跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用skinName属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。若是外部文件资源可以监听其加载完成。修改上面的代码如下：
+跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用skinName属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。修改上面的代码如下：
 
 ``` TypeScript
     public constructor () {
         super();
         this.myRadioButton.skinName = "skins/RadioButtonSkin.exml";  //指定外部皮肤
-        this.myRadioButton.once(lark.Event.COMPLETE,this.loaded,this); // 监听皮肤加载完成事件
-    }
-    
-    private loaded(e:lark.Event):void { //添加处理函数
-        console.log(" myRadioButton skin is loaded"); 
         this.addChild(this.myRadioButton); //将单选按钮添加到显示列表当中.
     }
 ```
@@ -60,12 +55,14 @@ class RadioButtonDemo extends swan.Group {
 
 ![](image/7-5-radiobutton-1.png)
 
-同Button一样，我们可以指定其label属性，来添加一段描述性的文字。在以上 loaded 函数中添加如下代码，指定其描述文字.
+同Button一样，我们可以指定其label属性，来添加一段描述性的文字。在以上 constructor 函数中添加如下代码，指定其描述文字.
 
 ``` TypeScript
-    private loaded(e:lark.Event):void {
-        console.log(" myRadioButton skin is loaded");
-        this.myRadioButton.label = "this is a single radio button"; //添加描述lable文字描述
+    public constructor () {
+        super();
+        this.myRadioButton.skinName = "skins/RadioButtonSkin.exml";  //指定外部皮肤
+        this.addChild(this.myRadioButton); //将单选按钮添加到显示列表当中.
+        this.myRadioButton.label = "this is a single radio button"; //添加描述label文字描述
         this.addChild(this.myRadioButton);
     }
 ```
@@ -75,24 +72,24 @@ class RadioButtonDemo extends swan.Group {
 单选按钮一般跟其他单选按钮组成一个按钮组，通过指定 groupName 属性来确定属于哪一个组。下面我们继续完善我们的 RadioButtonDemo 类。添加一个 myRadioButtonGroup 属性，并添加一个 myGroup() 方法，给他加入三个单选按钮。代码如下：
 
 ``` TypeScript
-private loaded(e:lark.Event):void {
-
-        console.log(" myRadioButton skin is loaded");
-        this.myRadioButton.label = "this is a single radio button";
+    public constructor () {
+        super();
+        this.myRadioButton.skinName = "skins/RadioButtonSkin.exml";  //指定外部皮肤
+        this.addChild(this.myRadioButton); //将单选按钮添加到显示列表当中.
+        this.myRadioButton.label = "this is a single radio button"; //添加描述label文字描述
         this.addChild(this.myRadioButton);
+
         
-        this.myGroup(); // 下一步 添加我的单选按钮组
+        this.createGroup(); // 下一步 添加我的单选按钮组
     }
 
     private myRadioButtonGroup:swan.RadioButtonGroup = new swan.RadioButtonGroup(); //新建我的单选按钮组
 
-    private myGroup():void{
-    
-        var skin = this.myRadioButton.skinName;         //使用上面的皮肤来完成下面的按钮
+    private createGroup():void{
 
         var myRadioButton1:swan.RadioButton = new swan.RadioButton();
         myRadioButton1.label = "swan is a bird";
-        myRadioButton1.skinName = skin;
+        myRadioButton1.skinName = "skins/RadioButtonSkin.exml";
         myRadioButton1.y = this.myRadioButton.y + this.myRadioButton.height +25;
         myRadioButton1.value = "bird";
         myRadioButton1.group = this.myRadioButtonGroup; //设置单选按钮组
@@ -100,7 +97,7 @@ private loaded(e:lark.Event):void {
 
         var myRadioButton2:swan.RadioButton = new swan.RadioButton();
         myRadioButton2.label = "swan is a program";
-        myRadioButton2.skinName = skin;
+        myRadioButton2.skinName = "skins/RadioButtonSkin.exml";
         myRadioButton2.y = myRadioButton1.y + myRadioButton1.height;
         myRadioButton2.value = "program";
         myRadioButton2.group = this.myRadioButtonGroup;  //设置单选按钮组
@@ -108,7 +105,7 @@ private loaded(e:lark.Event):void {
 
         var myRadioButton3:swan.RadioButton = new swan.RadioButton();
         myRadioButton3.label = "swan is an UI package provide by egret";
-        myRadioButton3.skinName = skin;
+        myRadioButton3.skinName = "skins/RadioButtonSkin.exml";
         myRadioButton3.y = myRadioButton2.y + myRadioButton2.height;
         myRadioButton3.value = "UI";
         myRadioButton3.group = this.myRadioButtonGroup;  //设置单选按钮组
@@ -143,5 +140,3 @@ private onChange(e:lark.Event){              //在RadioButtonDemo类中添加
 
 ![](image/7-5-radiobutton-3.png)
 
-* 上一节 [复选框](7-4-checkbox.md)
-* 下一节 [切换按钮](7-6-toggle.md)

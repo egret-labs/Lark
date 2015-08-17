@@ -30,21 +30,13 @@ class SliderDemo extends swan.Group{
 }
 ```
 
-跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用 skinName 属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。若是外部文件资源可以监听其加载完成。
-
-需要注意的是，我们需要指定滑块控件的宽度才能让他很好的显示出来，例如我们在下面添加他的属性，宽度为500，最大值1024，最小值0，并用上面的 lable 来显示滑块的值。修改上面的代码如下：
+跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用 skinName 属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定类名。接下来我们设置它的属性，宽度为500，最大值1024，最小值0，并用上面的 Label 来显示滑块的值。修改上面的代码如下：
 
 ``` TypeScript
 class SliderDemo extends swan.Group{
     public constructor() {
         super();
         this.myHSlider.skinName = "skins/HSliderSkin.exml"; //定义外部皮肤文件
-        this.myHSlider.once(lark.Event.COMPLETE,this.hsliderLoaded,this); //监听加载完成
-    }
-    private myHSlider:swan.HSlider = new swan.HSlider();
-    private myHSliderLable:swan.Label = new swan.Label();
-    private hsliderLoaded(e:lark.Event) {
-        
         this.myHSliderLable.text = "value:0";                   //设置标签的初始值
         this.myHSliderLable.y = this.myHSlider.height + 10;     //设置标签在滑块的下面
         this.myHSliderLable.horizontalCenter = 0;               //设置标签的居中属性
@@ -55,16 +47,18 @@ class SliderDemo extends swan.Group{
         this.myHSlider.maximum = 1024;                          //设置滑块的最大值
         this.myHSlider.minimum = 0;                             //设置滑块的最小值
     }
+    private myHSlider:swan.HSlider = new swan.HSlider();
+    private myHSliderLable:swan.Label = new swan.Label();
 }
 ```
 
-需要注意的是，我们的 SliderDemo 类的实例需要被添加至舞台，具体可参见其他章节。编译运行项目我们可以看到 SliderDemo 已经显示出来了。
+需要注意的是，我们的 SliderDemo 类的实例需要被添加至舞台才能显示。编译运行项目我们可以看到 SliderDemo 已经显示出来了。
 
 ![](image/7-7-slider-1.png)
 
-通过监听其CHANGE事件可以动态获取滑块的值，通过 pendingValue 属性来获得其值。
+通过监听其CHANGE事件可以动态获取滑块的值，通过 value 属性来获得其值。
 
-在 hsliderLoaded() 函数中添加相关监听即可，代码如下：
+在 constructor() 函数中添加相关监听即可，代码如下：
 
 ``` TypeScript
 this.myHSlider.on(lark.Event.CHANGE,this.onHChange,this);       //监听滑块滑动的过程
@@ -74,7 +68,7 @@ this.myHSlider.on(lark.Event.CHANGE,this.onHChange,this);       //监听滑块�
 
 ``` TypeScript
    private onHChange(e:lark.Event){
-        this.myHSliderLable.text = "value:" + this.myHSlider.pendingValue;  //将滑块的值显示出来
+        this.myHSliderLable.text = "value:" + this.myHSlider.value;  //将滑块的值显示出来
     }
 ```
 
@@ -82,7 +76,5 @@ this.myHSlider.on(lark.Event.CHANGE,this.onHChange,this);       //监听滑块�
 
 ![](image/7-7-slider-2.png)
 
-需要注意的是 liveDragging 属性如果被设置为 false 那么 pendingValue 将不会时时变化。
+需要注意的是 liveDragging 属性如果被设置为 false 那么 value 将不会时时变化。
 
-* 上一节 [切换按钮](7-6-toggle.md)
-* 下一节 [进度条](7-8-progressbar.md)

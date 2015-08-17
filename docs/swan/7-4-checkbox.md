@@ -40,37 +40,33 @@ class CheckBoxDemo extends swan.Group {
 }
 ```
 
-跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用skinName属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以直接指定。若是外部文件资源可以监听其加载完成。修改上面的代码如下：
+跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用skinName属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以直接指定类名。修改上面的代码如下：
 
 ``` TypeScript
     public constructor() {
         super();
         this.myCheckBox.skinName = "skins/CheckBoxSkin.exml"; // 指定外部皮肤.
-        this.myCheckBox.once(lark.Event.COMPLETE,this.onLoaded,this); // 监听皮肤加载完成.
+        this.addChild(this.myCheckBox);
     }
-    private onLoaded(e:lark.Event):void {   //添加事件处理
-        console.log("skin load complete"); //皮肤加载完成
-        this.addChild(this.myCheckBox);    //将我们的复选框添加到显示列表当中
-    }
+   
 ```
 
-需要注意的是，我们的 CheckBoxDemo 类的实例需要被添加至舞台，具体可参见其他章节。编译运行项目我们可以看到 myCheckBox 已经显示出来了。
+需要注意的是，我们的 CheckBoxDemo 类的实例需要被添加至舞台才可以显示出来。编译运行项目我们可以看到 myCheckBox 已经显示出来了。
 
 ![](image/7-4-checkbox-1.png)
 
-同Button一样，我们可以指定其label属性，来添加一段描述性的文字。在以上 onLoaded 函数中添加如下代码，指定其描述文字.
+同Button一样，我们可以指定其label属性，来添加一段描述性的文字。在以上 constructor 函数中添加如下代码，指定其描述文字.
 
 ``` TypeScript
     this.myCheckBox.label = "This is my Check Box"; //在onLoaded添加lable属性.
 ```
 
-通常，我们希望能指定复选框的行为，包括选中，不被选中下的表现，可以通过监听 lark.Event.CHANGE 来实现，比如我们在 onLoaded 中添加如下代码，并添加函数 onChange ：
+通常，我们希望能指定复选框的行为，包括选中，不被选中下的表现，可以通过监听 lark.Event.CHANGE 来实现，比如我们在 constructor 中添加如下代码，并添加函数 onChange ：
 
-``` TypeScript
-    private onLoaded(e:lark.Event):void {
-
-        console.log("skin load complete");
-
+``` 
+    public constructor() {
+        super();
+        this.myCheckBox.skinName = "skins/CheckBoxSkin.exml"; // 指定外部皮肤.
         this.addChild(this.myCheckBox);
         this.myCheckBox.label = "This is my Check Box";
         this.myCheckBox.on(lark.Event.CHANGE,this.onChange,this); // 监听CHANGE事件
@@ -78,7 +74,7 @@ class CheckBoxDemo extends swan.Group {
 
     private onChange(e:lark.Event) {
 
-        this.myCheckBox.label = this.myCheckBox.selected ? "Selected" : "Unselected"; // 指定lable
+        this.myCheckBox.label = this.myCheckBox.selected ? "Selected" : "Unselected"; // 指定label
 
         console.log("onChange myCheck Box");
     }
@@ -87,6 +83,3 @@ class CheckBoxDemo extends swan.Group {
 同 Button 一样，我们也可以禁用复选框组件，设置其 enabled 为 false 即可。 这样我们就得到了如下效果的复选框了:
 
 ![](image/7-4-checkbox-2.png)
-
-* 上一节 [按钮](7-3-button.md)
-* 下一节 [单选按钮](7-5-radiobutton.md)

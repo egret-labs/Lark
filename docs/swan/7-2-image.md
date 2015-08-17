@@ -2,7 +2,7 @@
 
 图片控件对应的类是 swan.Image。swan.Image 继承自 lark.Bitmap，实现了 swan.UIComponent 接口。因此它不仅拥有基本的位图功能(lark.Bitmap)，还有自动布局功能(swan.UIComponent)。
 
-基本的位图参考 [Lark Core 编程指南 - 处理位图的基本知识](../core/12-0-bitmap.md)
+基本的位图API使用参考 [Lark Core 编程指南 - 处理位图的基本知识](../core/12-0-bitmap.md)
 
 使用 lark.Image 加载并显示一张图片非常简单，代码如下：
 
@@ -13,6 +13,7 @@ this.addChild(image);
 ```
 
 ##显示一个九宫格的图片
+
 如下图所示：
 
 ![](image/7-2-scale9Grid.png)
@@ -23,7 +24,7 @@ this.addChild(image);
 
 需要注意的是缩小可能会出现问题。
 
-Image 的 scale9Grid 属性是一个制定的矩形区域，矩形区域的 x、y 属性分辨对应 A1 区域的宽、高，width、height 属性分别对应 A5 区域的宽、高。
+Image 的 scale9Grid 属性是一个指定的矩形区域，矩形区域对应 A5 区域的起点坐标以及宽高。
 
 显示一个指定尺寸为 200x200 的九宫格图片，代码如下：
 
@@ -35,6 +36,3 @@ image.width = 200;
 image.height = 200;
 this.addChild(image);
 ```
-
-* 上一节 [文本](7-1-label.md)
-* 下一节 [按钮](7-3-button.md)

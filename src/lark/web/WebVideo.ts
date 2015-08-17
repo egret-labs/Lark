@@ -77,12 +77,14 @@ module lark.web {
             this.$renderRegion = new sys.Region();
             this.src = url;
             this.once(lark.Event.ADDED_TO_STAGE, this.loadPoster, this);
+            if (url)
+                this.load();
         }
 
         /**
          * @inheritDoc
          */
-        load(url?: string) {
+        public load(url?: string) {
             url = url || this.src;
             if (DEBUG && !url) {
                 lark.$error(3002);
@@ -104,7 +106,7 @@ module lark.web {
         /**
          * @inheritDoc
          */
-        play(startTime?: number, loop = false) {
+        public play(startTime?: number, loop: boolean = false) {
             if (this.loaded == false) {
                 this.load();
                 this.once(lark.Event.COMPLETE, e=> this.play(startTime, loop), this);
@@ -160,7 +162,7 @@ module lark.web {
         /**
          * @inheritDoc
          */
-        close() {
+        public close() {
             this.pause();
             if (this.loaded == false && this.video)
                 this.video.src = "";
@@ -177,7 +179,7 @@ module lark.web {
         /**
          * @inheritDoc
          */
-        pause() {
+        public pause() {
             if (this.video) {
                 this.video.pause();
                 this.onVideoEnded();

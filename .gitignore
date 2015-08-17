@@ -23,3 +23,4 @@ tmp
 examples/*/src/libs
 web.config
 tsconfig.json
+/src/default.thm

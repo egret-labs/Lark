@@ -396,3 +396,9 @@ function joinPath(dir, filename) {
     return path;
 }
 exports.joinPath = joinPath;
+function getRelativePath(dir, filename) {
+    var relative = Path.relative(dir, filename);
+    return escapePath(relative);
+    ;
+}
+exports.getRelativePath = getRelativePath;

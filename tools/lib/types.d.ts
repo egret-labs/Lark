@@ -1,5 +1,6 @@
 ﻿/// <reference path="node.d.ts" />
 /// <reference path="totaljs/totaljs.d.ts" />
+/// <reference path="xml/xml.ts" />
 
 
 
@@ -30,11 +31,16 @@ declare module lark {
         Message,
     }
     export interface LarkToolArgs {
-        action: string;
+        command: string;
+        action?: string;
+        params?: string[];
+        platform?: string;
+
         projectDir: string;
         getTmpDir(): string;
         srcDir: string;
-        projManifest: any;
+        manifest: IProjectManifest;
+        manifestPath: string;
         larkPropertiesFile: string;
         debugDir: string;
         releaseDir: string;
@@ -50,8 +56,9 @@ declare module lark {
         debug?: boolean;
         getStartURL(address: string): string;
 
+
+
         publish?: boolean;
-        includeLark?: boolean;
         minify?: boolean;
         sourceMap?: boolean;
         removeComments?: boolean;
@@ -69,9 +76,20 @@ declare module lark {
         //工具用
     }
 
+    export interface ILarkTheme {
+        skins?: { [host: string]: string };
+        exmls?: Array<any>;
+    }
+
+    export interface IProjectManifest {
+        themes?: string[];
+        defaultTheme?: string;
+        platform?: string;
+    }
+
     export interface ILarkProject {
         modules?: LarkModule[];
-        platforms?: LarkPlatform[];
+        platform?: string;
         port?: number;
         scaleMode?: string;
         contentWidth?: number;
@@ -131,6 +149,7 @@ declare module lark {
         configurations: CompileConfiguration[];
         scaleModes: LarkScaleMode[];
         orientationModes: LarkOrientationMode[];
+        templates: LarkProjectTemplate[]
     }
 
     export interface LarkScaleMode {
@@ -141,7 +160,11 @@ declare module lark {
         name: string;
         description: string;
     }
-
+    export interface LarkProjectTemplate {
+        name: string;
+        description: string;
+        modules: string[];
+    }
     
     
     export interface LarkModule {
@@ -175,3 +198,4 @@ declare module lark {
     }
 }
 
+declare var DEBUG: boolean;

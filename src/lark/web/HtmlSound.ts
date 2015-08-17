@@ -63,13 +63,14 @@ module lark.web {
         constructor(url?: string) {
             super();
             this.url = url;
+            if (url)
+                this.load();
         }
 
         /**
-         * @private
          * @inheritDoc
          */
-        load(url?:string){
+        public load(url?: string) {
             url = url || this.url;
             if (DEBUG && !url) {
                 lark.$error(3002);
@@ -83,10 +84,9 @@ module lark.web {
         }
 
         /**
-         * @private
          * @inheritDoc
          */
-        play(startTime:number = 0, loop = false):lark.SoundChannel {
+        public play(startTime: number = 0, loop: boolean = false): lark.SoundChannel {
             if(DEBUG && this.loaded == false){
                 lark.$error(3001);
             }
@@ -109,10 +109,9 @@ module lark.web {
         }
         
         /**
-         * @private
          * @inheritDoc
          */
-        close() {
+        public close() {
             if (this.loaded == false && this.originAudio)
                 this.originAudio.src = "";
             if (this.originAudio)

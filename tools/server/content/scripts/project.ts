@@ -5,8 +5,9 @@
 module lark {
     export interface LarkModule{
         checked?: boolean;
+        readonly?: boolean;
     }
-    export interface LarkPlatform{
+    export interface LarkPlatform {
         checked?: boolean;
     }
 }
@@ -20,13 +21,13 @@ module lark.portal {
         scaleModes = lark.manifest.scaleModes;
         orientationModes = lark.manifest.orientationModes;
         modules: lark.LarkModule[] = [];
-        platforms: { name: string }[] = [];
+        platform: string = "web";
         scaleMode: string = 'noScale'; 
         orientationMode: string = 'auto'; 
         contentWidth: number = 480;
         contentHeight: number = 800;
         showPaintRects: boolean = false;
-        template: string = "Empty";
+        template: string = "swan";
         port: number = 3000;
         isConfig = location.pathname.indexOf("/$/config") >= 0;
         isConfirmed = true;
@@ -45,13 +46,10 @@ module lark.portal {
                 });
             });
             this.larkManifest.platforms.forEach(lm=> {
-                if (lm.name == 'web')
+                if (lm.name == this.platform)
                     lm.checked = true;
-                this.platforms.forEach(m=> {
-                    if (lm.name == m.name)
-                        lm.checked = true;
-                });
             });
+            this.selectTemplate(this.template);
             var port = parseInt(location.port || "80");
             this.port = port;
             var exist = location.search && location.search.indexOf("exist=true") >= 0;
@@ -62,7 +60,7 @@ module lark.portal {
         finish() {
             var manifest = this.larkManifest;
             this.modules = manifest.modules.filter(m=> m.checked).map(m=> { return { name: m.name }; });
-            this.platforms = manifest.platforms.filter(p=> p.checked).map(p=> { return { name: p.name }; });
+            //this.platform = manifest.platforms.filter(p=> p.checked)[0].name;
             this.larkManifest = undefined;
             var modes = this.scaleModes;
             this.scaleModes = undefined;
@@ -98,6 +96,26 @@ module lark.portal {
             var n = this.contentHeight;
             this.contentHeight = this.contentWidth;
             this.contentWidth = n;
+        }
+        selectTemplate(name: string) {
+            this.template = name;
+            var templates = this.larkManifest.templates;
+            for (var i = 0; i < templates.length; i++) {
+                if (templates[i].name == name) {
+                    var modules = templates[i].modules;
+
+                    this.larkManifest.modules.forEach(lm=> {
+
+                        if (modules.indexOf(lm.name)>=0) {
+                            lm.checked = true;
+                            lm.readonly = true;
+                        }
+                        else
+                            lm.readonly = false;
+                    });
+                    break;
+                }
+            }
         }
     }
 }

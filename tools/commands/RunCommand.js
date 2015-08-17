@@ -11,7 +11,12 @@ var RunCommand = (function () {
             if (exitCode != 0) {
                 process.exit(exitCode);
             }
-            utils.getAvailablePort(function (port) { return _this.onGotPort(port); }, lark.options.port);
+            if (lark.options.platform == undefined || lark.options.platform == 'web') {
+                utils.getAvailablePort(function (port) { return _this.onGotPort(port); }, lark.options.port);
+            }
+            else {
+                process.exit(0);
+            }
         };
     }
     RunCommand.prototype.execute = function () {

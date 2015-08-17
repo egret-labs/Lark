@@ -6,9 +6,12 @@ import FileUtil = require('../lib/FileUtil');
 
 
 class CompileOptions implements lark.LarkToolArgs {
+    command: string;
     action: string;
+    params: string[];
+    platform: string;
     projectDir: string;
-    projManifest: any;
+    manifest: lark.IProjectManifest;
 
     get dirName(): string {
         return FileUtil.getFileName(this.projectDir);
@@ -22,12 +25,21 @@ class CompileOptions implements lark.LarkToolArgs {
         return FileUtil.joinPath(this.projectDir, "lark.json");
     }
 
+    private _debugDir: string;
     get debugDir(): string {
-        return FileUtil.joinPath(this.projectDir, "bin-debug/");
+
+        return this._debugDir || FileUtil.joinPath(this.projectDir, "bin-debug/");
+    }
+    set debugDir(value: string) {
+        this._debugDir = value;
     }
 
+    private _releaseDir: string;
     get releaseDir(): string {
-        return FileUtil.joinPath(this.projectDir, "bin-release/");
+        return this._releaseDir || FileUtil.joinPath(this.projectDir, "bin-release/");
+    }
+    set releaseDir(value: string) {
+        this._releaseDir = value;
     }
 
 
@@ -46,6 +58,9 @@ class CompileOptions implements lark.LarkToolArgs {
         this._outDir = value;
     }
 
+    get manifestPath(): string {
+        return FileUtil.joinPath(this.projectDir, "manifest.json");
+    }
 
     get templateDir(): string {
         return FileUtil.joinPath(this.projectDir, "template/");
@@ -86,7 +101,6 @@ class CompileOptions implements lark.LarkToolArgs {
 
     larkRoot: string;
     publish: boolean;
-    includeLark: boolean;
     sourceMap: boolean;
     removeComments: boolean;
     esTarget: string = 'ES5';
