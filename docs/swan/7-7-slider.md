@@ -59,10 +59,10 @@ HSliderSkin.exml皮肤的代码如下：
     <s:Image id="thumb" source="resource/assets/blue/Slider/thumb.png" verticalCenter="0"/>
 </s:Skin>
 ```
-HSliderSkin.exml皮肤的代码如下：
+VSliderSkin.exml皮肤的代码如下：
 ``` XML
 <?xml version="1.0" encoding="utf-8"?>
-<s:Skin class="skins.HSliderSkin" minWidth="25" minHeight="30" xmlns:s="http://ns.egret.com/swan">
+<s:Skin class="skins.VSliderSkin" minWidth="25" minHeight="30" xmlns:s="http://ns.egret.com/swan">
     <s:Image id="track" source="resource/assets/blue/Slider/track.png" scale9Grid="1,1,4,4" width="7" height="100%" horizontalCenter="0"/>
     <s:Image id="thumb" source="resource/assets/blue/Slider/thumb.png" horizontalCenter="0" />
 </s:Skin>
