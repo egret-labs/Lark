@@ -10,4 +10,4 @@
 * [切换按钮](7-6-toggle.md)
 * [滑动选择器](7-7-slider.md)
 * [进度条](7-8-progressbar.md)
-* [输入文本](7-9-editabletext.md)		
+* [输入文本](7-9-editabletext.md)

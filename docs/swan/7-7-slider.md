@@ -1,80 +1,69 @@
 #Swan (UI库) 编程指南 - 滑动选择器
 
-Swan 库中给我们提供了两种滑块控件，swan.HSlider 水平滑块控件和 swan.VSlider 垂直滑块控件。他们都继承自 swan.SliderBase 基类，效果也相同，只是一个是水平控件，一个是垂直控件。他们都可以使用基类 swan.SliderBase 的属性和方法。下面以 swan.HSlider 为例，介绍如何使用滑动选择器控件.
+您还记得手机上的亮度调节工具吗？在swan中也有类似的组件，就是滑块控件。这个实际上是两个组件，根据方向，分为swan.HSlider 水平滑块控件和 swan.VSlider 垂直滑块控件。
 
-## 水平滑块控件
+#### 水平滑块控件
+``` TypeScript
+private initHSlider():void {
+    var hSlider: swan.HSlider = new swan.HSlider();
+    hSlider.width = 200;
+    hSlider.x = 20;
+    hSlider.y = 20;
+    hSlider.minimum = 0;//定义最小值
+    hSlider.maximum = 100;//定义最大值
+    hSlider.value = 10;//定义默认值
+    hSlider.on(swan.UIEvent.CHANGE, this.changeHandler, this);
+    this.addChild(hSlider);
+}
+private changeHandler(evt: swan.UIEvent): void {
+    lark.log(evt.target.value);
+}
+```
+得到的效果：
 
-首先，我们准备好组件皮肤所需要的素材，如下图所示：
+![](./image/7/7_7_1.png)
 
-![](image/7-7-slider-skin.png)
+#### 垂直滑块控件
+``` TypeScript
+private initVSlider():void {
+  var vSlider: swan.VSlider = new swan.VSlider();
+  vSlider.height = 200;
+  vSlider.x = 100;
+  vSlider.y = 60;
+  vSlider.minimum = 100;//定义最小值
+  vSlider.maximum = 200;//定义最大值
+  vSlider.value = 120;//定义默认值
+  vSlider.on(swan.UIEvent.CHANGE, this.changeHandler, this);
+  this.addChild(vSlider);
+}
+private changeHandler(evt: swan.UIEvent): void {
+    lark.log(evt.target.value);
+}
+```
+得到的效果：
 
-在项目中src目录下新建一个 skins 目录，存放我们的皮肤 skins/HSliderSkin.exml ,具体内容如下（图片资源已经在相应路径内）:
+![](./image/7/7_7_2.png)
 
+
+
+下面为本章节使用到的皮肤组件代码，供您参考。
+
+souce为图片路径，请替换成您的图片。
+
+HSliderSkin.exml皮肤的代码如下：
 ``` XML
 <?xml version="1.0" encoding="utf-8"?>
-<s:Skin class="skins.VSliderSkin" minWidth="25" minHeight="30" xmlns:s="http://ns.egret.com/swan">
+<s:Skin class="skins.HSliderSkin" minWidth="20" minHeight="8" xmlns:s="http://ns.egret.com/swan">
+    <s:Image id="track" source="resource/assets/blue/Slider/track.png" scale9Grid="1,1,4,4" width="100%"
+             height="6" verticalCenter="0"/>
+    <s:Image id="thumb" source="resource/assets/blue/Slider/thumb.png" verticalCenter="0"/>
+</s:Skin>
+```
+HSliderSkin.exml皮肤的代码如下：
+``` XML
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin class="skins.HSliderSkin" minWidth="25" minHeight="30" xmlns:s="http://ns.egret.com/swan">
     <s:Image id="track" source="resource/assets/blue/Slider/track.png" scale9Grid="1,1,4,4" width="7" height="100%" horizontalCenter="0"/>
     <s:Image id="thumb" source="resource/assets/blue/Slider/thumb.png" horizontalCenter="0" />
 </s:Skin>
 ```
-
-接下来我们创建一个滑块组件，在程序中我们新建一个 SliderDemo 类，并添加一个 myHSlider。代码如下:
-
-``` TypeScript
-class SliderDemo extends swan.Group{
-    public constructor() {
-        super();
-    }
-    private myHSlider:swan.HSlider = new swan.HSlider();   // 新建一个滑块
-    private myHSliderLable:swan.Label = new swan.Label(); //新建一个标签用于以后显示滑块的值
-}
-```
-
-跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用 skinName 属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定类名。接下来我们设置它的属性，宽度为500，最大值1024，最小值0，并用上面的 Label 来显示滑块的值。修改上面的代码如下：
-
-``` TypeScript
-class SliderDemo extends swan.Group{
-    public constructor() {
-        super();
-        this.myHSlider.skinName = "skins/HSliderSkin.exml"; //定义外部皮肤文件
-        this.myHSliderLable.text = "value:0";                   //设置标签的初始值
-        this.myHSliderLable.y = this.myHSlider.height + 10;     //设置标签在滑块的下面
-        this.myHSliderLable.horizontalCenter = 0;               //设置标签的居中属性
-        this.addChild(this.myHSliderLable);                     //添加到显示列表
-        this.addChild(this.myHSlider);                          //添加到显示列表
-
-        this.myHSlider.width = 500;                             //设置滑块的宽度
-        this.myHSlider.maximum = 1024;                          //设置滑块的最大值
-        this.myHSlider.minimum = 0;                             //设置滑块的最小值
-    }
-    private myHSlider:swan.HSlider = new swan.HSlider();
-    private myHSliderLable:swan.Label = new swan.Label();
-}
-```
-
-需要注意的是，我们的 SliderDemo 类的实例需要被添加至舞台才能显示。编译运行项目我们可以看到 SliderDemo 已经显示出来了。
-
-![](image/7-7-slider-1.png)
-
-通过监听其CHANGE事件可以动态获取滑块的值，通过 value 属性来获得其值。
-
-在 constructor() 函数中添加相关监听即可，代码如下：
-
-``` TypeScript
-this.myHSlider.on(lark.Event.CHANGE,this.onHChange,this);       //监听滑块滑动的过程
-```
-
-在 SliderDemo 中添加相关处理函数：
-
-``` TypeScript
-   private onHChange(e:lark.Event){
-        this.myHSliderLable.text = "value:" + this.myHSlider.value;  //将滑块的值显示出来
-    }
-```
-
-之后我们就可以看到获得的滑块值。
-
-![](image/7-7-slider-2.png)
-
-需要注意的是 liveDragging 属性如果被设置为 false 那么 value 将不会时时变化。
-
