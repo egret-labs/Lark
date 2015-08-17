@@ -1,34 +1,18 @@
 {
     "version": "1.0.1",
-    "registerClass":"lark",
+    "registerClass":"egret",
     "modules": [
         {
-            "name": "lark",
+            "name": "egret",
             "description": "Lark 核心库",
             "files": [
                 { "path": "../Defines.debug.ts", "debug": true },
                 { "path": "../Defines.release.ts", "debug": false },
-                { "path": "i18n/en_US.ts", "debug": true },
-                { "path": "i18n/zh_CN.ts", "debug": true },
-                { "path": "web/CanvasFactory.ts", "platform": "web" },
-                { "path": "web/HtmlSound.ts", "platform": "web" },
-                { "path": "web/HtmlSoundChannel.ts", "platform": "web" },
-                { "path": "web/LarkWeb.ts", "platform": "web" },
-                { "path": "web/WebBitmapData.ts", "platform": "web" },
-                { "path": "web/WebCapability.ts", "platform": "web" },
-                { "path": "web/WebGeolocation.ts", "platform": "web" },
-                { "path": "web/WebHttpRequest.ts", "platform": "web" },
-                { "path": "web/WebImageLoader.ts", "platform": "web" },
-                { "path": "web/WebMotion.ts", "platform": "web" },
-                { "path": "web/WebOrientation.ts", "platform": "web" },
-                { "path": "web/WebPlayer.ts", "platform": "web" },
-                { "path": "web/WebTextAdapter.ts", "platform": "web" },
-                { "path": "web/WebTouchHandler.ts", "platform": "web" },
-                { "path": "web/WebVideo.ts", "platform": "web" },
-                { "path": "web/WebXML.ts", "platform": "web" }
+                { "path": "net/NativeImageLoader.ts", "platform": "native" },
+                { "path": "native/NativeGetOption.ts", "platform": "native" }
             ],
-            "root": "src/lark",
-            "dependencies": [ ]
+            "root": "../Egret/src/egret",
+            "dependencies": []
         },
         {
             "name": "swan",
@@ -37,18 +21,10 @@
                 { "path": "i18n/en_US.ts", "debug": true },
                 { "path": "i18n/zh_CN.ts", "debug": true }
             ],
-            "root": "src/extension/swan",
-            "dependencies": [ "lark" ]
-        },
-        {
-            "name": "resource",
-            "description": "RES 资源加载库",
-            "files": [
-                { "path": "i18n/en_US.ts", "debug": true },
-                { "path": "i18n/zh_CN.ts", "debug": true }
-            ],
-            "root": "src/extension/resource",
-            "dependencies": [ "lark" ]
+            "sourceRoot": "src/extension/swan",
+            "root": "swanTmp",
+            "outFile":"../Egret/src/extension/",
+            "dependencies": [ "egret" ]
         }
     ],
     "platforms": [

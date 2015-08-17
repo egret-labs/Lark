@@ -125,6 +125,7 @@ declare module lark {
     export var manifest: lark.LarkManifest;
     export interface LarkManifest {
         version: string;
+        registerClass:string;
         modules: LarkModule[];
         platforms: LarkPlatform[];
         configurations: CompileConfiguration[];
@@ -148,7 +149,9 @@ declare module lark {
         description?: string;
         files?: Array<string|LarkSourceFile>;
         dependencies?: string[];
+        sourceRoot?: string;
         root?: string;
+        outFile?: string;
         noOtherTs?: boolean;
     }
 

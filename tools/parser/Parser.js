@@ -82,7 +82,14 @@ function parseCommandLine(commandLine) {
     parseStrings(commandLine);
     return options;
     function parseStrings(args) {
-        var i = 0;
+        var minefestBefore = "";
+        for (var i = 0; i < args.length; i++) {
+            if (args[i] == "-manifest") {
+                minefestBefore = args[i + 1];
+                i++;
+            }
+        }
+        i = 0;
         while (i < args.length) {
             var s = args[i++];
             if (s.charAt(0) === '-') {
@@ -108,7 +115,9 @@ function parseCommandLine(commandLine) {
                             options[opt.name] = args[i++] || "";
                             break;
                         case "array":
-                            options[opt.name] = (args[i++] || "").split(',').map(function (p) { return decodeURIComponent(p); });
+                            options[opt.name] = (args[i++] || "").split(',').map(function (p) {
+                                return decodeURIComponent(p);
+                            });
                     }
                 }
                 else {
@@ -138,7 +147,7 @@ function parseCommandLine(commandLine) {
             }
         }
         options.projectDir = file.joinPath(options.projectDir, "/");
-        var manifestPath = file.joinPath(options.larkRoot, "manifest.json");
+        var manifestPath = file.joinPath(options.larkRoot, minefestBefore + "manifest.json");
         var content = file.read(manifestPath);
         var manifest = lark.manifest;
         try {
