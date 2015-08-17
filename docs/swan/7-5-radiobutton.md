@@ -93,3 +93,4 @@ RadioButtonSkin.exml皮肤的代码如下：
     </s:Group>
 </s:Skin>
 ```
+其中的 ```<s:Label id="labelDisplay"/>``` 表示单选按钮上的默认文本组件，如果不设置该id，将无法使用 radioButton.label="xxxx" 显示文本。

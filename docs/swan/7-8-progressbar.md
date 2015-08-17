@@ -59,3 +59,5 @@ ProgressBarSkin.exml皮肤的代码如下：
 			 horizontalCenter="0" verticalCenter="0"/>
 </s:Skin>
 ```
+其中的 ```<s:Image id="thumb"/>``` 表示进度高亮的显示对象。
+如果不设置它，将无法显示当前的进度或者设置value定位进度。

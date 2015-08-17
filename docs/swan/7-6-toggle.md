@@ -80,3 +80,4 @@ ToggleButton.exml皮肤的代码如下：
                   textColor.disabledAndSelected="0xcccccc"  text="{label}"/>
 </s:Skin>
 ```
+其中的 ```<s:Label id="labelDisplay"/>``` 表示ToggleButton上的默认文本组件，如果不设置该id，将无法使用toggleButton.label="xxxx"显示文本。
