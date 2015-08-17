@@ -22,7 +22,7 @@ class CreateResource {
             }
         });
 
-        FileUtil.save(FileUtil.joinPath(lark.options.srcDir, "resource.json"), JSON.stringify(config, null, "  "));
+        FileUtil.save(FileUtil.joinPath(lark.options.srcDir, "resource/default.res.json"), JSON.stringify(config, null, "  "));
         return 0;
     }
 

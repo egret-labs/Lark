@@ -148,7 +148,7 @@ export function parseCommandLine(commandLine: string[]) {
 
         if (commands.length > 0) {
             options.command = commands[0];
-            if (file.isDirectory(commands[1])) {
+            if (file.isDirectory(commands[1]) || options.command=="create") {
                 options.projectDir = commands[1];
                 commands.splice(1, 1);
             }
@@ -169,6 +169,8 @@ export function parseCommandLine(commandLine: string[]) {
         if (options.projectDir == null)
             options.projectDir = process.cwd()
         else {
+            if (!file.exists(options.projectDir))
+                file.createDirectory(options.projectDir);
             var absPath = file.joinPath(process.cwd(), options.projectDir);
             if(file.isDirectory(absPath)){
                 options.projectDir = absPath;
