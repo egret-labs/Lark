@@ -14,6 +14,7 @@ var DoCreateCommand = (function () {
         FileUtil.copy(template, options.projectDir);
         CopyFiles.copyLark();
         copyTemplate(proj);
+        console.log(options.projectDir);
         var compileProject = new CompileProject();
         var result = compileProject.compileProject(options);
         CopyFiles.copyProjectFiles();
