@@ -23,13 +23,16 @@
         #menu {
             float: left;
             width: 200px;
-            height: 100%;
             border-right: 1px solid #55616C;
+            padding-top: 40px;
+        }
+        #menus {
             overflow:auto;
         }
         #samples {
             position:fixed;
             width: 200px;
+            top:0;
         }
 
             #menu a,#menu .head {
@@ -80,83 +83,84 @@
 <body>
     <div id="menu">
         <div id="samples" class="head">Samples</div>
-        <div class="head">.</div>
-        <div class="head head1">Lark</div>
-        <a href="?entry=BitmapExample">lark.Bitmap</a>
-        <a href="?entry=BitmapDataExample">lark.BitmapData</a>
-        <a href="?entry=BlendModeExample">lark.BlendMode</a>
-        <a href="?entry=CapabilitiesExample">lark.Capabilities</a>
-        <a href="?entry=DisplayObjectExample">lark.DisplayObject</a>
-        <a href="?entry=DisplayObjectContainerExample">lark.DisplayObjectContainer</a>
-        <a href="?entry=EventEmitterExample">lark.EventEmitter</a>
-        <a href="?entry=EventExample">lark.Event</a>
-        <a href="?entry=GeolocationExample">lark.Geolocation</a>
-        <a href="?entry=GraphicsExample">lark.Graphics</a>
-        <a href="?entry=HttpRequestExample">lark.HttpRequest</a>
-        <a href="?entry=ImageLoaderExample">lark.ImageLoader</a>
-        <a href="?entry=MotionExample">lark.Motion</a>
-        <a href="?entry=OrientationExample">lark.Orientation</a>
-        <a href="?entry=PointExample">lark.Point</a>
-        <a href="?entry=RectangleExample">lark.Rectangle</a>
-        <a href="?entry=ShapeExample">lark.Shape</a>
-        <a href="?entry=SoundExample">lark.Sound</a>
-        <a href="?entry=SpriteExample">lark.Sprite</a>
-        <a href="?entry=StageExample">lark.Stage</a>
-        <a href="?entry=StartTickExample">lark.startTick</a>
-        <a href="?entry=TextFieldExample">lark.TextField</a>
-        <a href="?entry=TextInputExample">lark.TextInput</a>
-        <a href="?entry=TextureExample">lark.Texture</a>
-        <a href="?entry=TimerEventExample">lark.TimerEvent</a>
-        <a href="?entry=TouchEventExample">lark.TouchEvent</a>
-        <a href="?entry=VideoExample">lark.Video</a>
+        <div id="menus">
+            <div class="head head1">Lark</div>
+            <a href="?entry=BitmapExample">lark.Bitmap</a>
+            <a href="?entry=BitmapDataExample">lark.BitmapData</a>
+            <a href="?entry=BlendModeExample">lark.BlendMode</a>
+            <a href="?entry=CapabilitiesExample">lark.Capabilities</a>
+            <a href="?entry=DisplayObjectExample">lark.DisplayObject</a>
+            <a href="?entry=DisplayObjectContainerExample">lark.DisplayObjectContainer</a>
+            <a href="?entry=EventEmitterExample">lark.EventEmitter</a>
+            <a href="?entry=EventExample">lark.Event</a>
+            <a href="?entry=GeolocationExample">lark.Geolocation</a>
+            <a href="?entry=GraphicsExample">lark.Graphics</a>
+            <a href="?entry=HttpRequestExample">lark.HttpRequest</a>
+            <a href="?entry=ImageLoaderExample">lark.ImageLoader</a>
+            <a href="?entry=MotionExample">lark.Motion</a>
+            <a href="?entry=OrientationExample">lark.Orientation</a>
+            <a href="?entry=PointExample">lark.Point</a>
+            <a href="?entry=RectangleExample">lark.Rectangle</a>
+            <a href="?entry=ShapeExample">lark.Shape</a>
+            <a href="?entry=SoundExample">lark.Sound</a>
+            <a href="?entry=SpriteExample">lark.Sprite</a>
+            <a href="?entry=StageExample">lark.Stage</a>
+            <a href="?entry=StartTickExample">lark.startTick</a>
+            <a href="?entry=TextFieldExample">lark.TextField</a>
+            <a href="?entry=TextInputExample">lark.TextInput</a>
+            <a href="?entry=TextureExample">lark.Texture</a>
+            <a href="?entry=TimerEventExample">lark.TimerEvent</a>
+            <a href="?entry=TouchEventExample">lark.TouchEvent</a>
+            <a href="?entry=VideoExample">lark.Video</a>
 
-        <div class="head head1">Swan</div>
-        <a href="?entry=ArrayCollectionExample">swan.ArrayCollection</a>
-        <a href="?entry=BasicLayoutExample">swan.BasicLayout</a>
-        <a href="?entry=BindingExample">swan.Binding</a>
-        <a href="?entry=BitmapFillModeExample">swan.BitmapFillMode</a>
-        <a href="?entry=CollectionEventExample">swan.CollectionEvent</a>
-        <a href="?entry=ColumnAlignExample">swan.ColumnAlign</a>
-        <a href="?entry=DefaultAssetAdapterExample">swan.DefaultAssetAdapter</a>
-        <a href="?entry=RangeExample">swan.Range</a>
-        <a href="?entry=ButtonExample">swan.Button</a>
-        <a href="?entry=CheckboxExample">swan.Checkbox</a>
-        <a href="?entry=ComponentExample">swan.Component</a>
-        <a href="?entry=DataGroupExample">swan.DataGroup</a>
-        <a href="?entry=DirectionExample">swan.Direction</a>
-        <a href="?entry=EditablTextExample">swan.EditablText</a>
-        <a href="?entry=GroupExample">swan.Group</a>
-        <a href="?entry=HScrollBarExample">swan.HScrollBar</a>
-        <a href="?entry=HSliderExample">swan.HSlider</a>
-        <a href="?entry=HorizontalLayoutExample">swan.HorizontalLayout</a>
-        <a href="?entry=ImageExample">swan.Image</a>
-        <a href="?entry=ItemRendererExample">swan.ItemRenderer</a>
-        <a href="?entry=ItemTapEventExample">swan.ItemTapEvent</a>
-        <a href="?entry=JustifyAlignExample">swan.JustifyAlign</a>
-        <a href="?entry=LabelExample">swan.Label</a>
-        <a href="?entry=ListExample">swan.List</a>
-        <a href="?entry=PanelExample">swan.Panel</a>
-        <a href="?entry=ProgressBarExample">swan.ProgressBar</a>
-        <a href="?entry=PropertyEventExample">swan.PropertyEvent</a>
-        <a href="?entry=RadioButtonExample">swan.RadioButton</a>
-        <a href="?entry=RadioButtonGroupExample">swan.RadioButtonGroup</a>
-        <a href="?entry=ResourceExample">RES</a>
-        <a href="?entry=RowAlignExample">swan.RowAlign</a>
-        <a href="?entry=ScrollerExample">swan.Scroller</a>
-        <a href="?entry=ScrollPolicyExample">swan.ScrollPolicy</a>
-        <a href="?entry=SkinExample">swan.Skin</a>
-        <a href="?entry=TabBarExample">swan.TabBar</a>
-        <a href="?entry=ThemeExample">swan.Theme</a>
-        <a href="?entry=ToggleButtonExample">swan.ToggleButton</a>
-        <a href="?entry=ToggleSwitchExample">swan.ToggleSwitch</a>
-        <a href="?entry=TileLayoutExample">swan.TileLayout</a>
-        <a href="?entry=TileOrientationExample">swan.TileOrientation</a>
-        <a href="?entry=UIEventExample">swan.UIEvent</a>
-        <a href="?entry=VerticalLayoutExample">swan.VerticalLayout</a>
-        <a href="?entry=ViewStackExample">swan.ViewStack</a>
-        <a href="?entry=VScrollBarExample">swan.VScrollBar</a>
-        <a href="?entry=VSliderExample">swan.VSlider</a>
-        <a href="?entry=WatcherExample">swan.Watcher</a>
+            <div class="head head1">Swan</div>
+            <a href="?entry=ArrayCollectionExample">swan.ArrayCollection</a>
+            <a href="?entry=BasicLayoutExample">swan.BasicLayout</a>
+            <a href="?entry=BindingExample">swan.Binding</a>
+            <a href="?entry=BitmapFillModeExample">swan.BitmapFillMode</a>
+            <a href="?entry=CollectionEventExample">swan.CollectionEvent</a>
+            <a href="?entry=ColumnAlignExample">swan.ColumnAlign</a>
+            <a href="?entry=DefaultAssetAdapterExample">swan.DefaultAssetAdapter</a>
+            <a href="?entry=RangeExample">swan.Range</a>
+            <a href="?entry=ButtonExample">swan.Button</a>
+            <a href="?entry=CheckboxExample">swan.Checkbox</a>
+            <a href="?entry=ComponentExample">swan.Component</a>
+            <a href="?entry=DataGroupExample">swan.DataGroup</a>
+            <a href="?entry=DirectionExample">swan.Direction</a>
+            <a href="?entry=EditablTextExample">swan.EditablText</a>
+            <a href="?entry=GroupExample">swan.Group</a>
+            <a href="?entry=HScrollBarExample">swan.HScrollBar</a>
+            <a href="?entry=HSliderExample">swan.HSlider</a>
+            <a href="?entry=HorizontalLayoutExample">swan.HorizontalLayout</a>
+            <a href="?entry=ImageExample">swan.Image</a>
+            <a href="?entry=ItemRendererExample">swan.ItemRenderer</a>
+            <a href="?entry=ItemTapEventExample">swan.ItemTapEvent</a>
+            <a href="?entry=JustifyAlignExample">swan.JustifyAlign</a>
+            <a href="?entry=LabelExample">swan.Label</a>
+            <a href="?entry=ListExample">swan.List</a>
+            <a href="?entry=PanelExample">swan.Panel</a>
+            <a href="?entry=ProgressBarExample">swan.ProgressBar</a>
+            <a href="?entry=PropertyEventExample">swan.PropertyEvent</a>
+            <a href="?entry=RadioButtonExample">swan.RadioButton</a>
+            <a href="?entry=RadioButtonGroupExample">swan.RadioButtonGroup</a>
+            <a href="?entry=ResourceExample">RES</a>
+            <a href="?entry=RowAlignExample">swan.RowAlign</a>
+            <a href="?entry=ScrollerExample">swan.Scroller</a>
+            <a href="?entry=ScrollPolicyExample">swan.ScrollPolicy</a>
+            <a href="?entry=SkinExample">swan.Skin</a>
+            <a href="?entry=TabBarExample">swan.TabBar</a>
+            <a href="?entry=ThemeExample">swan.Theme</a>
+            <a href="?entry=ToggleButtonExample">swan.ToggleButton</a>
+            <a href="?entry=ToggleSwitchExample">swan.ToggleSwitch</a>
+            <a href="?entry=TileLayoutExample">swan.TileLayout</a>
+            <a href="?entry=TileOrientationExample">swan.TileOrientation</a>
+            <a href="?entry=UIEventExample">swan.UIEvent</a>
+            <a href="?entry=VerticalLayoutExample">swan.VerticalLayout</a>
+            <a href="?entry=ViewStackExample">swan.ViewStack</a>
+            <a href="?entry=VScrollBarExample">swan.VScrollBar</a>
+            <a href="?entry=VSliderExample">swan.VSlider</a>
+            <a href="?entry=WatcherExample">swan.Watcher</a>
+        </div>
     </div>
     <div id="lark-sample" style="margin-left: 205px;height:100%" class="lark-player"
          data-entry-class="Main"
@@ -171,6 +175,13 @@
 
     <script>
 
+        resize();
+        function resize() {
+            var menus = document.getElementById('menus');
+            menus.style.height = (window.innerHeight - 40) + "px";
+        }
+        window.addEventListener("resize", resize);
+
         var entry = location.search && location.search.match(/\?entry\=(.*)/)[1] || "Main";
         var stage = document.getElementById("lark-sample");
         stage.setAttribute("data-entry-class", entry);
@@ -180,7 +191,6 @@
             active.setAttribute('name', entry);
             location.hash = entry;
         }
-
     </script>
 </body>
 </html>

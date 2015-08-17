@@ -37,7 +37,8 @@ module lark {
      * The Sound class lets you create a Sound object, load and play an external audio file into that object.
      * More detailed control of the sound is performed through the SoundChannel
      *
-     * @event egret.Event.COMPLETE Emit when the audio resource is loaded and ready to play
+     * @event lark.Event.COMPLETE Emit when the audio resource is loaded and ready to play
+     * @event lark.Event.IO_ERROR Emit when the audio resource is failed to load
      * @version Lark 1.0
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/media/SoundExample.ts
@@ -47,7 +48,8 @@ module lark {
      * Sound 允许您在应用程序中使用声音。使用 Sound 类可以创建 Sound 对象、将外部音频文件加载到该对象并播放该文件。
      * 可通过 SoundChannel 对声音执行更精细的控制，如控制音量和监控播放进度。
      *
-     * @event egret.Event.COMPLETE 音频加载完成时抛出
+     * @event lark.Event.COMPLETE 音频加载完成时抛出
+     * @event lark.Event.IO_ERROR 音频加载失败时抛出
      * @version Lark 1.0
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/media/SoundExample.ts
@@ -112,14 +114,14 @@ module lark {
         /**
          * @language en_US
          * Create Sound object, load an external audio file and play
-         * @param url Audio file URL
+         * @param url Audio file URL, Sound will start to load the media if url is not empty
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 创建 Sound 对象、将外部音频文件加载到该对象并播放该文件
-         * @param url 需要加载的音频文件URL
+         * @param url 需要加载的音频文件URL,如果指定了 url, Sound会立即开始加载指定的媒体文件
          * @version Lark 1.0
          * @platform Web,Native
          */

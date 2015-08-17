@@ -51,706 +51,194 @@ declare module lark {
 declare module lark {
     /**
      * @language en_US
-     * Stops the timer started by the lark.startTick() method.
-     * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
-     * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
-     * to render after processing of this method completes.
-     * @param thisObject the call back method's "this"
-     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
+     * The XMLNode class is the base class for all xml node.
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 停止之前用 startTick() 方法启动的计时器。
-     * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
-     * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
-     * @param thisObject 回调方法的this对象引用。
-     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
+     * XML节点基类
      * @version Lark 1.0
      * @platform Web,Native
      */
-    function stopTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The GraphicsGradient interface represents an opaque object describing a gradient. It is returned by the static methods
-     * Graphics.createLinearGradient() or Graphics.createRadialGradient().
-     * @see lark.Graphics#createLinearGradient()
-     * @see lark.Graphics#createRadialGradient()
-     * @see lark.Shape
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * GraphicsGradient 接口表示描述渐变的不透明对象。通过 Graphics.createLinearGradient() 或 Graphics.createRadialGradient() 等静态方法的返回值得到.
-     * @see lark.Graphics#createLinearGradient()
-     * @see lark.Graphics#createRadialGradient()
-     * @see lark.Shape
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    interface GraphicsGradient {
+    interface XMLNode {
         /**
          * @language en_US
-         * Adds a new stop, defined by an offset and a color, to the gradient. If the offset is not between 0 and 1 an
-         * error is thrown, if the color can't be parsed as a color, an error is thrown.
-         * @param offset the value between 0 and 1.
-         * @param color the color to add.
+         * a integer representing the type of the node, 1：XML，2：XMLAttribute，3：XMLText
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 添加一个由偏移值和颜色值指定的断点到渐变。如果偏移值不在0到1之间，将抛出错误，如果 color 不能被解析为有效的颜色值，也将抛出错误。
-         * @param offset 0到1之间的值
-         * @param color 要设置颜色值。
+         * 节点类型，1：XML，2：XMLAttribute，3：XMLText
          * @version Lark 1.0
          * @platform Web,Native
          */
-        addColorStop(offset: number, color: string): void;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The GraphicsPattern interface represents an opaque object describing a pattern, based on a BitmapData,
-     * created by the Graphics.createPattern() method.
-     * @see lark.Graphics#createPattern()
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * GraphicsPattern 接口表示描述一个模板（基于BitmapData）的不透明对象，通过 Graphics.createPattern() 静态方法创建.
-     * @see lark.Graphics#createPattern()
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    interface GraphicsPattern {
-    }
-}
-declare module lark {
-    /**
-     * @private
-     */
-    var $START_TIME: number;
-    /**
-     * @language en_US
-     * Used to compute relative time.this method returns the number of milliseconds since the Lark framework was initialized
-     * @returns The number of milliseconds since the Lark framework was initialized
-     * @example
-     * This example shows getting and printing the number of milliseconds since the Lark framework was initialized
-     * <pre>
-     *  var duration = lark.getTimer();
-     *  console.log("duration: " + duration);
-     * </pre>
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 用于计算相对时间。此方法返回自启动 Lark 框架以来经过的毫秒数。
-     * @returns 启动 Lark 框架以来经过的毫秒数。
-     * @example
-     * 获取并打印自启动 Lark 框架以来经过的毫秒数。
-     * <pre>
-     *  var duration = lark.getTimer();
-     *  console.log("duration: " + duration);
-     * </pre>
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function getTimer(): number;
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The Geolocation able to obtain the position of the device.
-     * Geolocation will emit CHANGE event when the device's location is changed.
-     * It will emit IO_ERROR event if the location request is denied
-     * or there is no location service on the device.
-     *
-     * @event lark.Event.CHANGE The device's location is changed
-     * @event lark.Event.IO_ERROR Error occurred while getting the location
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/sensor/GeolocationExample.ts
-     */
-    /**
-     * @language zh_CN
-     * Geolocation 能够从设备的定位服务获取设备的当前位置。
-     * 当设备的位置发生改变时 Geolocation 会派发 CHANGE 事件。
-     * 当定位请求被拒绝或该设备没有定位服务时 Geolocation 会派发 IO_ERROR 事件。
-     *
-     * @event lark.Event.CHANGE 设备位置发生改变
-     * @event lark.Event.IO_ERROR 获取设备位置时发生错误
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/sensor/GeolocationExample.ts
-     */
-    interface Geolocation extends IEventEmitter {
+        nodeType: number;
         /**
          * @language en_US
-         * Start to monitor the device's location
-         * @returns
+         * the parent node of this xml node.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 开始监听设备位置信息
-         * @returns
+         * 节点所属的父级节点
          * @version Lark 1.0
          * @platform Web,Native
          */
-        start(): void;
+        parent: XML;
+    }
+    /**
+     * @language en_US
+     * The XML class contains properties for working with XML objects.
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/utils/XMLExample.ts
+     */
+    /**
+     * @language zh_CN
+     * XML 类包含用于处理 XML 对象的属性。
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/utils/XMLExample.ts
+     */
+    interface XML extends XMLNode {
         /**
          * @language en_US
-         * Stop monitor the device's location
-         * @returns
+         * the attributes of this xml node.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 停止监听设备位置信息
-         * @returns
+         * 当前节点上的属性列表
          * @version Lark 1.0
          * @platform Web,Native
          */
-        stop(): void;
+        attributes: any;
+        /**
+         * @language en_US
+         * the children of the xml node.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当前节点的子节点列表
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        children: XMLNode[];
+        /**
+         * @language en_US
+         * the full name of this xml node. For example,the name of <s:Button/> is "s:Button".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点完整名称。例如节点 <s:Button/> 的 name 为："s:Button"
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        name: string;
+        /**
+         * @language en_US
+         * thie namesapce prefix of this xml node.For example,the prefix of <s:Button/> is "s".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点的命名空间前缀。例如节点 <s:Button/> 的 prefix 为：s
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        prefix: string;
+        /**
+         * @language en_US
+         * the local name of this xml node. For example,the local name of <s:Button/> is "Button".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点的本地名称。例如节点 <s:Button/> 的 localName 为：Button
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        localName: string;
+        /**
+         * @language en_US
+         * the namesapce uri of this xml node.For example,the namespace uri of <s:Skin xmlns:s="http://ns.egret.com/swan"/> is "http://ns.egret.com/swan".
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 节点的命名空间地址。例如节点 <s:Skin xmlns:s="http://ns.egret.com/swan"/> 的 namespace 为： http://ns.egret.com/swan
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        namespace: string;
     }
     /**
-     * @copy lark.Geolocation
+     * @language en_US
+     * The XMLText class represents a string node in the XML.
+     * @version Lark 1.0
+     * @platform Web,Native
      */
-    var Geolocation: {
-        new (): Geolocation;
+    /**
+     * @language zh_CN
+     * XMLText 类表示在XML中的文本节点
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    interface XMLText extends XMLNode {
+        /**
+         * @language en_US
+         * the text content
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 文本内容
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        text: string;
+    }
+    /**
+     * @language en_US
+     * The XML class contains properties for working with XML objects.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * XML 类包含用于处理 XML 对象的属性。
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    var XML: {
+        /**
+         * @language en_US
+         * parses a text to XML instance.
+         * @param text the text to be parsed.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 解析字符串为XML对象
+         * @param text 要解析的XML对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        parse(text: string): XML;
     };
-}
-declare module lark.sys {
-    /**
-     * @private
-     * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
-     */
-    var sharedRenderContext: sys.RenderContext;
-    /**
-     * @private
-     * surfaceFactory实例
-     */
-    var surfaceFactory: SurfaceFactory;
-    /**
-     * @private
-     */
-    interface SurfaceFactory {
-        /**
-         * @private
-         * 从对象池取出或创建一个新的Surface实例
-         * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
-         */
-        create(useOnce?: boolean): Surface;
-        /**
-         * @private
-         * 释放一个Surface实例
-         * @param surface 要释放的Surface实例
-         */
-        release(surface: Surface): void;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The StageScaleMode class provides values for the Stage.scaleMode property.
-     * @see lark.Stage#scaleMode
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * StageScaleMode 类为舞台缩放模式提供值。
-     * @see lark.Stage#scaleMode
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    class StageScaleMode {
-        /**
-         * @language en_US
-         * Specifies that the size of the application be fixed, so that it remains unchanged even as the size of the screen
-         * changes. Cropping might occur if the screen is smaller than the content.<br/>
-         * In this mode,the size of the stage (Stage.stageWidth,Stage.stageHeight) always equals to the size of the screen.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 不缩放应用程序内容。即使在更改播放器视口大小时，它仍然保持不变。如果播放器视口比内容小，则可能进行一些裁切。
-         * 在此模式下，舞台尺寸（Stage.stageWidth,Stage.stageHeight）始终跟播放器视口大小保持一致。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static NO_SCALE: string;
-        /**
-         * @language en_US
-         * @private
-         * Specifies that the entire application be visible in the specified area without distortion while maintaining the
-         * original aspect ratio of the application. Borders can appear on two sides of the application.
-         * In this mode,the size of the stage (Stage.stageWidth,Stage.stageHeight) always equals to the initial content size.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * @private
-         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容的较宽方向填满播放器视口，另一个方向的两侧可能会不够宽而留有黑边。
-         * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static SHOW_ALL: string;
-        /**
-         * @language en_US
-         * Specifies that the entire application fill the specified area, without distortion but possibly with some cropping,
-         * while maintaining the original aspect ratio of the application.
-         * In this mode,the size of the stage (Stage.stageWidth,Stage.stageHeight) always equals to the initial content size.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容的较窄方向填满播放器视口，另一个方向的两侧可能会超出播放器视口而被裁切。
-         * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static NO_BORDER: string;
-        /**
-         * @language en_US
-         * Specifies that the entire application be visible in the specified area without trying to preserve the original
-         * aspect ratio. Distortion can occur.
-         * In this mode,the size of the stage (Stage.stageWidth,Stage.stageHeight) always equals to the initial content size.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 不保持原始宽高比缩放应用程序内容，缩放后应用程序内容正好填满播放器视口。
-         * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static EXACT_FIT: string;
-        /**
-         * @language en_US
-         * Specifies that the width of the application be fixed,while maintaining the original aspect ratio of the application,
-         * so that the height of the application might changes. Cropping might occur if the height of the screen is smaller than the content.
-         * In this mode,the stage width always equals to the initial content width,but the stage height is determined by the content height
-         * and the scaling factor of the stage width and the content width.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容在水平和垂直方向都填满播放器视口，但只保持应用程序内容的原始宽度不变，高度可能会改变。
-         * 在此模式下，舞台宽度(Stage.stageWidth)始终等于初始化时外部传入的应用程序内容宽度。舞台高度(Stage.stageHeight)由当前的缩放比例与播放器视口高度决定。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static FIXED_WIDTH: string;
-        /**
-         * @language en_US
-         * Specifies that the height of the application be fixed,while maintaining the original aspect ratio of the application,
-         * so that the width of the application might changes. Cropping might occur if the width of the screen is smaller than the content.
-         * In this mode,the stage height always equals to the initial content height,but the stage width is determined by the content width
-         * and the scaling factor of the stage height and the content height.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容在水平和垂直方向都填满播放器视口，但只保持应用程序内容的原始高度不变，宽度可能会改变。
-         * 在此模式下，舞台高度(Stage.stageHeight)始终等于初始化时外部传入的应用程序内容高度。舞台宽度(Stage.stageWidth)由当前的缩放比例与播放器视口宽度决定。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static FIXED_HEIGHT: string;
-    }
-}
-declare module lark.sys {
-    /**
-     * @private
-     * 呈现最终绘图结果的画布
-     */
-    interface Surface extends BitmapData {
-        /**
-         * @private
-         * 绘图上下文
-         */
-        renderContext: RenderContext;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * Indicates whether an object is a instance of the class or interface specified as the parameter.This method is similar
-     * to the instanceOf operator which indicate whether an object is a instance of the specific class,besides, it can indicate
-     * whether an object is a instance of the specific interface.
-     * @param instance the instance to be checked.
-     * @param typeName the string value representing a specific class or interface.
-     * @returns A value of true if the object is a instance of the class or interface specified as the parameter.
-     * @example
-     * <pre>
-     *     var instance = new lark.Sprite();
-     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
-     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
-     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
-     * </pre>
-     * @see lark.registerClass()
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字作用类似，但除了判断类定义也能判断接口的实现。
-     * @param instance 要判断的实例。
-     * @param typeName 类或接口的完全名称.
-     * @returns 返回true表示当前对象是指定类或接口的实例。
-     * @example
-     * <pre>
-     *     var instance = new lark.Sprite();
-     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
-     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
-     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
-     * </pre>
-     * @see lark.registerClass()
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function is(instance: any, typeName: string): boolean;
-}
-declare module lark.sys {
-    /**
-     * @private
-     * 设备屏幕
-     */
-    interface Screen {
-        /**
-         * @private
-         * 更新屏幕视口尺寸
-         */
-        updateScreenSize(): any;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The DisplayObjectContainer class is the base class for all objects that can serve as display object containers on
-     * the display list. The display list manages all objects displayed in the runtime. Use the DisplayObjectContainer
-     * class to arrange the display objects in the display list. Each DisplayObjectContainer object has its own child list
-     * for organizing the z-order of the objects. The z-order is the front-to-back order that determines which object is
-     * drawn in front, which is behind, and so on.
-     * @see lark.DisplayObject
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/DisplayObjectContainerExample.ts
-     */
-    /**
-     * @language zh_CN
-     * DisplayObjectContainer 接口定义显示列表中的显示对象容器。该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer
-     * 排列显示列表中的显示对象。每个 DisplayObjectContainer 对象都有自己的子级列表，用于组织对象的 Z 轴顺序。Z 轴顺序是由前至后的顺序，
-     * 可确定哪个对象绘制在前，哪个对象绘制在后等。
-     * @see lark.DisplayObject
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/DisplayObjectContainerExample.ts
-     */
-    interface DisplayObjectContainer extends DisplayObject {
-        /**
-         * @language en_US
-         * Returns the number of children of this object.
-         * @readOnly
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回此对象的子项数目。
-         * @readOnly
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        numChildren: number;
-        /**
-         * @language en_US
-         * Adds a child DisplayObject instance to this DisplayObjectContainer instance. The child is added to the front
-         * (top) of all other children in this DisplayObjectContainer instance. (To add a child to a specific index position,
-         * use the addChildAt() method.)If you add a child object that already has a different display object container
-         * as a parent, the object is removed from the child list of the other display object container.
-         * @param child The DisplayObject instance to add as a child of this DisplayObjectContainer instance.
-         * @returns 在 child The DisplayObject instance that you pass in the child parameter.
-         * @see #addChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他
-         * 所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
-         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
-         * @returns 在 child 参数中传递的 DisplayObject 实例。
-         * @see #addChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        addChild(child: DisplayObject): DisplayObject;
-        /**
-         * @language en_US
-         * Adds a child DisplayObject instance to this DisplayObjectContainer instance. The child is added at the index position
-         * specified. An index of 0 represents the back (bottom) of the display list for this DisplayObjectContainer object.
-         * If you add a child object that already has a different display object container as a parent, the object is removed
-         * from the child list of the other display object container.
-         * @param child The DisplayObject instance to add as a child of this DisplayObjectContainer instance.
-         * @param index The index position to which the child is added. If you specify a currently occupied index position,
-         * the child object that exists at that position and all higher positions are moved up one position in the child list.
-         * @returns The DisplayObject instance that you pass in the child parameter.
-         * @see #addChild()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。索引为 0 表示该
-         * DisplayObjectContainer 对象的显示列表的后（底）部。如果添加一个已将其它显示对象容器作为父项的子对象，则会从其它显示对象容器的子列表中删除该对象。
-         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
-         * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
-         * @returns 在 child 参数中传递的 DisplayObject 实例。
-         * @see #addChild()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        addChildAt(child: DisplayObject, index: number): DisplayObject;
-        /**
-         * @language en_US
-         * Determines whether the specified display object is a child of the DisplayObjectContainer instance or the instance
-         * itself. The search includes the entire display list including this DisplayObjectContainer instance. Grandchildren,
-         * great-grandchildren, and so on each return true.
-         * @param child The child object to test.
-         * @returns true if the child object is a child of the DisplayObjectContainer or the container itself; otherwise false.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。
-         * 孙项、曾孙项等，每项都返回 true。
-         * @param child 要测试的子对象。
-         * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        contains(child: DisplayObject): boolean;
-        /**
-         * @language en_US
-         * Returns the child display object instance that exists at the specified index.
-         * @param index The index position of the child object.
-         * @returns The child display object at the specified index position.
-         * @see #getChildByName()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回位于指定索引处的子显示对象实例。
-         * @param index 子对象的索引位置。
-         * @returns 位于指定索引位置处的子显示对象。
-         * @see #getChildByName()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        getChildAt(index: number): DisplayObject;
-        /**
-         * @language en_US
-         * Returns the index position of a child DisplayObject instance.
-         * @param child The DisplayObject instance to identify.
-         * @returns The index position of the child display object to identify.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回 DisplayObject 的 child 实例的索引位置。
-         * @returns 要查找的子显示对象的索引位置。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        getChildIndex(child: DisplayObject): number;
-        /**
-         * @language en_US
-         * Returns the child display object that exists with the specified name. If more that one child display object has
-         * the specified name, the method returns the first object in the child list.The getChildAt() method is faster than
-         * the getChildByName() method. The getChildAt() method accesses a child from a cached array, whereas the getChildByName()
-         * method has to traverse a linked list to access a child.
-         * @param name The name of the child to return.
-         * @returns The child display object with the specified name.
-         * @see #getChildAt()
-         * @see lark.DisplayObject#name
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 返回具有指定名称的子显示对象。如果多个子显示对象具有指定名称，则该方法会返回子级列表中的第一个对象。
-         * getChildAt() 方法比 getChildByName() 方法快。getChildAt() 方法从缓存数组中访问子项，而 getChildByName() 方法则必须遍历链接的列表来访问子项。
-         * @param name 要返回的子项的名称。
-         * @returns 具有指定名称的子显示对象。
-         * @see #getChildAt()
-         * @see lark.DisplayObject#name
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        getChildByName(name: string): DisplayObject;
-        /**
-         * @language en_US
-         * Removes the specified child DisplayObject instance from the child list of the DisplayObjectContainer instance.
-         * The parent property of the removed child is set to null , and the object is garbage collected if no other references
-         * to the child exist. The index positions of any display objects above the child in the DisplayObjectContainer are
-         * decreased by 1.
-         * @param child The DisplayObject instance to remove.
-         * @returns The DisplayObject instance that you pass in the child parameter.
-         * @see #removeChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从 DisplayObjectContainer 实例的子列表中删除指定的 child DisplayObject 实例。将已删除子项的 parent 属性设置为 null；
-         * 如果不存在对该子项的任何其它引用，则将该对象作为垃圾回收。DisplayObjectContainer 中该子项之上的任何显示对象的索引位置都减去 1。
-         * @param child 要删除的 DisplayObject 实例。
-         * @returns 在 child 参数中传递的 DisplayObject 实例。
-         * @see #removeChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        removeChild(child: DisplayObject): DisplayObject;
-        /**
-         * @language en_US
-         * Removes a child DisplayObject from the specified index position in the child list of the DisplayObjectContainer.
-         * The parent property of the removed child is set to null, and the object is garbage collected if no other references
-         * to the child exist. The index positions of any display objects above the child in the DisplayObjectContainer are decreased by 1.
-         * @param index The child index of the DisplayObject to remove.
-         * @returns The DisplayObject instance that was removed.
-         * @see #removeChild()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。将已删除子项的 parent 属性设置为 null；
-         * 如果没有对该子项的任何其他引用，则将该对象作为垃圾回收。DisplayObjectContainer 中该子项之上的任何显示对象的索引位置都减去 1。
-         * @param index 要删除的 DisplayObject 的子索引。
-         * @returns 已删除的 DisplayObject 实例。
-         * @see #removeChild()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        removeChildAt(index: number): DisplayObject;
-        /**
-         * @language en_US
-         * Changes the position of an existing child in the display object container. This affects the layering of child objects.
-         * @param child The child DisplayObject instance for which you want to change the index number.
-         * @param index The resulting index number for the child display object.
-         * @see #addChildAt()
-         * @see #getChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 更改现有子项在显示对象容器中的位置。这会影响子对象的分层。
-         * @param child 要为其更改索引编号的 DisplayObject 子实例。
-         * @param index 生成的 child 显示对象的索引编号。当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
-         * @see #addChildAt()
-         * @see #getChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        setChildIndex(child: DisplayObject, index: number): void;
-        /**
-         * @language en_US
-         * Swaps the z-order (front-to-back order) of the child objects at the two specified index positions in the child
-         * list. All other child objects in the display object container remain in the same index positions.
-         * @param index1 The index position of the first child object.
-         * @param index2 The index position of the second child object.
-         * @see #swapChildren()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
-         * @param index1 第一个子对象的索引位置。
-         * @param index2 第二个子对象的索引位置。
-         * @see #swapChildren()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        swapChildrenAt(index1: number, index2: number): void;
-        /**
-         * @language en_US
-         * Swaps the z-order (front-to-back order) of the two specified child objects. All other child objects in the
-         * display object container remain in the same index positions.
-         * @param child1 The first child object.
-         * @param child2 The second child object.
-         * @see #swapChildrenAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
-         * @param child1 第一个子对象。
-         * @param child2 第二个子对象。
-         * @see #swapChildrenAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        swapChildren(child1: DisplayObject, child2: DisplayObject): void;
-        /**
-         * @language en_US
-         * Removes all child DisplayObject instances from the child list of the DisplayObjectContainer instance. The parent
-         * property of the removed children is set to null , and the objects are garbage collected if no other references to the children exist.
-         * @see #removeChild()
-         * @see #removeChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
-         * @see #removeChild()
-         * @see #removeChildAt()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        removeChildren(): void;
-        /**
-         * @language en_US
-         * Determines whether or not the children of the object are touch, or user input device, enabled. If an object is
-         * enabled, a user can interact with it by using a touch or user input device.
-         * @default true
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 确定对象的子级是否支持触摸或用户输入设备。如果对象支持触摸或用户输入设备，用户可以通过使用触摸或用户输入设备与之交互。
-         * @default true
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        touchChildren: boolean;
-    }
 }
 declare module lark {
     /**
@@ -806,533 +294,6 @@ declare module lark {
          */
         BUBBLING_PHASE = 3,
     }
-}
-declare module lark {
-    /**
-     * @copy lark.Motion
-     */
-    var Motion: {
-        new (): Motion;
-    };
-    /**
-     * @language en_US
-     * The Motion class emits events based on activity detected by the device's motion sensor.
-     * This data represents the device's movement along a 3-dimensional axis. When the device moves,
-     * the sensor detects this movement and emit the CHANGE event. @see lark.MotionEvent
-     *
-     * @event lark.Event.CHANGE device is moved
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/sensor/MotionExample.ts
-     */
-    /**
-     * @language zh_CN
-     * Motion 类从用户设备读取运动状态信息并派发 CHANGE 事件。
-     * 当设备移动时，传感器会检测到此移动并返回设备加速度，重力和旋转数据。@see lark.MotionEvent
-     * Motion 类提供了 start 和 stop 方法，来启动和停止运动信息检查
-     *
-     * @event lark.Event.CHANGE 运动状态发生改变
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/sensor/MotionExample.ts
-     */
-    interface Motion extends IEventEmitter {
-        /**
-         * @language en_US
-         * Start to monitor device movement
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 开始监听设备运动状态
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        start(): void;
-        /**
-         * @language en_US
-         * Stop monitor device movement
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 停止监听设备运动状态
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        stop(): void;
-    }
-    /**
-     * @language en_US
-     * A DeviceRotationRate object provides information about the rate at which
-     * the device is rotating around all three axes.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * DeviceRotationRate 提供设备围绕三个轴旋转的角速度信息，单位是 角度/秒
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    interface DeviceRotationRate {
-        /**
-         * @language en_US
-         * The amount of rotation around the Z axis, in degrees per second.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设备绕 Z 轴旋转的角速度信息，单位是 度/秒
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        alpha: number;
-        /**
-         * @language en_US
-         * The amount of rotation around the X axis, in degrees per second.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设备绕 X 轴旋转的角速度信息，单位是 度/秒
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        beta: number;
-        /**
-         * @language en_US
-         * The amount of rotation around the Y axis, in degrees per second.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 设备绕 Y 轴旋转的角速度信息，单位是 度/秒
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        gamma: number;
-    }
-    /**
-     * @language en_US
-     * A DeviceAcceleration object provides information about the amount
-     * of acceleration the device is experiencing along all three axes.
-     * Acceleration is expressed in m/s2.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * DeviceAcceleration 提供设备在三个维度的加速度信息，加速度值的单位是 m/s2
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    interface DeviceAcceleration {
-        /**
-         * @language en_US
-         * The amount of acceleration along the X axis
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * X 轴方向的加速度值
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        x: number;
-        /**
-         * @language en_US
-         * The amount of acceleration along the Y axis
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * Y 轴方向的加速度值
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        y: number;
-        /**
-         * @language en_US
-         * The amount of acceleration along the Z axis
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * Z 轴方向的加速度值
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        z: number;
-    }
-}
-declare module lark.sys {
-    /**
-     * @private
-     */
-    interface Renderable extends HashObject {
-    }
-}
-declare module lark {
-    /**
-     * @copy lark.Orientation
-     */
-    var Orientation: {
-        new (): Orientation;
-    };
-    /**
-     * @language en_US
-     * Orientation monitor the orientation of the device, send CHANGE event when the orientation is changed
-     *
-     * @event lark.Event.CHANGE device's orientation is changed
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/sensor/OrientationExample.ts
-     */
-    /**
-     * @language zh_CN
-     * Orientation 监听设备方向的变化，当方向变化时派发 CHANGE 事件
-     * @event lark.Event.CHANGE 设备方向改变时派发
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/sensor/OrientationExample.ts
-     */
-    interface Orientation extends IEventEmitter {
-        /**
-         * @language en_US
-         * Start to monitor the device's orientation
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 开始监听设备方向变化
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        start(): void;
-        /**
-         * @language en_US
-         * Stop monitor the device's orientation
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 停止监听设备方向变化
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        stop(): void;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The IEventEmitter interface defines methods for adding or removing event listeners, checks whether specific types
-     * of event listeners are registered, and emits events. Event targets are an important part of the Lark event model.
-     * The event target serves as the focal point for how events flow through the display list hierarchy. When an event
-     * such as a touch tap occurs, an event object is emitted into the event flow from the root of the display list.
-     * The event object makes a round-trip journey to the event target, which is conceptually divided into three phases: <br/>
-     * the capture phase includes the journey from the root to the last node before the event target's node; the target
-     * phase includes only the event target node; and the bubbling phase includes any subsequent nodes encountered on the
-     * return trip to the root of the display list.In general, the easiest way for a user-defined class to gain event
-     * emitting capabilities is to extend EventEmitter. If this is impossible (that is, if the class is already
-     * extending another class), you can instead implement the IEventEmitter interface, create an EventEmitter member,
-     * and write simple hooks to route calls into the aggregated EventEmitter.
-     * @see lark.EventEmitter
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * IEventEmitter 接口定义用于添加或删除事件侦听器的方法，检查是否已注册特定类型的事件侦听器，并调度事件。
-     * 事件目标是 Lark 事件模型的重要组成部分。事件目标是事件如何通过显示列表层次结构这一问题的焦点。当发生触摸轻拍事件时，
-     * 会将事件对象调度到从显示列表根开始的事件流中。事件对象进行到事件目标的往返行程，在概念上，此往返行程被划分为三个阶段：<br/>
-     * 捕获阶段包括从根到事件目标节点之前的最后一个节点的行程，目标阶段仅包括事件目标节点，冒泡阶段包括到显示列表的根的回程上遇到的任何后续节点。
-     * 通常，使用户定义的类能够调度事件的最简单方法是扩展 EventEmitter。如果无法扩展（即，如果该类已经扩展了另一个类），
-     * 则可以实现 IEventEmitter 接口，创建 EventEmitter 成员，并编写一些简单的挂钩，将调用连接到聚合的 EventEmitter 中。
-     * @see lark.EventEmitter
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    interface IEventEmitter extends HashObject {
-        /**
-         * @language en_US
-         * Registers an event listener object with an EventEmitter object so that the listener receives notification of an
-         * event. You can register event listeners on all nodes in the display list for a specific type of event, phase,
-         * and priority.After you successfully register an event listener, you cannot change its priority through additional
-         * calls to on(). To change a listener's priority, you must first call removeListener(). Then you can register the
-         * listener again with the new priority level.After the listener is registered, subsequent calls to on() with a
-         * different value for either type or useCapture result in the creation of a separate listener registration. <br/>
-         * When you no longer need an event listener, remove it by calling EventEmitter.removeListener(); otherwise, memory
-         * problems might result. Objects with registered event listeners are not automatically removed from memory because
-         * the garbage collector does not remove objects that still have references.Copying an EventEmitter instance does
-         * not copy the event listeners attached to it. (If your newly created node needs an event listener, you must attach
-         * the listener after creating the node.) However, if you move an EventEmitter instance, the event listeners attached
-         * to it move along with it.If the event listener is being registered on a node while an event is also being processed
-         * on this node, the event listener is not triggered during the current phase but may be triggered during a later phase
-         * in the event flow, such as the bubbling phase.If an event listener is removed from a node while an event is being
-         * processed on the node, it is still triggered by the current actions. After it is removed, the event listener is
-         * never invoked again (unless it is registered again for future processing).
-         * @param type The type of event.
-         * @param listener The listener function that processes the event. This function must accept an event object as
-         * its only parameter and must return nothing, as this example shows: function(evt:Event):void  The function can
-         * have any name.
-         * @param thisObject the listener function's "this"
-         * @param useCapture Determines whether the listener works in the capture phase or the bubbling phases. If useCapture
-         * is set to true, the listener processes the event only during the capture phase and not in the bubbling phase.
-         * If useCapture is false, the listener processes the event only during the bubbling phase. To listen for the event
-         * in all three phases, call on() twice, once with useCapture set to true, then again with useCapture set to false.
-         * @param  priority The priority level of the event listener. Priorities are designated by a integer. The higher
-         * the number, the higher the priority. All listeners with priority n are processed before listeners of priority n-1.
-         * If two or more listeners share the same priority, they are processed in the order in which they were added.
-         * The default priority is
-         * @see #once()
-         * @see #removeListener()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 使用 EventEmitter 对象注册事件侦听器对象，以使侦听器能够接收事件通知。可以为特定类型的事件、阶段和优先级在显示列表的所有节
-         * 点上注册事件侦听器。成功注册一个事件侦听器后，无法通过额外调用 on() 来更改其优先级。要更改侦听器的优先级，必须
-         * 先调用 removeListener()。然后，可以使用新的优先级再次注册该侦听器。注册该侦听器后，如果继续调用具有不同 type 或 useCapture
-         * 值的 on()，则会创建单独的侦听器注册。<br/>
-         * 如果不再需要某个事件侦听器，可调用 EventEmitter.removeListener()
-         * 删除它；否则会产生内存问题。由于垃圾回收器不会删除仍包含引用的对象，因此不会从内存中自动删除使用已注册事件侦听器的对象。复制
-         * EventEmitter 实例时并不复制其中附加的事件侦听器。（如果新近创建的节点需要一个事件侦听器，必须在创建该节点后附加该侦听器。）
-         * 但是，如果移动 EventEmitter 实例，则其中附加的事件侦听器也会随之移动。如果在正在处理事件的节点上注册事件侦听器，则不会在当
-         * 前阶段触发事件侦听器，但会在事件流的稍后阶段触发，如冒泡阶段。如果从正在处理事件的节点中删除事件侦听器，则该事件侦听器仍由当前操
-         * 作触发。删除事件侦听器后，决不会再次调用该事件侦听器（除非再次注册以备将来处理）。
-         * @param type 事件的类型。
-         * @param listener 处理事件的侦听器函数。此函数必须接受 Event 对象作为其唯一的参数，并且不能返回任何结果，
-         * 如下面的示例所示： function(evt:Event):void 函数可以有任何名称。
-         * @param listener 侦听函数绑定的this对象
-         * @param useCapture 确定侦听器是运行于捕获阶段还是运行于冒泡阶段。如果将 useCapture 设置为 true，
-         * 则侦听器只在捕获阶段处理事件，而不在冒泡阶段处理事件。如果 useCapture 为 false，则侦听器只在冒泡阶段处理事件。
-         * 要在两个阶段都侦听事件，请调用 on() 两次：一次将 useCapture 设置为 true，一次将 useCapture 设置为 false。
-         * @param  priority 事件侦听器的优先级。优先级由一个带符号的整数指定。数字越大，优先级越高。优先级为 n 的所有侦听器会在
-         * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
-         * @see #once()
-         * @see #removeListener()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        /**
-         * @language en_US
-         * Registers an event listener object with an EventEmitter object so that the listener receives notification of an
-         * event. Different from the on() method,the listener receives notification only once,and then it will be removed
-         * automatically.
-         * @param type The type of event.
-         * @param listener The listener function that processes the event. This function must accept an event object as
-         * its only parameter and must return nothing, as this example shows: function(evt:Event):void  The function can
-         * have any name.
-         * @param thisObject the listener function's "this"
-         * @param useCapture Determines whether the listener works in the capture phase or the bubbling phases. If useCapture
-         * is set to true, the listener processes the event only during the capture phase and not in the bubbling phase.
-         * If useCapture is false, the listener processes the event only during the bubbling phase. To listen for the event
-         * in all three phases, call on() twice, once with useCapture set to true, then again with useCapture set to false.
-         * @param  priority The priority level of the event listener. Priorities are designated by a integer. The higher
-         * the number, the higher the priority. All listeners with priority n are processed before listeners of priority n-1.
-         * If two or more listeners share the same priority, they are processed in the order in which they were added.
-         * The default priority is
-         * @see #on()
-         * @see #removeListener()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 添加仅回调一次的事件侦听器，此方法与on()方法不同，on()方法会持续产生回调，而此方法在第一次回调时就会自动移除监听。
-         * @param type 事件的类型。
-         * @param listener 处理事件的侦听器函数。此函数必须接受 Event 对象作为其唯一的参数，并且不能返回任何结果，
-         * 如下面的示例所示： function(evt:Event):void 函数可以有任何名称。
-         * @param thisObject 侦听函数绑定的this对象
-         * @param useCapture 确定侦听器是运行于捕获阶段还是运行于冒泡阶段。如果将 useCapture 设置为 true，
-         * 则侦听器只在捕获阶段处理事件，而不在冒泡阶段处理事件。如果 useCapture 为 false，则侦听器只在冒泡阶段处理事件。
-         * 要在两个阶段都侦听事件，请调用 once() 两次：一次将 useCapture 设置为 true，一次将 useCapture 设置为 false。
-         * @param  priority 事件侦听器的优先级。优先级由一个带符号整数指定。数字越大，优先级越高。优先级为 n 的所有侦听器会在
-         * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
-         * @see #on()
-         * @see #removeListener()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        once(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
-        /**
-         * @language en_US
-         * Removes a listener from the EventEmitter object. If there is no matching listener registered with the
-         * EventEmitter object, a call to this method has no effect.
-         * @param type The type of event.
-         * @param listener The listener object to remove.
-         * @param thisObject the listener function's "this"
-         * @param useCapture Specifies whether the listener was registered for the capture phase or the bubbling phases.
-         * If the listener was registered for both the capture phase and the bubbling phases, two calls to removeListener()
-         * are required to remove both: one call with useCapture set to true, and another call with useCapture set to false.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 从 EventEmitter 对象中删除侦听器。如果没有向 EventEmitter 对象注册任何匹配的侦听器，则对此方法的调用没有任何效果。
-         * @param type 事件的类型。
-         * @param listener 要删除的侦听器对象
-         * @param thisObject 侦听函数绑定的this对象
-         * @param useCapture 指出是为捕获阶段还是为冒泡阶段注册了侦听器。如果为捕获阶段以及冒泡阶段注册了侦听器，则需要对
-         * removeListener() 进行两次调用才能将这两个侦听器删除：一次调用将 useCapture 设置为 true，另一次调用将 useCapture 设置为 false。。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        removeListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean): void;
-        /**
-         * @language en_US
-         * Checks whether the EventEmitter object has any listeners registered for a specific type of event. This allows
-         * you to determine where an EventEmitter object has altered handling of an event type in the event flow hierarchy.
-         * To determine whether a specific event type will actually trigger an event listener, use IEventEmitter.willTrigger().
-         * The difference between hasListener() and willTrigger() is that hasListener() examines only the object to
-         * which it belongs, whereas willTrigger() examines the entire event flow for the event specified by the type parameter.
-         * @param type The type of event.
-         * @returns A value of true if a listener of the specified type is registered; false otherwise.
-         * @see #willTrigger()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 检查 EventEmitter 对象是否为特定事件类型注册了任何侦听器。这样，您就可以确定 EventEmitter 对象在事件流层次结构中的哪个
-         * 位置改变了对事件类型的处理。要确定特定事件类型是否确实会触发事件侦听器，请使用 IEventEmitter.willTrigger()。hasListener()
-         * 与 willTrigger() 的区别是：hasListener() 只检查它所属的对象，而 willTrigger() 检查整个事件流以查找由 type 参数指定的事件。
-         * @param type 事件的类型。
-         * @returns 如果指定类型的侦听器已注册，则值为 true；否则，值为 false。
-         * @see #willTrigger()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        hasListener(type: string): boolean;
-        /**
-         * @language en_US
-         * Emits an event into the event flow. The event target is the EventEmitter object upon which emit() is called.
-         * @param event The event object emitted into the event flow.
-         * @returns A value of true unless preventDefault() is called on the event, in which case it returns false.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将事件分派到事件流中。事件目标是对其调用 emit() 方法的 EventEmitter 对象。
-         * @param event 调度到事件流中的 Event 对象。
-         * @returns 如果成功调度了事件，则值为 true。值 false 表示失败或对事件调用了 preventDefault()。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        emit(event: Event): boolean;
-        /**
-         * @language en_US
-         * Checks whether an event listener is registered with this EventEmitter object or any of its ancestors for the
-         * specified event type. This method returns true if an event listener is triggered during any phase of the event
-         * flow when an event of the specified type is emitted to this EventEmitter object or any of its descendants.
-         * @param type The type of event.
-         * @returns A value of true if a listener of the specified type will be triggered; false otherwise.
-         * @see #hasListener()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 检查是否用此 EventEmitter 对象或其任何始祖为指定事件类型注册了事件侦听器。将指定类型的事件调度给此
-         * EventEmitter 对象或其任一后代时，如果在事件流的任何阶段触发了事件侦听器，则此方法返回 true。
-         * hasListener() 与 willTrigger() 方法的区别是：hasListener() 只检查它所属的对象，
-         * 而 willTrigger() 方法检查整个事件流以查找由 type 参数指定的事件。
-         * @param type 事件类型
-         * @returns 是否注册过监听器，如果注册过返回true，反之返回false
-         * @see #hasListener()
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        willTrigger(type: string): boolean;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * Writes an error message to the console if the assertion is false. If the assertion is true, nothing will happen.
-     * @param assertion Any boolean expression. If the assertion is false, the message will get written to the console.
-     * @param message the message written to the console
-     * @param optionalParams the extra messages written to the console
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 判断参数assertion是否为true，若为false则抛出异常并且在console输出相应信息，反之什么也不做。
-     * @param assertion 一个 boolean 表达式，若结果为false，则抛出错误并输出信息。
-     * @param message 要输出到控制台的信息
-     * @param optionalParams 要输出到控制台的额外可选信息
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function assert(assertion?: boolean, message?: string, ...optionalParams: any[]): void;
-    /**
-     * @language en_US
-     * Writes a warning message to the console.
-     * @param message the message written to the console
-     * @param optionalParams the extra messages written to the console
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 输出一个警告信息到控制台。
-     * @param message 要输出到控制台的信息
-     * @param optionalParams 要输出到控制台的额外信息
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function warn(message?: any, ...optionalParams: any[]): void;
-    /**
-     * @language en_US
-     * Writes an error message to the console.
-     * @param message the message written to the console
-     * @param optionalParams the extra messages written to the console
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 输出一个错误信息到控制台。
-     * @param message 要输出到控制台的信息
-     * @param optionalParams 要输出到控制台的额外信息
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function error(message?: any, ...optionalParams: any[]): void;
-    /**
-     * @language en_US
-     * Writes an message to the console.
-     * @param message the message written to the console
-     * @param optionalParams the extra messages written to the console
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 输出一个日志信息到控制台。
-     * @param message 要输出到控制台的信息
-     * @param optionalParams 要输出到控制台的额外信息
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    function log(message?: any, ...optionalParams: any[]): void;
 }
 declare module lark.sys {
     /**
@@ -1691,58 +652,242 @@ declare module lark.sys {
 declare module lark {
     /**
      * @language en_US
-     * The HorizontalAlign class defines the possible values for the horizontal alignment.
-     * @see lark.TextField#textAlign
+     * The IEventEmitter interface defines methods for adding or removing event listeners, checks whether specific types
+     * of event listeners are registered, and emits events. Event targets are an important part of the Lark event model.
+     * The event target serves as the focal point for how events flow through the display list hierarchy. When an event
+     * such as a touch tap occurs, an event object is emitted into the event flow from the root of the display list.
+     * The event object makes a round-trip journey to the event target, which is conceptually divided into three phases: <br/>
+     * the capture phase includes the journey from the root to the last node before the event target's node; the target
+     * phase includes only the event target node; and the bubbling phase includes any subsequent nodes encountered on the
+     * return trip to the root of the display list.In general, the easiest way for a user-defined class to gain event
+     * emitting capabilities is to extend EventEmitter. If this is impossible (that is, if the class is already
+     * extending another class), you can instead implement the IEventEmitter interface, create an EventEmitter member,
+     * and write simple hooks to route calls into the aggregated EventEmitter.
+     * @see lark.EventEmitter
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * HorizontalAlign 类为水平对齐方式定义可能的值。
-     * @see lark.TextField#textAlign
+     * IEventEmitter 接口定义用于添加或删除事件侦听器的方法，检查是否已注册特定类型的事件侦听器，并调度事件。
+     * 事件目标是 Lark 事件模型的重要组成部分。事件目标是事件如何通过显示列表层次结构这一问题的焦点。当发生触摸轻拍事件时，
+     * 会将事件对象调度到从显示列表根开始的事件流中。事件对象进行到事件目标的往返行程，在概念上，此往返行程被划分为三个阶段：<br/>
+     * 捕获阶段包括从根到事件目标节点之前的最后一个节点的行程，目标阶段仅包括事件目标节点，冒泡阶段包括到显示列表的根的回程上遇到的任何后续节点。
+     * 通常，使用户定义的类能够调度事件的最简单方法是扩展 EventEmitter。如果无法扩展（即，如果该类已经扩展了另一个类），
+     * 则可以实现 IEventEmitter 接口，创建 EventEmitter 成员，并编写一些简单的挂钩，将调用连接到聚合的 EventEmitter 中。
+     * @see lark.EventEmitter
      * @version Lark 1.0
      * @platform Web,Native
      */
-    class HorizontalAlign {
+    interface IEventEmitter extends HashObject {
         /**
          * @language en_US
-         * Horizontally align content to the left of the container.
+         * Registers an event listener object with an EventEmitter object so that the listener receives notification of an
+         * event. You can register event listeners on all nodes in the display list for a specific type of event, phase,
+         * and priority.After you successfully register an event listener, you cannot change its priority through additional
+         * calls to on(). To change a listener's priority, you must first call removeListener(). Then you can register the
+         * listener again with the new priority level.After the listener is registered, subsequent calls to on() with a
+         * different value for either type or useCapture result in the creation of a separate listener registration. <br/>
+         * When you no longer need an event listener, remove it by calling EventEmitter.removeListener(); otherwise, memory
+         * problems might result. Objects with registered event listeners are not automatically removed from memory because
+         * the garbage collector does not remove objects that still have references.Copying an EventEmitter instance does
+         * not copy the event listeners attached to it. (If your newly created node needs an event listener, you must attach
+         * the listener after creating the node.) However, if you move an EventEmitter instance, the event listeners attached
+         * to it move along with it.If the event listener is being registered on a node while an event is also being processed
+         * on this node, the event listener is not triggered during the current phase but may be triggered during a later phase
+         * in the event flow, such as the bubbling phase.If an event listener is removed from a node while an event is being
+         * processed on the node, it is still triggered by the current actions. After it is removed, the event listener is
+         * never invoked again (unless it is registered again for future processing).
+         * @param type The type of event.
+         * @param listener The listener function that processes the event. This function must accept an event object as
+         * its only parameter and must return nothing, as this example shows: function(evt:Event):void  The function can
+         * have any name.
+         * @param thisObject the listener function's "this"
+         * @param useCapture Determines whether the listener works in the capture phase or the bubbling phases. If useCapture
+         * is set to true, the listener processes the event only during the capture phase and not in the bubbling phase.
+         * If useCapture is false, the listener processes the event only during the bubbling phase. To listen for the event
+         * in all three phases, call on() twice, once with useCapture set to true, then again with useCapture set to false.
+         * @param  priority The priority level of the event listener. Priorities are designated by a integer. The higher
+         * the number, the higher the priority. All listeners with priority n are processed before listeners of priority n-1.
+         * If two or more listeners share the same priority, they are processed in the order in which they were added.
+         * The default priority is
+         * @see #once()
+         * @see #removeListener()
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 将内容与容器的左侧对齐。
+         * 使用 EventEmitter 对象注册事件侦听器对象，以使侦听器能够接收事件通知。可以为特定类型的事件、阶段和优先级在显示列表的所有节
+         * 点上注册事件侦听器。成功注册一个事件侦听器后，无法通过额外调用 on() 来更改其优先级。要更改侦听器的优先级，必须
+         * 先调用 removeListener()。然后，可以使用新的优先级再次注册该侦听器。注册该侦听器后，如果继续调用具有不同 type 或 useCapture
+         * 值的 on()，则会创建单独的侦听器注册。<br/>
+         * 如果不再需要某个事件侦听器，可调用 EventEmitter.removeListener()
+         * 删除它；否则会产生内存问题。由于垃圾回收器不会删除仍包含引用的对象，因此不会从内存中自动删除使用已注册事件侦听器的对象。复制
+         * EventEmitter 实例时并不复制其中附加的事件侦听器。（如果新近创建的节点需要一个事件侦听器，必须在创建该节点后附加该侦听器。）
+         * 但是，如果移动 EventEmitter 实例，则其中附加的事件侦听器也会随之移动。如果在正在处理事件的节点上注册事件侦听器，则不会在当
+         * 前阶段触发事件侦听器，但会在事件流的稍后阶段触发，如冒泡阶段。如果从正在处理事件的节点中删除事件侦听器，则该事件侦听器仍由当前操
+         * 作触发。删除事件侦听器后，决不会再次调用该事件侦听器（除非再次注册以备将来处理）。
+         * @param type 事件的类型。
+         * @param listener 处理事件的侦听器函数。此函数必须接受 Event 对象作为其唯一的参数，并且不能返回任何结果，
+         * 如下面的示例所示： function(evt:Event):void 函数可以有任何名称。
+         * @param listener 侦听函数绑定的this对象
+         * @param useCapture 确定侦听器是运行于捕获阶段还是运行于冒泡阶段。如果将 useCapture 设置为 true，
+         * 则侦听器只在捕获阶段处理事件，而不在冒泡阶段处理事件。如果 useCapture 为 false，则侦听器只在冒泡阶段处理事件。
+         * 要在两个阶段都侦听事件，请调用 on() 两次：一次将 useCapture 设置为 true，一次将 useCapture 设置为 false。
+         * @param  priority 事件侦听器的优先级。优先级由一个带符号的整数指定。数字越大，优先级越高。优先级为 n 的所有侦听器会在
+         * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
+         * @see #once()
+         * @see #removeListener()
          * @version Lark 1.0
          * @platform Web,Native
          */
-        static LEFT: string;
+        on(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
         /**
          * @language en_US
-         * Horizontally align content to the right of the container.
+         * Registers an event listener object with an EventEmitter object so that the listener receives notification of an
+         * event. Different from the on() method,the listener receives notification only once,and then it will be removed
+         * automatically.
+         * @param type The type of event.
+         * @param listener The listener function that processes the event. This function must accept an event object as
+         * its only parameter and must return nothing, as this example shows: function(evt:Event):void  The function can
+         * have any name.
+         * @param thisObject the listener function's "this"
+         * @param useCapture Determines whether the listener works in the capture phase or the bubbling phases. If useCapture
+         * is set to true, the listener processes the event only during the capture phase and not in the bubbling phase.
+         * If useCapture is false, the listener processes the event only during the bubbling phase. To listen for the event
+         * in all three phases, call on() twice, once with useCapture set to true, then again with useCapture set to false.
+         * @param  priority The priority level of the event listener. Priorities are designated by a integer. The higher
+         * the number, the higher the priority. All listeners with priority n are processed before listeners of priority n-1.
+         * If two or more listeners share the same priority, they are processed in the order in which they were added.
+         * The default priority is
+         * @see #on()
+         * @see #removeListener()
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 将内容与容器的右侧对齐。
+         * 添加仅回调一次的事件侦听器，此方法与on()方法不同，on()方法会持续产生回调，而此方法在第一次回调时就会自动移除监听。
+         * @param type 事件的类型。
+         * @param listener 处理事件的侦听器函数。此函数必须接受 Event 对象作为其唯一的参数，并且不能返回任何结果，
+         * 如下面的示例所示： function(evt:Event):void 函数可以有任何名称。
+         * @param thisObject 侦听函数绑定的this对象
+         * @param useCapture 确定侦听器是运行于捕获阶段还是运行于冒泡阶段。如果将 useCapture 设置为 true，
+         * 则侦听器只在捕获阶段处理事件，而不在冒泡阶段处理事件。如果 useCapture 为 false，则侦听器只在冒泡阶段处理事件。
+         * 要在两个阶段都侦听事件，请调用 once() 两次：一次将 useCapture 设置为 true，一次将 useCapture 设置为 false。
+         * @param  priority 事件侦听器的优先级。优先级由一个带符号整数指定。数字越大，优先级越高。优先级为 n 的所有侦听器会在
+         * 优先级为 n -1 的侦听器之前得到处理。如果两个或更多个侦听器共享相同的优先级，则按照它们的添加顺序进行处理。默认优先级为 0。
+         * @see #on()
+         * @see #removeListener()
          * @version Lark 1.0
          * @platform Web,Native
          */
-        static RIGHT: string;
+        once(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean, priority?: number): void;
         /**
          * @language en_US
-         * Horizontally align content in the center of the container.
+         * Removes a listener from the EventEmitter object. If there is no matching listener registered with the
+         * EventEmitter object, a call to this method has no effect.
+         * @param type The type of event.
+         * @param listener The listener object to remove.
+         * @param thisObject the listener function's "this"
+         * @param useCapture Specifies whether the listener was registered for the capture phase or the bubbling phases.
+         * If the listener was registered for both the capture phase and the bubbling phases, two calls to removeListener()
+         * are required to remove both: one call with useCapture set to true, and another call with useCapture set to false.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 在容器的水平中心对齐内容。
+         * 从 EventEmitter 对象中删除侦听器。如果没有向 EventEmitter 对象注册任何匹配的侦听器，则对此方法的调用没有任何效果。
+         * @param type 事件的类型。
+         * @param listener 要删除的侦听器对象
+         * @param thisObject 侦听函数绑定的this对象
+         * @param useCapture 指出是为捕获阶段还是为冒泡阶段注册了侦听器。如果为捕获阶段以及冒泡阶段注册了侦听器，则需要对
+         * removeListener() 进行两次调用才能将这两个侦听器删除：一次调用将 useCapture 设置为 true，另一次调用将 useCapture 设置为 false。。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        static CENTER: string;
+        removeListener(type: string, listener: (event: Event) => void, thisObject: any, useCapture?: boolean): void;
+        /**
+         * @language en_US
+         * Checks whether the EventEmitter object has any listeners registered for a specific type of event. This allows
+         * you to determine where an EventEmitter object has altered handling of an event type in the event flow hierarchy.
+         * To determine whether a specific event type will actually trigger an event listener, use IEventEmitter.willTrigger().
+         * The difference between hasListener() and willTrigger() is that hasListener() examines only the object to
+         * which it belongs, whereas willTrigger() examines the entire event flow for the event specified by the type parameter.
+         * @param type The type of event.
+         * @returns A value of true if a listener of the specified type is registered; false otherwise.
+         * @see #willTrigger()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 检查 EventEmitter 对象是否为特定事件类型注册了任何侦听器。这样，您就可以确定 EventEmitter 对象在事件流层次结构中的哪个
+         * 位置改变了对事件类型的处理。要确定特定事件类型是否确实会触发事件侦听器，请使用 IEventEmitter.willTrigger()。hasListener()
+         * 与 willTrigger() 的区别是：hasListener() 只检查它所属的对象，而 willTrigger() 检查整个事件流以查找由 type 参数指定的事件。
+         * @param type 事件的类型。
+         * @returns 如果指定类型的侦听器已注册，则值为 true；否则，值为 false。
+         * @see #willTrigger()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        hasListener(type: string): boolean;
+        /**
+         * @language en_US
+         * Emits an event into the event flow. The event target is the EventEmitter object upon which emit() is called.
+         * @param event The event object emitted into the event flow.
+         * @returns A value of true unless preventDefault() is called on the event, in which case it returns false.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将事件分派到事件流中。事件目标是对其调用 emit() 方法的 EventEmitter 对象。
+         * @param event 调度到事件流中的 Event 对象。
+         * @returns 如果成功调度了事件，则值为 true。值 false 表示失败或对事件调用了 preventDefault()。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        emit(event: Event): boolean;
+        /**
+         * @language en_US
+         * Checks whether an event listener is registered with this EventEmitter object or any of its ancestors for the
+         * specified event type. This method returns true if an event listener is triggered during any phase of the event
+         * flow when an event of the specified type is emitted to this EventEmitter object or any of its descendants.
+         * @param type The type of event.
+         * @returns A value of true if a listener of the specified type will be triggered; false otherwise.
+         * @see #hasListener()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 检查是否用此 EventEmitter 对象或其任何始祖为指定事件类型注册了事件侦听器。将指定类型的事件调度给此
+         * EventEmitter 对象或其任一后代时，如果在事件流的任何阶段触发了事件侦听器，则此方法返回 true。
+         * hasListener() 与 willTrigger() 方法的区别是：hasListener() 只检查它所属的对象，
+         * 而 willTrigger() 方法检查整个事件流以查找由 type 参数指定的事件。
+         * @param type 事件类型
+         * @returns 是否注册过监听器，如果注册过返回true，反之返回false
+         * @see #hasListener()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        willTrigger(type: string): boolean;
+    }
+}
+declare module lark.sys {
+    /**
+     * @private
+     * 设备屏幕
+     */
+    interface Screen {
+        /**
+         * @private
+         * 更新屏幕视口尺寸
+         */
+        updateScreenSize(): any;
     }
 }
 declare module lark.sys {
@@ -1771,39 +916,6 @@ declare module lark.sys {
          * 默认横屏，舞台逆时针旋转90度
          */
         static LANDSCAPE_FLIPPED: string;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * Helper class to measure the width of text.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * 用于文本宽度测量的辅助类
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    class TextMeasurer {
-        /**
-         * @language en_US
-         * Returns the width of the text with some specific styles.
-         * @param text the text to be measured.
-         * @param font text font style of the given text.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 测量文本在指定样式下的宽度。
-         * @param text 要测量的文本内容。
-         * @param font 文本的样式值。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static measureText(text: string, font: string): number;
     }
 }
 declare module lark.sys {
@@ -1850,63 +962,6 @@ declare module lark.sys {
         displayHeight: number;
     }
 }
-declare module lark {
-    /**
-     * @language en_US
-     * The VerticalAlign class defines the possible values for the vertical alignment.
-     * @see lark.TextField#verticalAlign
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * VerticalAlign 类为垂直对齐方式定义可能的值。
-     * @see lark.TextField#verticalAlign
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    class VerticalAlign {
-        /**
-         * @language en_US
-         * Vertically align content to the top of the container.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将内容与容器的顶部对齐。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static TOP: string;
-        /**
-         * @language en_US
-         * Vertically align content to the bottom of the container.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 将内容与容器的底部对齐。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static BOTTOM: string;
-        /**
-         * @language en_US
-         * Vertically align content in the middle of the container.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在容器的垂直中心对齐内容。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        static MIDDLE: string;
-    }
-}
 declare module lark.sys {
     /**
      * @private
@@ -1935,64 +990,6 @@ declare module lark.sys {
          * 这种模式下，相同字号的文字在不同DPI的屏幕上视觉尺寸会不同，在高DPI屏幕下文字看起来会比较小。
          */
         static DEVICE: string;
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * A BitmapData object contains an array of pixel data. This data can represent either a fully opaque bitmap or a
-     * transparent bitmap that contains alpha channel data. Either type of BitmapData object is stored as a buffer of 32-bit
-     * integers. Each 32-bit integer determines the properties of a single pixel in the bitmap.<br/>
-     * Each 32-bit integer is a combination of four 8-bit channel values (from 0 to 255) that describe the alpha transparency
-     * and the red, green, and blue (ARGB) values of the pixel. (For ARGB values, the most significant byte represents the
-     * alpha channel value, followed by red, green, and blue.)
-     * @see lark.Bitmap
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/BitmapDataExample.ts
-     */
-    /**
-     * @language zh_CN
-     * BitmapData 对象是一个包含像素数据的数组。此数据可以表示完全不透明的位图，或表示包含 Alpha 通道数据的透明位图。
-     * 以上任一类型的 BitmapData 对象都作为 32 位整数的缓冲区进行存储。每个 32 位整数确定位图中单个像素的属性。<br/>
-     * 每个 32 位整数都是四个 8 位通道值（从 0 到 255）的组合，这些值描述像素的 Alpha 透明度以及红色、绿色、蓝色 (ARGB) 值。
-     * （对于 ARGB 值，最高有效字节代表 Alpha 通道值，其后的有效字节分别代表红色、绿色和蓝色通道值。）
-     * @see lark.Bitmap
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/BitmapDataExample.ts
-     */
-    interface BitmapData extends HashObject {
-        /**
-         * @language en_US
-         * The width of the bitmap image in pixels.
-         * @readOnly
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 位图图像的宽度，以像素为单位。
-         * @readOnly
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        width: number;
-        /**
-         * @language en_US
-         * The height of the bitmap image in pixels.
-         * @readOnly
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 位图图像的高度，以像素为单位。
-         * @readOnly
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        height: number;
     }
 }
 declare module lark {
@@ -2087,198 +1084,6 @@ declare module lark {
 declare module lark {
     /**
      * @language en_US
-     * The XMLNode class is the base class for all xml node.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * XML节点基类
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    interface XMLNode {
-        /**
-         * @language en_US
-         * a integer representing the type of the node, 1：XML，2：XMLAttribute，3：XMLText
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 节点类型，1：XML，2：XMLAttribute，3：XMLText
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        nodeType: number;
-        /**
-         * @language en_US
-         * the parent node of this xml node.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 节点所属的父级节点
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        parent: XML;
-    }
-    /**
-     * @language en_US
-     * The XML class contains properties for working with XML objects.
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/utils/XMLExample.ts
-     */
-    /**
-     * @language zh_CN
-     * XML 类包含用于处理 XML 对象的属性。
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/utils/XMLExample.ts
-     */
-    interface XML extends XMLNode {
-        /**
-         * @language en_US
-         * the attributes of this xml node.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当前节点上的属性列表
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        attributes: any;
-        /**
-         * @language en_US
-         * the children of the xml node.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当前节点的子节点列表
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        children: XMLNode[];
-        /**
-         * @language en_US
-         * the full name of this xml node. For example,the name of <s:Button/> is "s:Button".
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 节点完整名称。例如节点 <s:Button/> 的 name 为："s:Button"
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        name: string;
-        /**
-         * @language en_US
-         * thie namesapce prefix of this xml node.For example,the prefix of <s:Button/> is "s".
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 节点的命名空间前缀。例如节点 <s:Button/> 的 prefix 为：s
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        prefix: string;
-        /**
-         * @language en_US
-         * the local name of this xml node. For example,the local name of <s:Button/> is "Button".
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 节点的本地名称。例如节点 <s:Button/> 的 localName 为：Button
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        localName: string;
-        /**
-         * @language en_US
-         * the namesapce uri of this xml node.For example,the namespace uri of <s:Skin xmlns:s="http://ns.egret.com/swan"/> is "http://ns.egret.com/swan".
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 节点的命名空间地址。例如节点 <s:Skin xmlns:s="http://ns.egret.com/swan"/> 的 namespace 为： http://ns.egret.com/swan
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        namespace: string;
-    }
-    /**
-     * @language en_US
-     * The XMLText class represents a string node in the XML.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * XMLText 类表示在XML中的文本节点
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    interface XMLText extends XMLNode {
-        /**
-         * @language en_US
-         * the text content
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 文本内容
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        text: string;
-    }
-    /**
-     * @language en_US
-     * The XML class contains properties for working with XML objects.
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    /**
-     * @language zh_CN
-     * XML 类包含用于处理 XML 对象的属性。
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
-    var XML: {
-        /**
-         * @language en_US
-         * parses a text to XML instance.
-         * @param text the text to be parsed.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 解析字符串为XML对象
-         * @param text 要解析的XML对象。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        parse(text: string): XML;
-    };
-}
-declare module lark {
-    /**
-     * @language en_US
      * The HttpResponseType class provides values that specify how downloaded data is received.
      * @see lark.HttpRequest
      * @version Lark 1.0
@@ -2323,31 +1128,41 @@ declare module lark {
 declare module lark {
     /**
      * @language en_US
-     * Return the fully qualified class name of an object
-     * @param value The object for which a fully qualified class name is desired. Any JavaScript value may be passed to
-     * this method including all available JavaScript types, object instances, primitive types such as number, and class objects.
-     * @returns A string containing the fully qualified class name.
+     * Indicates whether an object is a instance of the class or interface specified as the parameter.This method is similar
+     * to the instanceOf operator which indicate whether an object is a instance of the specific class,besides, it can indicate
+     * whether an object is a instance of the specific interface.
+     * @param instance the instance to be checked.
+     * @param typeName the string value representing a specific class or interface.
+     * @returns A value of true if the object is a instance of the class or interface specified as the parameter.
      * @example
      * <pre>
-     *  lark.getQualifiedClassName(lark.DisplayObject) //return "lark.DisplayObject"
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
+     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
+     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
      * </pre>
+     * @see lark.registerClass()
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 返回对象的完全限定类名。
-     * @param value 需要完全限定类名称的对象，可以将任何 JavaScript 值传递给此方法，包括所有可用的 JavaScript 类型、对象实例、原始类型
-     * （如number)和类对象
-     * @returns 包含完全限定类名称的字符串。
+     * 检查指定对象是否为 Lark 框架内指定接口或类或其子类的实例。此方法与使用 instanceOf 关键字作用类似，但除了判断类定义也能判断接口的实现。
+     * @param instance 要判断的实例。
+     * @param typeName 类或接口的完全名称.
+     * @returns 返回true表示当前对象是指定类或接口的实例。
      * @example
      * <pre>
-     *  lark.getQualifiedClassName(lark.DisplayObject) //返回 "lark.DisplayObject"
+     *     var instance = new lark.Sprite();
+     *     lark.log(lark.is(instance,"lark.Sprite"))  //true
+     *     lark.log(lark.is(instance,"lark.DisplayObjectContainer"))  //true
+     *     lark.log(lark.is(instance,"lark.Bitmap"))  //false
      * </pre>
+     * @see lark.registerClass()
      * @version Lark 1.0
      * @platform Web,Native
      */
-    function getQualifiedClassName(value: any): string;
+    function is(instance: any, typeName: string): boolean;
 }
 declare module lark {
     /**
@@ -2356,7 +1171,8 @@ declare module lark {
      * The Sound class lets you create a Sound object, load and play an external audio file into that object.
      * More detailed control of the sound is performed through the SoundChannel
      *
-     * @event egret.Event.COMPLETE Emit when the audio resource is loaded and ready to play
+     * @event lark.Event.COMPLETE Emit when the audio resource is loaded and ready to play
+     * @event lark.Event.IO_ERROR Emit when the audio resource is failed to load
      * @version Lark 1.0
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/media/SoundExample.ts
@@ -2366,7 +1182,8 @@ declare module lark {
      * Sound 允许您在应用程序中使用声音。使用 Sound 类可以创建 Sound 对象、将外部音频文件加载到该对象并播放该文件。
      * 可通过 SoundChannel 对声音执行更精细的控制，如控制音量和监控播放进度。
      *
-     * @event egret.Event.COMPLETE 音频加载完成时抛出
+     * @event lark.Event.COMPLETE 音频加载完成时抛出
+     * @event lark.Event.IO_ERROR 音频加载失败时抛出
      * @version Lark 1.0
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/media/SoundExample.ts
@@ -2425,46 +1242,32 @@ declare module lark {
         /**
          * @language en_US
          * Create Sound object, load an external audio file and play
-         * @param url Audio file URL
+         * @param url Audio file URL, Sound will start to load the media if url is not empty
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
          * 创建 Sound 对象、将外部音频文件加载到该对象并播放该文件
-         * @param url 需要加载的音频文件URL
+         * @param url 需要加载的音频文件URL,如果指定了 url, Sound会立即开始加载指定的媒体文件
          * @version Lark 1.0
          * @platform Web,Native
          */
         new (url?: string): Sound;
     };
 }
-declare module lark {
-    /** @language en_US
-     * Returns the fully qualified class name of the base class of the object specified by the value parameter.
-     * @param value The object for which a parent class is desired. Any JavaScript value may be passed to this method including
-     * all available JavaScript types, object instances, primitive types such as number, and class objects.
-     * @returns  A fully qualified base class name, or null if none exists.
-     * @example
-     * <pre>
-     *  lark.getQualifiedSuperclassName(lark.Bitmap) //return "lark.DisplayObject"
-     * </pre>
-     * @version Lark 1.0
-     * @platform Web,Native
-     */
+declare module lark.sys {
     /**
-     * @language zh_CN
-     * 返回 value 参数指定的对象的基类的完全限定类名。
-     * @param value 需要取得父类的对象，可以将任何 JavaScript 值传递给此方法，包括所有可用的 JavaScript 类型、对象实例、原始类型（如number）和类对象
-     * @returns 完全限定的基类名称，或 null（如果不存在基类名称）。
-     * @example
-     * <pre>
-     *  lark.getQualifiedSuperclassName(lark.Sprite) //返回 "lark.DisplayObject"
-     * </pre>
-     * @version Lark 1.0
-     * @platform Web,Native
+     * @private
+     * 呈现最终绘图结果的画布
      */
-    function getQualifiedSuperclassName(value: any): string;
+    interface Surface extends BitmapData {
+        /**
+         * @private
+         * 绘图上下文
+         */
+        renderContext: RenderContext;
+    }
 }
 declare module lark {
     /**
@@ -2536,12 +1339,133 @@ declare module lark {
 declare module lark {
     /**
      * @language en_US
+     * The StageScaleMode class provides values for the Stage.scaleMode property.
+     * @see lark.Stage#scaleMode
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * StageScaleMode 类为舞台缩放模式提供值。
+     * @see lark.Stage#scaleMode
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class StageScaleMode {
+        /**
+         * @language en_US
+         * Specifies that the size of the application be fixed, so that it remains unchanged even as the size of the screen
+         * changes. Cropping might occur if the screen is smaller than the content.<br/>
+         * In this mode,the size of the stage (Stage.stageWidth,Stage.stageHeight) always equals to the size of the screen.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 不缩放应用程序内容。即使在更改播放器视口大小时，它仍然保持不变。如果播放器视口比内容小，则可能进行一些裁切。
+         * 在此模式下，舞台尺寸（Stage.stageWidth,Stage.stageHeight）始终跟播放器视口大小保持一致。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static NO_SCALE: string;
+        /**
+         * @language en_US
+         * @private
+         * Specifies that the entire application be visible in the specified area without distortion while maintaining the
+         * original aspect ratio of the application. Borders can appear on two sides of the application.
+         * In this mode,the size of the stage (Stage.stageWidth,Stage.stageHeight) always equals to the initial content size.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * @private
+         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容的较宽方向填满播放器视口，另一个方向的两侧可能会不够宽而留有黑边。
+         * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static SHOW_ALL: string;
+        /**
+         * @language en_US
+         * Specifies that the entire application fill the specified area, without distortion but possibly with some cropping,
+         * while maintaining the original aspect ratio of the application.
+         * In this mode,the size of the stage (Stage.stageWidth,Stage.stageHeight) always equals to the initial content size.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容的较窄方向填满播放器视口，另一个方向的两侧可能会超出播放器视口而被裁切。
+         * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static NO_BORDER: string;
+        /**
+         * @language en_US
+         * Specifies that the entire application be visible in the specified area without trying to preserve the original
+         * aspect ratio. Distortion can occur.
+         * In this mode,the size of the stage (Stage.stageWidth,Stage.stageHeight) always equals to the initial content size.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 不保持原始宽高比缩放应用程序内容，缩放后应用程序内容正好填满播放器视口。
+         * 在此模式下，舞台尺寸(Stage.stageWidth,Stage.stageHeight)始终等于初始化时外部传入的应用程序内容尺寸。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static EXACT_FIT: string;
+        /**
+         * @language en_US
+         * Specifies that the width of the application be fixed,while maintaining the original aspect ratio of the application,
+         * so that the height of the application might changes. Cropping might occur if the height of the screen is smaller than the content.
+         * In this mode,the stage width always equals to the initial content width,but the stage height is determined by the content height
+         * and the scaling factor of the stage width and the content width.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容在水平和垂直方向都填满播放器视口，但只保持应用程序内容的原始宽度不变，高度可能会改变。
+         * 在此模式下，舞台宽度(Stage.stageWidth)始终等于初始化时外部传入的应用程序内容宽度。舞台高度(Stage.stageHeight)由当前的缩放比例与播放器视口高度决定。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static FIXED_WIDTH: string;
+        /**
+         * @language en_US
+         * Specifies that the height of the application be fixed,while maintaining the original aspect ratio of the application,
+         * so that the width of the application might changes. Cropping might occur if the width of the screen is smaller than the content.
+         * In this mode,the stage height always equals to the initial content height,but the stage width is determined by the content width
+         * and the scaling factor of the stage height and the content height.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 保持原始宽高比缩放应用程序内容，缩放后应用程序内容在水平和垂直方向都填满播放器视口，但只保持应用程序内容的原始高度不变，宽度可能会改变。
+         * 在此模式下，舞台高度(Stage.stageHeight)始终等于初始化时外部传入的应用程序内容高度。舞台宽度(Stage.stageWidth)由当前的缩放比例与播放器视口宽度决定。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static FIXED_HEIGHT: string;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
      * The Video class lets you work with video in an application.
      * The Video class lets you create a Video object, load and play an external video file into that object.
      * Note: On most mobile device, the video is playback in the full screen mode.<br/>
      *
-     * @event egret.Event.COMPLETE Emit when the video resource is loaded and ready to play
-     * @event egret.Event.ENDED Emit when the video playback ended
+     * @param url URL of the media to play, Video will start to load if the url is not empty
+     *
+     * @event lark.Event.COMPLETE Emit when the video resource is loaded and ready to play
+     * @event lark.Event.ENDED Emit when the video playback ended
+     * @event lark.Event.IO_ERROR when the video is failed to load
      * @version Lark 1.0
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/media/VideoExample.ts
@@ -2551,8 +1475,11 @@ declare module lark {
      * Video 允许您在应用程序中使用视频。使用 Video 类可以创建 Video 对象、将外部视频文件加载到该对象并播放该文件。<br/>
      * 注意: 在大多数移动设备中，视频是强制全屏播放的，所以你可以直接调用 play() 方法全屏播放视频，不用将它绘制在Stage中。
      *
-     * @event egret.Event.COMPLETE 视频加载完成时抛出
-     * @event egret.Event.ENDED 视频播放完成时抛出
+     * @param url 要播放的视频的URL，如果url不为空，Video会立即加载这个视频
+     *
+     * @event lark.Event.COMPLETE 视频加载完成时抛出
+     * @event lark.Event.ENDED 视频播放完成时抛出
+     * @event lark.Event.IO_ERROR 视频加载失败市触发
      * @version Lark 1.0
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/media/VideoExample.ts
@@ -2708,30 +1635,802 @@ declare module lark {
         new (src?: string): Video;
     };
 }
+declare module lark.sys {
+    /**
+     * @private
+     * 全局共享的RenderContext。通常用于交换缓存，测量文本或创建填充对象。
+     */
+    var sharedRenderContext: sys.RenderContext;
+    /**
+     * @private
+     * surfaceFactory实例
+     */
+    var surfaceFactory: SurfaceFactory;
+    /**
+     * @private
+     */
+    interface SurfaceFactory {
+        /**
+         * @private
+         * 从对象池取出或创建一个新的Surface实例
+         * @param useOnce 表示对取出实例的使用是一次性的，用完后立即会释放。
+         */
+        create(useOnce?: boolean): Surface;
+        /**
+         * @private
+         * 释放一个Surface实例
+         * @param surface 要释放的Surface实例
+         */
+        release(surface: Surface): void;
+    }
+}
+declare module lark.sys {
+    /**
+     * @private
+     * 平台实现输入文本的接口
+     */
+    interface ITextAdapter {
+    }
+}
 declare module lark {
     /**
+     * @private
+     */
+    var $START_TIME: number;
+    /**
      * @language en_US
-     * Register and start a timer,which will notify the callback method at a rate of 60 FPS ,and pass the current time stamp as parameters.<br/>
-     * Note: After the registration,it will notify the callback method continuously,you can call the stopTick () method to stop it.
-     * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
-     * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
-     * to render after processing of this method completes.
-     * @param thisObject the call back method's "this"
-     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
+     * Used to compute relative time.this method returns the number of milliseconds since the Lark framework was initialized
+     * @returns The number of milliseconds since the Lark framework was initialized
+     * @example
+     * This example shows getting and printing the number of milliseconds since the Lark framework was initialized
+     * <pre>
+     *  var duration = lark.getTimer();
+     *  console.log("duration: " + duration);
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
     /**
      * @language zh_CN
-     * 注册并启动一个计时器，通常会以60FPS的速率触发回调方法，并传入当前时间戳。注意：注册后将会持续触发回调方法，若要停止回调，需要手动调用stopTick()方法。
-     * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
-     * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
-     * @param thisObject 回调方法的this对象引用。
-     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
+     * 用于计算相对时间。此方法返回自启动 Lark 框架以来经过的毫秒数。
+     * @returns 启动 Lark 框架以来经过的毫秒数。
+     * @example
+     * 获取并打印自启动 Lark 框架以来经过的毫秒数。
+     * <pre>
+     *  var duration = lark.getTimer();
+     *  console.log("duration: " + duration);
+     * </pre>
      * @version Lark 1.0
      * @platform Web,Native
      */
-    function startTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
+    function getTimer(): number;
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The GraphicsPattern interface represents an opaque object describing a pattern, based on a BitmapData,
+     * created by the Graphics.createPattern() method.
+     * @see lark.Graphics#createPattern()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * GraphicsPattern 接口表示描述一个模板（基于BitmapData）的不透明对象，通过 Graphics.createPattern() 静态方法创建.
+     * @see lark.Graphics#createPattern()
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    interface GraphicsPattern {
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The GraphicsGradient interface represents an opaque object describing a gradient. It is returned by the static methods
+     * Graphics.createLinearGradient() or Graphics.createRadialGradient().
+     * @see lark.Graphics#createLinearGradient()
+     * @see lark.Graphics#createRadialGradient()
+     * @see lark.Shape
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * GraphicsGradient 接口表示描述渐变的不透明对象。通过 Graphics.createLinearGradient() 或 Graphics.createRadialGradient() 等静态方法的返回值得到.
+     * @see lark.Graphics#createLinearGradient()
+     * @see lark.Graphics#createRadialGradient()
+     * @see lark.Shape
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    interface GraphicsGradient {
+        /**
+         * @language en_US
+         * Adds a new stop, defined by an offset and a color, to the gradient. If the offset is not between 0 and 1 an
+         * error is thrown, if the color can't be parsed as a color, an error is thrown.
+         * @param offset the value between 0 and 1.
+         * @param color the color to add.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 添加一个由偏移值和颜色值指定的断点到渐变。如果偏移值不在0到1之间，将抛出错误，如果 color 不能被解析为有效的颜色值，也将抛出错误。
+         * @param offset 0到1之间的值
+         * @param color 要设置颜色值。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        addColorStop(offset: number, color: string): void;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The Geolocation able to obtain the position of the device.
+     * Geolocation will emit CHANGE event when the device's location is changed.
+     * It will emit IO_ERROR event if the location request is denied
+     * or there is no location service on the device.
+     *
+     * @event lark.Event.CHANGE The device's location is changed
+     * @event lark.Event.IO_ERROR Error occurred while getting the location
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/sensor/GeolocationExample.ts
+     */
+    /**
+     * @language zh_CN
+     * Geolocation 能够从设备的定位服务获取设备的当前位置。
+     * 当设备的位置发生改变时 Geolocation 会派发 CHANGE 事件。
+     * 当定位请求被拒绝或该设备没有定位服务时 Geolocation 会派发 IO_ERROR 事件。
+     *
+     * @event lark.Event.CHANGE 设备位置发生改变
+     * @event lark.Event.IO_ERROR 获取设备位置时发生错误
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/sensor/GeolocationExample.ts
+     */
+    interface Geolocation extends IEventEmitter {
+        /**
+         * @language en_US
+         * Start to monitor the device's location
+         * @returns
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 开始监听设备位置信息
+         * @returns
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        start(): void;
+        /**
+         * @language en_US
+         * Stop monitor the device's location
+         * @returns
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 停止监听设备位置信息
+         * @returns
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        stop(): void;
+    }
+    /**
+     * @copy lark.Geolocation
+     */
+    var Geolocation: {
+        new (): Geolocation;
+    };
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The DisplayObjectContainer class is the base class for all objects that can serve as display object containers on
+     * the display list. The display list manages all objects displayed in the runtime. Use the DisplayObjectContainer
+     * class to arrange the display objects in the display list. Each DisplayObjectContainer object has its own child list
+     * for organizing the z-order of the objects. The z-order is the front-to-back order that determines which object is
+     * drawn in front, which is behind, and so on.
+     * @see lark.DisplayObject
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObjectContainerExample.ts
+     */
+    /**
+     * @language zh_CN
+     * DisplayObjectContainer 接口定义显示列表中的显示对象容器。该显示列表管理运行时中显示的所有对象。使用 DisplayObjectContainer
+     * 排列显示列表中的显示对象。每个 DisplayObjectContainer 对象都有自己的子级列表，用于组织对象的 Z 轴顺序。Z 轴顺序是由前至后的顺序，
+     * 可确定哪个对象绘制在前，哪个对象绘制在后等。
+     * @see lark.DisplayObject
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/DisplayObjectContainerExample.ts
+     */
+    interface DisplayObjectContainer extends DisplayObject {
+        /**
+         * @language en_US
+         * Returns the number of children of this object.
+         * @readOnly
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回此对象的子项数目。
+         * @readOnly
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        numChildren: number;
+        /**
+         * @language en_US
+         * Adds a child DisplayObject instance to this DisplayObjectContainer instance. The child is added to the front
+         * (top) of all other children in this DisplayObjectContainer instance. (To add a child to a specific index position,
+         * use the addChildAt() method.)If you add a child object that already has a different display object container
+         * as a parent, the object is removed from the child list of the other display object container.
+         * @param child The DisplayObject instance to add as a child of this DisplayObjectContainer instance.
+         * @returns 在 child The DisplayObject instance that you pass in the child parameter.
+         * @see #addChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。子项将被添加到该 DisplayObjectContainer 实例中其他
+         * 所有子项的前（上）面。（要将某子项添加到特定索引位置，请使用 addChildAt() 方法。）
+         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @see #addChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        addChild(child: DisplayObject): DisplayObject;
+        /**
+         * @language en_US
+         * Adds a child DisplayObject instance to this DisplayObjectContainer instance. The child is added at the index position
+         * specified. An index of 0 represents the back (bottom) of the display list for this DisplayObjectContainer object.
+         * If you add a child object that already has a different display object container as a parent, the object is removed
+         * from the child list of the other display object container.
+         * @param child The DisplayObject instance to add as a child of this DisplayObjectContainer instance.
+         * @param index The index position to which the child is added. If you specify a currently occupied index position,
+         * the child object that exists at that position and all higher positions are moved up one position in the child list.
+         * @returns The DisplayObject instance that you pass in the child parameter.
+         * @see #addChild()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将一个 DisplayObject 子实例添加到该 DisplayObjectContainer 实例中。该子项将被添加到指定的索引位置。索引为 0 表示该
+         * DisplayObjectContainer 对象的显示列表的后（底）部。如果添加一个已将其它显示对象容器作为父项的子对象，则会从其它显示对象容器的子列表中删除该对象。
+         * @param child 要作为该 DisplayObjectContainer 实例的子项添加的 DisplayObject 实例。
+         * @param index 添加该子项的索引位置。 如果指定当前占用的索引位置，则该位置以及所有更高位置上的子对象会在子级列表中上移一个位置。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @see #addChild()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        addChildAt(child: DisplayObject, index: number): DisplayObject;
+        /**
+         * @language en_US
+         * Determines whether the specified display object is a child of the DisplayObjectContainer instance or the instance
+         * itself. The search includes the entire display list including this DisplayObjectContainer instance. Grandchildren,
+         * great-grandchildren, and so on each return true.
+         * @param child The child object to test.
+         * @returns true if the child object is a child of the DisplayObjectContainer or the container itself; otherwise false.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定指定显示对象是 DisplayObjectContainer 实例的子项还是该实例本身。搜索包括整个显示列表（其中包括此 DisplayObjectContainer 实例）。
+         * 孙项、曾孙项等，每项都返回 true。
+         * @param child 要测试的子对象。
+         * @returns 如果指定的显示对象为 DisplayObjectContainer 该实例本身，则返回true，如果指定的显示对象为当前实例子项，则返回false。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        contains(child: DisplayObject): boolean;
+        /**
+         * @language en_US
+         * Returns the child display object instance that exists at the specified index.
+         * @param index The index position of the child object.
+         * @returns The child display object at the specified index position.
+         * @see #getChildByName()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回位于指定索引处的子显示对象实例。
+         * @param index 子对象的索引位置。
+         * @returns 位于指定索引位置处的子显示对象。
+         * @see #getChildByName()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        getChildAt(index: number): DisplayObject;
+        /**
+         * @language en_US
+         * Returns the index position of a child DisplayObject instance.
+         * @param child The DisplayObject instance to identify.
+         * @returns The index position of the child display object to identify.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回 DisplayObject 的 child 实例的索引位置。
+         * @returns 要查找的子显示对象的索引位置。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        getChildIndex(child: DisplayObject): number;
+        /**
+         * @language en_US
+         * Returns the child display object that exists with the specified name. If more that one child display object has
+         * the specified name, the method returns the first object in the child list.The getChildAt() method is faster than
+         * the getChildByName() method. The getChildAt() method accesses a child from a cached array, whereas the getChildByName()
+         * method has to traverse a linked list to access a child.
+         * @param name The name of the child to return.
+         * @returns The child display object with the specified name.
+         * @see #getChildAt()
+         * @see lark.DisplayObject#name
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 返回具有指定名称的子显示对象。如果多个子显示对象具有指定名称，则该方法会返回子级列表中的第一个对象。
+         * getChildAt() 方法比 getChildByName() 方法快。getChildAt() 方法从缓存数组中访问子项，而 getChildByName() 方法则必须遍历链接的列表来访问子项。
+         * @param name 要返回的子项的名称。
+         * @returns 具有指定名称的子显示对象。
+         * @see #getChildAt()
+         * @see lark.DisplayObject#name
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        getChildByName(name: string): DisplayObject;
+        /**
+         * @language en_US
+         * Removes the specified child DisplayObject instance from the child list of the DisplayObjectContainer instance.
+         * The parent property of the removed child is set to null , and the object is garbage collected if no other references
+         * to the child exist. The index positions of any display objects above the child in the DisplayObjectContainer are
+         * decreased by 1.
+         * @param child The DisplayObject instance to remove.
+         * @returns The DisplayObject instance that you pass in the child parameter.
+         * @see #removeChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从 DisplayObjectContainer 实例的子列表中删除指定的 child DisplayObject 实例。将已删除子项的 parent 属性设置为 null；
+         * 如果不存在对该子项的任何其它引用，则将该对象作为垃圾回收。DisplayObjectContainer 中该子项之上的任何显示对象的索引位置都减去 1。
+         * @param child 要删除的 DisplayObject 实例。
+         * @returns 在 child 参数中传递的 DisplayObject 实例。
+         * @see #removeChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        removeChild(child: DisplayObject): DisplayObject;
+        /**
+         * @language en_US
+         * Removes a child DisplayObject from the specified index position in the child list of the DisplayObjectContainer.
+         * The parent property of the removed child is set to null, and the object is garbage collected if no other references
+         * to the child exist. The index positions of any display objects above the child in the DisplayObjectContainer are decreased by 1.
+         * @param index The child index of the DisplayObject to remove.
+         * @returns The DisplayObject instance that was removed.
+         * @see #removeChild()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从 DisplayObjectContainer 的子列表中指定的 index 位置删除子 DisplayObject。将已删除子项的 parent 属性设置为 null；
+         * 如果没有对该子项的任何其他引用，则将该对象作为垃圾回收。DisplayObjectContainer 中该子项之上的任何显示对象的索引位置都减去 1。
+         * @param index 要删除的 DisplayObject 的子索引。
+         * @returns 已删除的 DisplayObject 实例。
+         * @see #removeChild()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        removeChildAt(index: number): DisplayObject;
+        /**
+         * @language en_US
+         * Changes the position of an existing child in the display object container. This affects the layering of child objects.
+         * @param child The child DisplayObject instance for which you want to change the index number.
+         * @param index The resulting index number for the child display object.
+         * @see #addChildAt()
+         * @see #getChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 更改现有子项在显示对象容器中的位置。这会影响子对象的分层。
+         * @param child 要为其更改索引编号的 DisplayObject 子实例。
+         * @param index 生成的 child 显示对象的索引编号。当新的索引编号小于0或大于已有子元件数量时，新加入的DisplayObject对象将会放置于最上层。
+         * @see #addChildAt()
+         * @see #getChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        setChildIndex(child: DisplayObject, index: number): void;
+        /**
+         * @language en_US
+         * Swaps the z-order (front-to-back order) of the child objects at the two specified index positions in the child
+         * list. All other child objects in the display object container remain in the same index positions.
+         * @param index1 The index position of the first child object.
+         * @param index2 The index position of the second child object.
+         * @see #swapChildren()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在子级列表中两个指定的索引位置，交换子对象的 Z 轴顺序（前后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
+         * @param index1 第一个子对象的索引位置。
+         * @param index2 第二个子对象的索引位置。
+         * @see #swapChildren()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        swapChildrenAt(index1: number, index2: number): void;
+        /**
+         * @language en_US
+         * Swaps the z-order (front-to-back order) of the two specified child objects. All other child objects in the
+         * display object container remain in the same index positions.
+         * @param child1 The first child object.
+         * @param child2 The second child object.
+         * @see #swapChildrenAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 交换两个指定子对象的 Z 轴顺序（从前到后顺序）。显示对象容器中所有其他子对象的索引位置保持不变。
+         * @param child1 第一个子对象。
+         * @param child2 第二个子对象。
+         * @see #swapChildrenAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        swapChildren(child1: DisplayObject, child2: DisplayObject): void;
+        /**
+         * @language en_US
+         * Removes all child DisplayObject instances from the child list of the DisplayObjectContainer instance. The parent
+         * property of the removed children is set to null , and the objects are garbage collected if no other references to the children exist.
+         * @see #removeChild()
+         * @see #removeChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 从 DisplayObjectContainer 实例的子级列表中删除所有 child DisplayObject 实例。
+         * @see #removeChild()
+         * @see #removeChildAt()
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        removeChildren(): void;
+        /**
+         * @language en_US
+         * Determines whether or not the children of the object are touch, or user input device, enabled. If an object is
+         * enabled, a user can interact with it by using a touch or user input device.
+         * @default true
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 确定对象的子级是否支持触摸或用户输入设备。如果对象支持触摸或用户输入设备，用户可以通过使用触摸或用户输入设备与之交互。
+         * @default true
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        touchChildren: boolean;
+    }
+}
+declare module lark {
+    /**
+     * @copy lark.Motion
+     */
+    var Motion: {
+        new (): Motion;
+    };
+    /**
+     * @language en_US
+     * The Motion class emits events based on activity detected by the device's motion sensor.
+     * This data represents the device's movement along a 3-dimensional axis. When the device moves,
+     * the sensor detects this movement and emit the CHANGE event. @see lark.MotionEvent
+     *
+     * @event lark.Event.CHANGE device is moved
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/sensor/MotionExample.ts
+     */
+    /**
+     * @language zh_CN
+     * Motion 类从用户设备读取运动状态信息并派发 CHANGE 事件。
+     * 当设备移动时，传感器会检测到此移动并返回设备加速度，重力和旋转数据。@see lark.MotionEvent
+     * Motion 类提供了 start 和 stop 方法，来启动和停止运动信息检查
+     *
+     * @event lark.Event.CHANGE 运动状态发生改变
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/sensor/MotionExample.ts
+     */
+    interface Motion extends IEventEmitter {
+        /**
+         * @language en_US
+         * Start to monitor device movement
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 开始监听设备运动状态
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        start(): void;
+        /**
+         * @language en_US
+         * Stop monitor device movement
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 停止监听设备运动状态
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        stop(): void;
+    }
+    /**
+     * @language en_US
+     * A DeviceRotationRate object provides information about the rate at which
+     * the device is rotating around all three axes.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * DeviceRotationRate 提供设备围绕三个轴旋转的角速度信息，单位是 角度/秒
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    interface DeviceRotationRate {
+        /**
+         * @language en_US
+         * The amount of rotation around the Z axis, in degrees per second.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设备绕 Z 轴旋转的角速度信息，单位是 度/秒
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        alpha: number;
+        /**
+         * @language en_US
+         * The amount of rotation around the X axis, in degrees per second.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设备绕 X 轴旋转的角速度信息，单位是 度/秒
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        beta: number;
+        /**
+         * @language en_US
+         * The amount of rotation around the Y axis, in degrees per second.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 设备绕 Y 轴旋转的角速度信息，单位是 度/秒
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        gamma: number;
+    }
+    /**
+     * @language en_US
+     * A DeviceAcceleration object provides information about the amount
+     * of acceleration the device is experiencing along all three axes.
+     * Acceleration is expressed in m/s2.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * DeviceAcceleration 提供设备在三个维度的加速度信息，加速度值的单位是 m/s2
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    interface DeviceAcceleration {
+        /**
+         * @language en_US
+         * The amount of acceleration along the X axis
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * X 轴方向的加速度值
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        x: number;
+        /**
+         * @language en_US
+         * The amount of acceleration along the Y axis
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * Y 轴方向的加速度值
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        y: number;
+        /**
+         * @language en_US
+         * The amount of acceleration along the Z axis
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * Z 轴方向的加速度值
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        z: number;
+    }
+}
+declare module lark {
+    /**
+     * @copy lark.Orientation
+     */
+    var Orientation: {
+        new (): Orientation;
+    };
+    /**
+     * @language en_US
+     * Orientation monitor the orientation of the device, send CHANGE event when the orientation is changed
+     *
+     * @event lark.Event.CHANGE device's orientation is changed
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/sensor/OrientationExample.ts
+     */
+    /**
+     * @language zh_CN
+     * Orientation 监听设备方向的变化，当方向变化时派发 CHANGE 事件
+     * @event lark.Event.CHANGE 设备方向改变时派发
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/sensor/OrientationExample.ts
+     */
+    interface Orientation extends IEventEmitter {
+        /**
+         * @language en_US
+         * Start to monitor the device's orientation
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 开始监听设备方向变化
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        start(): void;
+        /**
+         * @language en_US
+         * Stop monitor the device's orientation
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 停止监听设备方向变化
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        stop(): void;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * Writes an error message to the console if the assertion is false. If the assertion is true, nothing will happen.
+     * @param assertion Any boolean expression. If the assertion is false, the message will get written to the console.
+     * @param message the message written to the console
+     * @param optionalParams the extra messages written to the console
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 判断参数assertion是否为true，若为false则抛出异常并且在console输出相应信息，反之什么也不做。
+     * @param assertion 一个 boolean 表达式，若结果为false，则抛出错误并输出信息。
+     * @param message 要输出到控制台的信息
+     * @param optionalParams 要输出到控制台的额外可选信息
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function assert(assertion?: boolean, message?: string, ...optionalParams: any[]): void;
+    /**
+     * @language en_US
+     * Writes a warning message to the console.
+     * @param message the message written to the console
+     * @param optionalParams the extra messages written to the console
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 输出一个警告信息到控制台。
+     * @param message 要输出到控制台的信息
+     * @param optionalParams 要输出到控制台的额外信息
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function warn(message?: any, ...optionalParams: any[]): void;
+    /**
+     * @language en_US
+     * Writes an error message to the console.
+     * @param message the message written to the console
+     * @param optionalParams the extra messages written to the console
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 输出一个错误信息到控制台。
+     * @param message 要输出到控制台的信息
+     * @param optionalParams 要输出到控制台的额外信息
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function error(message?: any, ...optionalParams: any[]): void;
+    /**
+     * @language en_US
+     * Writes an message to the console.
+     * @param message the message written to the console
+     * @param optionalParams the extra messages written to the console
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 输出一个日志信息到控制台。
+     * @param message 要输出到控制台的信息
+     * @param optionalParams 要输出到控制台的额外信息
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function log(message?: any, ...optionalParams: any[]): void;
 }
 declare module lark {
     /**
@@ -2926,13 +2625,315 @@ declare module lark {
         new (): HttpRequest;
     };
 }
-declare module lark.sys {
+declare module lark {
     /**
-     * @private
-     * 平台实现输入文本的接口
+     * @language en_US
+     * The HorizontalAlign class defines the possible values for the horizontal alignment.
+     * @see lark.TextField#textAlign
+     * @version Lark 1.0
+     * @platform Web,Native
      */
-    interface ITextAdapter {
+    /**
+     * @language zh_CN
+     * HorizontalAlign 类为水平对齐方式定义可能的值。
+     * @see lark.TextField#textAlign
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class HorizontalAlign {
+        /**
+         * @language en_US
+         * Horizontally align content to the left of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的左侧对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static LEFT: string;
+        /**
+         * @language en_US
+         * Horizontally align content to the right of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的右侧对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static RIGHT: string;
+        /**
+         * @language en_US
+         * Horizontally align content in the center of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在容器的水平中心对齐内容。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static CENTER: string;
     }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * Helper class to measure the width of text.
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 用于文本宽度测量的辅助类
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class TextMeasurer {
+        /**
+         * @language en_US
+         * Returns the width of the text with some specific styles.
+         * @param text the text to be measured.
+         * @param font text font style of the given text.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 测量文本在指定样式下的宽度。
+         * @param text 要测量的文本内容。
+         * @param font 文本的样式值。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static measureText(text: string, font: string): number;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The VerticalAlign class defines the possible values for the vertical alignment.
+     * @see lark.TextField#verticalAlign
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * VerticalAlign 类为垂直对齐方式定义可能的值。
+     * @see lark.TextField#verticalAlign
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    class VerticalAlign {
+        /**
+         * @language en_US
+         * Vertically align content to the top of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的顶部对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static TOP: string;
+        /**
+         * @language en_US
+         * Vertically align content to the bottom of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 将内容与容器的底部对齐。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static BOTTOM: string;
+        /**
+         * @language en_US
+         * Vertically align content in the middle of the container.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 在容器的垂直中心对齐内容。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        static MIDDLE: string;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * A BitmapData object contains an array of pixel data. This data can represent either a fully opaque bitmap or a
+     * transparent bitmap that contains alpha channel data. Either type of BitmapData object is stored as a buffer of 32-bit
+     * integers. Each 32-bit integer determines the properties of a single pixel in the bitmap.<br/>
+     * Each 32-bit integer is a combination of four 8-bit channel values (from 0 to 255) that describe the alpha transparency
+     * and the red, green, and blue (ARGB) values of the pixel. (For ARGB values, the most significant byte represents the
+     * alpha channel value, followed by red, green, and blue.)
+     * @see lark.Bitmap
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BitmapDataExample.ts
+     */
+    /**
+     * @language zh_CN
+     * BitmapData 对象是一个包含像素数据的数组。此数据可以表示完全不透明的位图，或表示包含 Alpha 通道数据的透明位图。
+     * 以上任一类型的 BitmapData 对象都作为 32 位整数的缓冲区进行存储。每个 32 位整数确定位图中单个像素的属性。<br/>
+     * 每个 32 位整数都是四个 8 位通道值（从 0 到 255）的组合，这些值描述像素的 Alpha 透明度以及红色、绿色、蓝色 (ARGB) 值。
+     * （对于 ARGB 值，最高有效字节代表 Alpha 通道值，其后的有效字节分别代表红色、绿色和蓝色通道值。）
+     * @see lark.Bitmap
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BitmapDataExample.ts
+     */
+    interface BitmapData extends HashObject {
+        /**
+         * @language en_US
+         * The width of the bitmap image in pixels.
+         * @readOnly
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 位图图像的宽度，以像素为单位。
+         * @readOnly
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        width: number;
+        /**
+         * @language en_US
+         * The height of the bitmap image in pixels.
+         * @readOnly
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 位图图像的高度，以像素为单位。
+         * @readOnly
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        height: number;
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * Return the fully qualified class name of an object
+     * @param value The object for which a fully qualified class name is desired. Any JavaScript value may be passed to
+     * this method including all available JavaScript types, object instances, primitive types such as number, and class objects.
+     * @returns A string containing the fully qualified class name.
+     * @example
+     * <pre>
+     *  lark.getQualifiedClassName(lark.DisplayObject) //return "lark.DisplayObject"
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 返回对象的完全限定类名。
+     * @param value 需要完全限定类名称的对象，可以将任何 JavaScript 值传递给此方法，包括所有可用的 JavaScript 类型、对象实例、原始类型
+     * （如number)和类对象
+     * @returns 包含完全限定类名称的字符串。
+     * @example
+     * <pre>
+     *  lark.getQualifiedClassName(lark.DisplayObject) //返回 "lark.DisplayObject"
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function getQualifiedClassName(value: any): string;
+}
+declare module lark {
+    /** @language en_US
+     * Returns the fully qualified class name of the base class of the object specified by the value parameter.
+     * @param value The object for which a parent class is desired. Any JavaScript value may be passed to this method including
+     * all available JavaScript types, object instances, primitive types such as number, and class objects.
+     * @returns  A fully qualified base class name, or null if none exists.
+     * @example
+     * <pre>
+     *  lark.getQualifiedSuperclassName(lark.Bitmap) //return "lark.DisplayObject"
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 返回 value 参数指定的对象的基类的完全限定类名。
+     * @param value 需要取得父类的对象，可以将任何 JavaScript 值传递给此方法，包括所有可用的 JavaScript 类型、对象实例、原始类型（如number）和类对象
+     * @returns 完全限定的基类名称，或 null（如果不存在基类名称）。
+     * @example
+     * <pre>
+     *  lark.getQualifiedSuperclassName(lark.Sprite) //返回 "lark.DisplayObject"
+     * </pre>
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function getQualifiedSuperclassName(value: any): string;
+}
+declare module lark {
+    /**
+     * @language en_US
+     * Register and start a timer,which will notify the callback method at a rate of 60 FPS ,and pass the current time stamp as parameters.<br/>
+     * Note: After the registration,it will notify the callback method continuously,you can call the stopTick () method to stop it.
+     * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
+     * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
+     * to render after processing of this method completes.
+     * @param thisObject the call back method's "this"
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 注册并启动一个计时器，通常会以60FPS的速率触发回调方法，并传入当前时间戳。注意：注册后将会持续触发回调方法，若要停止回调，需要手动调用stopTick()方法。
+     * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
+     * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
+     * @param thisObject 回调方法的this对象引用。
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function startTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
+}
+declare module lark {
+    /**
+     * @language en_US
+     * Stops the timer started by the lark.startTick() method.
+     * @param callBack the call back method. the timeStamp parameter of this method represents the number of milliseconds
+     * since the Lark framework was initialized. If the return value of this method is true, it will force Lark runtime
+     * to render after processing of this method completes.
+     * @param thisObject the call back method's "this"
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    /**
+     * @language zh_CN
+     * 停止之前用 startTick() 方法启动的计时器。
+     * @param callBack 要执行的回调方法。参数 timeStamp 表示从启动Lark框架开始经过的时间(毫秒)。
+     * 若回调方法返回值为true，其作用与TimerEvent.updateAfterEvent()类似，将会忽略帧频限制，在此方法处理完成后立即重绘屏幕。
+     * @param thisObject 回调方法的this对象引用。
+     * @includeExample examples/Samples/src/lark/utils/StartTickExample.ts
+     * @version Lark 1.0
+     * @platform Web,Native
+     */
+    function stopTick(callBack: (timeStamp: number) => boolean, thisObject: any): void;
 }
 declare module lark {
     /**
@@ -2978,6 +2979,13 @@ declare module lark {
          * @platform Web,Native
          */
         static POST: string;
+    }
+}
+declare module lark.sys {
+    /**
+     * @private
+     */
+    interface Renderable extends HashObject {
     }
 }
 declare module lark {
@@ -7095,128 +7103,6 @@ declare module lark {
         graphics: Graphics;
     }
 }
-declare module lark.sys {
-    /**
-     * @private
-     */
-    const enum BitmapKeys {
-        bitmapData = 0,
-        image = 1,
-        clipX = 2,
-        clipY = 3,
-        clipWidth = 4,
-        clipHeight = 5,
-        offsetX = 6,
-        offsetY = 7,
-        width = 8,
-        height = 9,
-        smoothing = 10,
-    }
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The Bitmap class represents display objects that represent bitmap images.
-     * The Bitmap() constructor allows you to create a Bitmap object that contains a reference to a BitmapData object.
-     * After you create a Bitmap object, use the addChild() or addChildAt() method of the parent DisplayObjectContainer
-     * instance to place the bitmap on the display list.A Bitmap object can share its BitmapData reference among several
-     * Bitmap objects, independent of translation or rotation properties. Because you can create multiple Bitmap objects
-     * that reference the same BitmapData object, multiple display objects can use the same complex BitmapData object
-     * without incurring the memory overhead of a BitmapData object for each display object instance.
-     *
-     * @see lark.BitmapData
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
-     */
-    /**
-     * @language zh_CN
-     * Bitmap 类表示用于显示位图图片的显示对象。
-     * 利用 Bitmap() 构造函数，可以创建包含对 BitmapData 对象引用的 Bitmap 对象。创建了 Bitmap 对象后，
-     * 使用父级 DisplayObjectContainer 实例的 addChild() 或 addChildAt() 方法可以将位图放在显示列表中。
-     * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 BitmapData 引用，与缩放或旋转属性无关。
-     * 由于能够创建引用相同 BitmapData 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的 BitmapData 对象，
-     * 而不会因为每个显示对象实例使用一个 BitmapData 对象而产生额外内存开销。
-     *
-     * @see lark.BitmapData
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
-     */
-    class Bitmap extends DisplayObject {
-        /**
-         * @language en_US
-         * Initializes a Bitmap object to refer to the specified BitmapData object.
-         * @param bitmapData The BitmapData object being referenced.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 创建一个引用指定 BitmapData 实例的 Bitmap 对象
-         * @param bitmapData 被引用的 BitmapData 实例
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        constructor(bitmapData?: BitmapData | Texture);
-        /**
-         * @language en_US
-         * The BitmapData object being referenced.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 被引用的 BitmapData 对象。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        bitmapData: BitmapData | Texture;
-        /**
-         * @private
-         */
-        private setImageData(image, clipX, clipY, clipWidth, clipHeight, offsetX, offsetY, width, height);
-        /**
-         * @language en_US
-         * Whether or not the bitmap is smoothed when scaled.
-         * @default true。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 控制在缩放时是否对位图进行平滑处理。
-         * @default true。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        smoothing: boolean;
-        private _pixelHitTest;
-        /**
-         * @language en_US
-         * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
-         * is set to true,the transparent area of the bitmap will be touched through.
-         * Note:If the image is loaded from cross origin,that we can't access to the pixel data,so it might cause
-         * the pixelHitTest property invalid.
-         * @default false
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透。<br/>
-         * 注意：若图片资源是以跨域方式从外部服务器加载的，将无法访问图片的像素数据，而导致此属性失效。
-         * @default false
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        pixelHitTest: boolean;
-        /**
-         * @private
-         */
-        private hitTestPixel(stageX, stageY);
-    }
-}
 declare module lark {
     /**
      * @language en_US
@@ -7555,6 +7441,267 @@ declare module lark {
      * 仅供框架内复用，要防止暴露引用到外部。
      */
     var $TempRectangle: Rectangle;
+}
+declare module lark.sys {
+    /**
+     * @private
+     */
+    const enum BitmapKeys {
+        bitmapData = 0,
+        image = 1,
+        clipX = 2,
+        clipY = 3,
+        clipWidth = 4,
+        clipHeight = 5,
+        offsetX = 6,
+        offsetY = 7,
+        width = 8,
+        height = 9,
+        smoothing = 10,
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The Bitmap class represents display objects that represent bitmap images.
+     * The Bitmap() constructor allows you to create a Bitmap object that contains a reference to a BitmapData object.
+     * After you create a Bitmap object, use the addChild() or addChildAt() method of the parent DisplayObjectContainer
+     * instance to place the bitmap on the display list.A Bitmap object can share its BitmapData reference among several
+     * Bitmap objects, independent of translation or rotation properties. Because you can create multiple Bitmap objects
+     * that reference the same BitmapData object, multiple display objects can use the same complex BitmapData object
+     * without incurring the memory overhead of a BitmapData object for each display object instance.
+     *
+     * @see lark.BitmapData
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
+     */
+    /**
+     * @language zh_CN
+     * Bitmap 类表示用于显示位图图片的显示对象。
+     * 利用 Bitmap() 构造函数，可以创建包含对 BitmapData 对象引用的 Bitmap 对象。创建了 Bitmap 对象后，
+     * 使用父级 DisplayObjectContainer 实例的 addChild() 或 addChildAt() 方法可以将位图放在显示列表中。
+     * 一个 Bitmap 对象可在若干 Bitmap 对象之中共享其 BitmapData 引用，与缩放或旋转属性无关。
+     * 由于能够创建引用相同 BitmapData 对象的多个 Bitmap 对象，因此，多个显示对象可以使用相同的 BitmapData 对象，
+     * 而不会因为每个显示对象实例使用一个 BitmapData 对象而产生额外内存开销。
+     *
+     * @see lark.BitmapData
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/BitmapExample.ts
+     */
+    class Bitmap extends DisplayObject {
+        /**
+         * @language en_US
+         * Initializes a Bitmap object to refer to the specified BitmapData object.
+         * @param bitmapData The BitmapData object being referenced.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 创建一个引用指定 BitmapData 实例的 Bitmap 对象
+         * @param bitmapData 被引用的 BitmapData 实例
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        constructor(bitmapData?: BitmapData | Texture);
+        /**
+         * @language en_US
+         * The BitmapData object being referenced.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 被引用的 BitmapData 对象。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        bitmapData: BitmapData | Texture;
+        /**
+         * @private
+         */
+        private setImageData(image, clipX, clipY, clipWidth, clipHeight, offsetX, offsetY, width, height);
+        /**
+         * @language en_US
+         * Whether or not the bitmap is smoothed when scaled.
+         * @default true。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 控制在缩放时是否对位图进行平滑处理。
+         * @default true。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        smoothing: boolean;
+        private _pixelHitTest;
+        /**
+         * @language en_US
+         * Specifies whether this object use precise hit testing by checking the alpha value of each pixel.If pixelHitTest
+         * is set to true,the transparent area of the bitmap will be touched through.
+         * Note:If the image is loaded from cross origin,that we can't access to the pixel data,so it might cause
+         * the pixelHitTest property invalid.
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 是否开启精确像素碰撞。设置为true显示对象本身的透明区域将能够被穿透。<br/>
+         * 注意：若图片资源是以跨域方式从外部服务器加载的，将无法访问图片的像素数据，而导致此属性失效。
+         * @default false
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        pixelHitTest: boolean;
+        /**
+         * @private
+         */
+        private hitTestPixel(stageX, stageY);
+    }
+}
+declare module lark {
+    /**
+     * @language en_US
+     * The Sprite class is a basic display list building block: a display list node that can contain children.
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/SpriteExample.ts
+     */
+    /**
+     * @language zh_CN
+     * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
+     * @version Lark 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/lark/display/SpriteExample.ts
+     */
+    class Sprite extends DisplayObject implements DisplayObjectContainer {
+        /**
+         * @language en_US
+         * Creates a new Sprite instance.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 实例化一个容器
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        constructor();
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        numChildren: number;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        addChild(child: DisplayObject): DisplayObject;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        addChildAt(child: DisplayObject, index: number): DisplayObject;
+        /**
+         * @private
+         */
+        private doAddChild(child, index);
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        contains(child: DisplayObject): boolean;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        getChildAt(index: number): DisplayObject;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        getChildIndex(child: DisplayObject): number;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        getChildByName(name: string): DisplayObject;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        removeChild(child: DisplayObject): DisplayObject;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        removeChildAt(index: number): DisplayObject;
+        /**
+         * @private
+         */
+        private doRemoveChild(index);
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        setChildIndex(child: DisplayObject, index: number): void;
+        /**
+         * @private
+         */
+        private doSetChildIndex(child, index);
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        swapChildrenAt(index1: number, index2: number): void;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        swapChildren(child1: DisplayObject, child2: DisplayObject): void;
+        /**
+         * @private
+         */
+        private doSwapChildrenAt(index1, index2);
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        removeChildren(): void;
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        touchChildren: boolean;
+        /**
+         * @private
+         */
+        private markChildDirty(child, parentCache);
+        /**
+         * @private
+         */
+        private assignParentDisplayList(child, parentCache, newParent);
+    }
 }
 declare module lark.sys {
     /**
@@ -7928,145 +8075,6 @@ declare module lark.sys {
      * 返回字符串形式的颜色值
      */
     function toColorString(value: number): string;
-}
-declare module lark {
-    /**
-     * @language en_US
-     * The Sprite class is a basic display list building block: a display list node that can contain children.
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/SpriteExample.ts
-     */
-    /**
-     * @language zh_CN
-     * Sprite 类是基本显示列表构造块：一个可包含子项的显示列表节点。
-     * @version Lark 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/lark/display/SpriteExample.ts
-     */
-    class Sprite extends DisplayObject implements DisplayObjectContainer {
-        /**
-         * @language en_US
-         * Creates a new Sprite instance.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 实例化一个容器
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        constructor();
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        numChildren: number;
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        addChild(child: DisplayObject): DisplayObject;
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        addChildAt(child: DisplayObject, index: number): DisplayObject;
-        /**
-         * @private
-         */
-        private doAddChild(child, index);
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        contains(child: DisplayObject): boolean;
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        getChildAt(index: number): DisplayObject;
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        getChildIndex(child: DisplayObject): number;
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        getChildByName(name: string): DisplayObject;
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        removeChild(child: DisplayObject): DisplayObject;
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        removeChildAt(index: number): DisplayObject;
-        /**
-         * @private
-         */
-        private doRemoveChild(index);
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        setChildIndex(child: DisplayObject, index: number): void;
-        /**
-         * @private
-         */
-        private doSetChildIndex(child, index);
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        swapChildrenAt(index1: number, index2: number): void;
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        swapChildren(child1: DisplayObject, child2: DisplayObject): void;
-        /**
-         * @private
-         */
-        private doSwapChildrenAt(index1, index2);
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        removeChildren(): void;
-        /**
-         * @inheritDoc
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        touchChildren: boolean;
-        /**
-         * @private
-         */
-        private markChildDirty(child, parentCache);
-        /**
-         * @private
-         */
-        private assignParentDisplayList(child, parentCache, newParent);
-    }
 }
 declare module lark.sys {
     /**

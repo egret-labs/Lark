@@ -35,8 +35,11 @@ module lark {
      * The Video class lets you create a Video object, load and play an external video file into that object.
      * Note: On most mobile device, the video is playback in the full screen mode.<br/>
      *
-     * @event egret.Event.COMPLETE Emit when the video resource is loaded and ready to play
-     * @event egret.Event.ENDED Emit when the video playback ended
+     * @param url URL of the media to play, Video will start to load if the url is not empty
+     * 
+     * @event lark.Event.COMPLETE Emit when the video resource is loaded and ready to play
+     * @event lark.Event.ENDED Emit when the video playback ended
+     * @event lark.Event.IO_ERROR when the video is failed to load
      * @version Lark 1.0
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/media/VideoExample.ts
@@ -46,8 +49,11 @@ module lark {
      * Video 允许您在应用程序中使用视频。使用 Video 类可以创建 Video 对象、将外部视频文件加载到该对象并播放该文件。<br/>
      * 注意: 在大多数移动设备中，视频是强制全屏播放的，所以你可以直接调用 play() 方法全屏播放视频，不用将它绘制在Stage中。
      *
-     * @event egret.Event.COMPLETE 视频加载完成时抛出
-     * @event egret.Event.ENDED 视频播放完成时抛出
+     * @param url 要播放的视频的URL，如果url不为空，Video会立即加载这个视频
+     *
+     * @event lark.Event.COMPLETE 视频加载完成时抛出
+     * @event lark.Event.ENDED 视频播放完成时抛出
+     * @event lark.Event.IO_ERROR 视频加载失败市触发
      * @version Lark 1.0
      * @platform Web,Native
      * @includeExample examples/Samples/src/lark/media/VideoExample.ts
