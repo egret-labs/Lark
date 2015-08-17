@@ -39,6 +39,12 @@ button.width = 100;
 button.height = 40;
 button.label = "确定";
 this.addChild(button);
+var button2 = new swan.Button();
+button2.y = 50;
+button2.width = 200;
+button2.height = 200;
+button2.label = "确定";
+this.addChild(button2);
 ```  
 ![](image/7/7_3_2.png)
 
