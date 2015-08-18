@@ -23,7 +23,6 @@ class SoundExample extends lark.Sprite {
 
         var sound = new lark.Sound("resources/sound_go.mp3");
         sound.on(lark.Event.COMPLETE, this.onLoaded, this);
-        sound.load();
         this.sound = sound;
     }
 

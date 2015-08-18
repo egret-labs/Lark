@@ -50,7 +50,7 @@
 	},
 	"lark.Bitmap":
 	{
-		"bitmapData":"lark.BitmapData",
+		"bitmapData":"any",
 		"pixelHitTest":"boolean",
 		"smoothing":"boolean",
 		"super":"lark.DisplayObject"
@@ -79,12 +79,12 @@
 	"lark.Event":
 	{
 		"data":"any",
-		"super":"lark.LarkObject"
+		"super":"lark.HashObject"
 	},
 	"lark.EventEmitter":
 	{
 		"implements":["lark.IEventEmitter"],
-		"super":"lark.LarkObject"
+		"super":"lark.HashObject"
 	},
 	"lark.GeolocationEvent":
 	{
@@ -98,9 +98,9 @@
 		"lineWidth":"number",
 		"miterLimit":"number",
 		"strokeStyle":"any",
-		"super":"lark.LarkObject"
+		"super":"lark.HashObject"
 	},
-	"lark.LarkObject":
+	"lark.HashObject":
 	{
 		
 	},
@@ -110,7 +110,7 @@
 		"b":"number",
 		"c":"number",
 		"d":"number",
-		"super":"lark.LarkObject",
+		"super":"lark.HashObject",
 		"tx":"number",
 		"ty":"number"
 	},
@@ -127,7 +127,7 @@
 	},
 	"lark.Point":
 	{
-		"super":"lark.LarkObject",
+		"super":"lark.HashObject",
 		"x":"number",
 		"y":"number"
 	},
@@ -143,7 +143,7 @@
 		"height":"number",
 		"left":"number",
 		"right":"number",
-		"super":"lark.LarkObject",
+		"super":"lark.HashObject",
 		"top":"number",
 		"width":"number",
 		"x":"number",
@@ -185,6 +185,10 @@
 		"displayAsPassword":"boolean",
 		"maxChars":"number",
 		"super":"lark.TextField"
+	},
+	"lark.Texture":
+	{
+		"super":"lark.HashObject"
 	},
 	"lark.Timer":
 	{
@@ -505,7 +509,7 @@
 		"minWidth":"number",
 		"skinParts":"Array",
 		"states":"Array",
-		"super":"lark.LarkObject",
+		"super":"lark.HashObject",
 		"width":"number"
 	},
 	"swan.SliderBase":
@@ -523,7 +527,7 @@
 		"name":"string",
 		"overrides":"Array",
 		"stateGroups":"Array",
-		"super":"lark.LarkObject"
+		"super":"lark.HashObject"
 	},
 	"swan.TabBar":
 	{
@@ -564,6 +568,10 @@
 	"swan.UIEvent":
 	{
 		"super":"lark.Event"
+	},
+	"swan.UILayer":
+	{
+		"super":"swan.Group"
 	},
 	"swan.VScrollBar":
 	{

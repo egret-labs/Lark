@@ -1,6 +1,7 @@
 /// <reference path="../lib/types.d.ts" />
 var utils = require('../lib/utils');
 var service = require('../service/index');
+var exml = require('../actions/EXMLAction');
 var FileUtil = require('../lib/FileUtil');
 var CopyFiles = require('../actions/CopyFiles');
 var CompileProject = require('../actions/CompileProject');
@@ -45,6 +46,7 @@ var AutoCompileCommand = (function () {
         CopyFiles.copyProjectFiles();
         _scripts = result.files.length > 0 ? result.files : _scripts;
         CompileTemplate.compileTemplates(options, _scripts);
+        exml.updateSetting(false);
         this._scripts = result.files;
         this._lastExitCode = result.exitStatus;
         this._lastMessages = result.messages;
@@ -87,9 +89,7 @@ var AutoCompileCommand = (function () {
         var src = lark.options.srcDir, temp = lark.options.templateDir, proj = lark.options.larkPropertiesFile, start = "index.html";
         fileNames.forEach(function (fileName) {
             if (fileName == proj) {
-                lark.options.includeLark = true;
                 _this.buildProject();
-                lark.options.includeLark = false;
             }
             if (fileName.indexOf(src) < 0 && fileName.indexOf(temp) < 0) {
                 return;
@@ -106,6 +106,8 @@ var AutoCompileCommand = (function () {
             }
             if (fileName.indexOf(start) >= 0)
                 return _this.onTemplateIndexChanged();
+            if (fileName.indexOf('.exml') >= 0)
+                exml.updateSetting(false);
         });
     };
     AutoCompileCommand.prototype.onTemplateIndexChanged = function () {
@@ -113,6 +115,10 @@ var AutoCompileCommand = (function () {
         index = FileUtil.escapePath(index);
         console.log('Compile Template: ' + index);
         CompileTemplate.compileTemplates(lark.options, this._scripts);
+        return 0;
+    };
+    AutoCompileCommand.prototype.onEXMLChanged = function () {
+        exml.updateSetting(false);
         return 0;
     };
     AutoCompileCommand.prototype.onServiceMessage = function (msg) {

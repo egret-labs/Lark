@@ -13,13 +13,13 @@ var lark;
                 this.scaleModes = lark.manifest.scaleModes;
                 this.orientationModes = lark.manifest.orientationModes;
                 this.modules = [];
-                this.platforms = [];
+                this.platform = "web";
                 this.scaleMode = 'noScale';
                 this.orientationMode = 'auto';
                 this.contentWidth = 480;
                 this.contentHeight = 800;
                 this.showPaintRects = false;
-                this.template = "Empty";
+                this.template = "swan";
                 this.port = 3000;
                 this.isConfig = location.pathname.indexOf("/$/config") >= 0;
                 this.isConfirmed = true;
@@ -36,13 +36,10 @@ var lark;
                     });
                 });
                 this.larkManifest.platforms.forEach(function (lm) {
-                    if (lm.name == 'web')
+                    if (lm.name == _this.platform)
                         lm.checked = true;
-                    _this.platforms.forEach(function (m) {
-                        if (lm.name == m.name)
-                            lm.checked = true;
-                    });
                 });
+                this.selectTemplate(this.template);
                 var port = parseInt(location.port || "80");
                 this.port = port;
                 var exist = location.search && location.search.indexOf("exist=true") >= 0;
@@ -53,7 +50,7 @@ var lark;
                 var _this = this;
                 var manifest = this.larkManifest;
                 this.modules = manifest.modules.filter(function (m) { return m.checked; }).map(function (m) { return { name: m.name }; });
-                this.platforms = manifest.platforms.filter(function (p) { return p.checked; }).map(function (p) { return { name: p.name }; });
+                //this.platform = manifest.platforms.filter(p=> p.checked)[0].name;
                 this.larkManifest = undefined;
                 var modes = this.scaleModes;
                 this.scaleModes = undefined;
@@ -85,6 +82,24 @@ var lark;
                 var n = this.contentHeight;
                 this.contentHeight = this.contentWidth;
                 this.contentWidth = n;
+            };
+            Project.prototype.selectTemplate = function (name) {
+                this.template = name;
+                var templates = this.larkManifest.templates;
+                for (var i = 0; i < templates.length; i++) {
+                    if (templates[i].name == name) {
+                        var modules = templates[i].modules;
+                        this.larkManifest.modules.forEach(function (lm) {
+                            if (modules.indexOf(lm.name) >= 0) {
+                                lm.checked = true;
+                                lm.readonly = true;
+                            }
+                            else
+                                lm.readonly = false;
+                        });
+                        break;
+                    }
+                }
             };
             return Project;
         })();

@@ -225,6 +225,8 @@ var lark;
                 this.$renderRegion = new lark.sys.Region();
                 this.src = url;
                 this.once(lark.Event.ADDED_TO_STAGE, this.loadPoster, this);
+                if (url)
+                    this.load();
             }
             var d = __define,c=WebVideo;p=c.prototype;
             /**
@@ -759,10 +761,11 @@ var lark;
                     _this.emitWith(lark.Event.COMPLETE);
                 };
                 this.url = url;
+                if (url)
+                    this.load();
             }
             var d = __define,c=HtmlSound;p=c.prototype;
             /**
-             * @private
              * @inheritDoc
              */
             p.load = function (url) {
@@ -779,7 +782,6 @@ var lark;
                 this.audios.push(audio);
             };
             /**
-             * @private
              * @inheritDoc
              */
             p.play = function (startTime, loop) {
@@ -805,7 +807,6 @@ var lark;
                 return channel;
             };
             /**
-             * @private
              * @inheritDoc
              */
             p.close = function () {

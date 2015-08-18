@@ -66,7 +66,7 @@ module swan {
          * Constructor.
          *
          * @param source The source used for the bitmap fill. the value can be
-         * a string or an instance of <code>BitmapData</code>
+         * a string or an instance of <code>lark.BitmapData</code>
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -76,7 +76,7 @@ module swan {
          * @language zh_CN
          * 构造函数。
          *
-         * @param source 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
+         * @param source 用于位图填充的源。可以是一个字符串或者 <code>lark.BitmapData</code> 对象
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -93,7 +93,9 @@ module swan {
         /**
          * @private
          */
+        //if lark
         private _scale9Grid:lark.Rectangle = null;
+        //endif*/
 
         /**
          * @language en_US
@@ -115,18 +117,32 @@ module swan {
          * @platform Web,Native
          */
         public get scale9Grid():lark.Rectangle {
+            //if lark
             return this._scale9Grid;
+            //endif*/
+            /*//if egret
+            return this.$scale9Grid;
+            //endif*/
         }
 
         public set scale9Grid(value:lark.Rectangle) {
+            //if lark
             this._scale9Grid = value;
             this.invalidateDisplayList();
+            //endif*/
+            /*//if egret
+            this.$scale9Grid = value;
+            this.$invalidateContentBounds();
+            this.invalidateDisplayList();
+            //endif*/
         }
 
         /**
          * @private
          */
+        //if lark
         private _fillMode:string = "scale";
+        //endif*/
         /**
          * @language en_US
          * Determines how the bitmap fills in the dimensions.
@@ -157,16 +173,36 @@ module swan {
          * @platform Web,Native
          */
         public get fillMode():string {
+            //if lark
             return this._fillMode;
+            //endif*/
+            /*//if egret
+            return this.$fillMode;
+            //endif*/
         }
 
         public set fillMode(value:string) {
+            //if lark
             if (value == this._fillMode) {
                 return;
             }
             this._fillMode = value;
+            //endif*/
+            /*//if egret
+            if (value == this.$fillMode) {
+                return;
+            }
+            this.$fillMode = value;
+             //endif*/
             this.invalidateDisplayList();
         }
+
+        /*//if egret
+        $setFillMode(value:string):void {
+            super.$setFillMode(value);
+            this.invalidateDisplayList();
+        }
+         //endif*/
 
         /**
          * @private
@@ -179,7 +215,7 @@ module swan {
         /**
          * @language en_US
          * The source used for the bitmap fill. the value can be
-         * a string or an instance of <code>BitmapData</code>
+         * a string or an instance of <code>lark.BitmapData</code>
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -187,7 +223,7 @@ module swan {
          */
         /**
          * @language zh_CN
-         * 用于位图填充的源。可以是一个字符串或者 <code>BitmapData</code> 对象
+         * 用于位图填充的源。可以是一个字符串或者 <code>lark.BitmapData</code> 对象
          *
          * @version Lark 1.0
          * @version Swan 1.0
@@ -209,6 +245,7 @@ module swan {
         /**
          * @private
          */
+        //if lark
         $setBitmapData(value:lark.BitmapData|lark.Texture):void {
             var values = this.$Bitmap;
             if (value == values[lark.sys.BitmapKeys.bitmapData]) {
@@ -219,6 +256,18 @@ module swan {
             this.invalidateSize();
             this.invalidateDisplayList();
         }
+        //endif*/
+        /*//if egret
+        $setBitmapData(value:egret.Texture):void {
+            if (value == this.$bitmapData) {
+                return;
+            }
+            super.$setBitmapData(value);
+            this.sourceChanged = false;
+            this.invalidateSize();
+            this.invalidateDisplayList();
+        }
+         //endif*/
 
         /**
          * @private
@@ -246,7 +295,13 @@ module swan {
         private contentChanged(data:any, source:any):void {
             if (source !== this._source)
                 return;
-            if (!lark.is(data, "lark.BitmapData")&&!(data instanceof lark.Texture)) {
+            //if lark
+            if (!lark.is(data, "lark.BitmapData") && !(data instanceof lark.Texture))
+            //endif*/
+            /*//if egret
+            if (!egret.is(data, "egret.Texture"))
+             //endif*/
+            {
                 return;
             }
             this.$setBitmapData(data);
@@ -261,6 +316,7 @@ module swan {
         /**
          * @private
          */
+        //if lark
         $measureContentBounds(bounds:lark.Rectangle):void {
             var values = this.$Bitmap;
             var image = values[lark.sys.BitmapKeys.image];
@@ -272,7 +328,8 @@ module swan {
                     bounds.setEmpty();
                     return;
                 }
-                if (this._fillMode == "clip") {
+                if (this._fillMode == "clip")
+                {
                     if (width > values[lark.sys.BitmapKeys.width]) {
                         width = values[lark.sys.BitmapKeys.width];
                     }
@@ -286,15 +343,49 @@ module swan {
                 bounds.setEmpty();
             }
         }
+        //endif*/
+        /*//if egret
+        $measureContentBounds(bounds:lark.Rectangle):void {
+            var values = this.$Bitmap;
+            var image = this.$bitmapData;
+            if (image) {
+                var uiValues = this.$UIComponent;
+                var width = uiValues[sys.UIKeys.width];
+                var height = uiValues[sys.UIKeys.height];
+                if (isNaN(width) || isNaN(height)) {
+                    bounds.setEmpty();
+                    return;
+                }
+                if (this.$fillMode == "clip")
+                {
+                    if (width > image.$getTextureWidth()) {
+                        width = image.$getTextureWidth();
+                    }
+                    if (height > image.$getTextureHeight()) {
+                        height = image.$getTextureHeight();
+                    }
+                }
+                bounds.setTo(0, 0, width, height);
+            }
+            else {
+                bounds.setEmpty();
+            }
+        }
+         //endif*/
 
         /**
          * @private
-         * 
-         * @param context 
+         *
+         * @param context
          */
         $render(context:lark.sys.RenderContext):void {
+            //if lark
             var values = this.$Bitmap;
             var image = values[lark.sys.BitmapKeys.image];
+            //endif*/
+            /*//if egret
+            var image = this.$bitmapData;
+             //endif*/
             if (!image) {
                 return;
             }
@@ -304,6 +395,7 @@ module swan {
             if (width === 0 || height === 0) {
                 return;
             }
+            //if lark
             switch (this._fillMode) {
                 case "clip":
                     if (width > values[lark.sys.BitmapKeys.width]) {
@@ -331,12 +423,17 @@ module swan {
                     }
                     break;
             }
+            //endif*/
+            /*//if egret
+            egret.Bitmap.$drawImage(context, image, width, height, this.$scale9Grid, this.$fillMode, this.$smoothing, 0, 0);
+            //endif*/
         }
 
         /**
          * @private
          * 绘制九宫格位图
          */
+        //if lark
         private drawScale9GridImage(context:lark.sys.RenderContext, image:lark.BitmapData,
                                     scale9Grid:lark.Rectangle, surfaceWidth?:number, surfaceHeight?:number):void {
 
@@ -411,7 +508,7 @@ module swan {
             context.drawImage(image, sourceX1, sourceY2, sourceW1, sourceH2, targetX1, targetY2, targetW1, sourceH2);
             context.drawImage(image, sourceX2, sourceY2, sourceW2, sourceH2, targetX2, targetY2, sourceW2, sourceH2);
         }
-
+        //endif*/
 
         //=======================UIComponent接口实现===========================
         /**
@@ -464,6 +561,7 @@ module swan {
          * @platform Web,Native
          */
         protected measure():void {
+            //if lark
             var values = this.$Bitmap;
             var image = values[lark.sys.BitmapKeys.image];
             if (image) {
@@ -472,7 +570,16 @@ module swan {
             else {
                 this.setMeasuredSize(0, 0);
             }
-
+            //endif*/
+            /*//if egret
+            var bitmapData = this.$bitmapData;
+            if (bitmapData) {
+                this.setMeasuredSize(bitmapData.$getTextureWidth(), bitmapData.$getTextureHeight());
+            }
+            else {
+                this.setMeasuredSize(0, 0);
+            }
+            //endif*/
         }
 
         /**

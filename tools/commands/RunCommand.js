@@ -7,11 +7,19 @@ var service = require('../service/index');
 var RunCommand = (function () {
     function RunCommand() {
         var _this = this;
+        this.serverStarted = false;
         this.onBuildFinish = function (exitCode) {
+            if (_this.serverStarted)
+                return;
             if (exitCode != 0) {
                 process.exit(exitCode);
             }
-            utils.getAvailablePort(function (port) { return _this.onGotPort(port); }, lark.options.port);
+            if (lark.options.platform == undefined || lark.options.platform == 'web') {
+                utils.getAvailablePort(function (port) { return _this.onGotPort(port); }, lark.options.port);
+            }
+            else {
+                process.exit(0);
+            }
         };
     }
     RunCommand.prototype.execute = function () {
@@ -26,6 +34,7 @@ var RunCommand = (function () {
         if (addresses.length > 0) {
             lark.options.host = addresses[0];
         }
+        this.serverStarted = true;
         server.startServer(lark.options, lark.options.startUrl);
         console.log("    " + utils.tr(10013, ''));
         console.log('\n');

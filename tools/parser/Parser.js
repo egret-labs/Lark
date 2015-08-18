@@ -7,10 +7,6 @@ exports.optionDeclarations = [
         name: "action",
         type: "string"
     }, {
-        name: "includeLark",
-        type: "boolean",
-        shortName: "e"
-    }, {
         name: "sourceMap",
         type: "boolean"
     }, {
@@ -63,6 +59,9 @@ exports.optionDeclarations = [
     }, {
         name: 'modified',
         type: 'array'
+    }, {
+        name: 'manifest',
+        type: 'string'
     }
 ];
 var shortOptionNames = {};
@@ -83,6 +82,7 @@ function parseCommandLine(commandLine) {
     return options;
     function parseStrings(args) {
         var i = 0;
+        var commands = [];
         while (i < args.length) {
             var s = args[i++];
             if (s.charAt(0) === '-') {
@@ -117,17 +117,31 @@ function parseCommandLine(commandLine) {
                 }
             }
             else {
-                if (options.action == null)
-                    options.action = s;
-                else if (options.projectDir == null)
-                    options.projectDir = s;
-                else
-                    filenames.push(s);
+                commands.push(s);
+            }
+        }
+        if (commands.length > 0) {
+            options.command = commands[0];
+            if (file.isDirectory(commands[1]) || options.command == "create") {
+                options.projectDir = commands[1];
+                commands.splice(1, 1);
+            }
+            switch (options.command) {
+                case "build":
+                case "run":
+                case "emulate":
+                    options.platform = commands[1];
+                    break;
+                case "platform":
+                case "plugin":
+                    options.params = commands.slice(1);
             }
         }
         if (options.projectDir == null)
             options.projectDir = process.cwd();
         else {
+            if (!file.exists(options.projectDir))
+                file.createDirectory(options.projectDir);
             var absPath = file.joinPath(process.cwd(), options.projectDir);
             if (file.isDirectory(absPath)) {
                 options.projectDir = absPath;
@@ -138,7 +152,7 @@ function parseCommandLine(commandLine) {
             }
         }
         options.projectDir = file.joinPath(options.projectDir, "/");
-        var manifestPath = file.joinPath(options.larkRoot, "manifest.json");
+        var manifestPath = file.joinPath(options.larkRoot, (options["manifest"] || "") + "manifest.json");
         var content = file.read(manifestPath);
         var manifest = lark.manifest;
         try {
@@ -157,7 +171,7 @@ function parseJSON(json) {
     var errors = [];
     options.larkRoot = json.larkRoot || utils.getLarkRoot();
     options.projectDir = json.projectDir || process.cwd();
-    options.action = json.action;
+    options.command = json.command;
     options.autoCompile = json.autoCompile;
     options.debug = json.debug;
     options.esTarget = json.esTarget;

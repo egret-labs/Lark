@@ -1,4 +1,4 @@
-#Swan (UI库) 编程指南 - 基本布局
+#Swan (UI库) 编程指南 - 基本布局 
 
 这是Group的默认布局模式。在基本布局模式下，容器内的子项的定位方式，取决于每个子项的坐标设置。首先，创建一个 Group 容器，并设置其布局属性为基本布局：    
 ``` TypeScript
@@ -11,7 +11,7 @@ this.myGroup.layout = new swan.BasicLayout();
 ``` TypeScript
 /// 绘制矩形用于显示 myGroup 的轮廓
 var outline:lark.Shape = new lark.Shape;
-outline.graphics.strokeStyle = "#00ff00";
+outline.graphics.strokeStyle = 0x00ff00;
 outline.graphics.beginPath();
 outline.graphics.strokeRect( 0, 0, 500, 300 );
 this.myGroup.addChild( outline );

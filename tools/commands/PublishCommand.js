@@ -1,6 +1,7 @@
 /// <reference path="../lib/types.d.ts" />
 var utils = require('../lib/utils');
 var FileUtil = require('../lib/FileUtil');
+var exml = require('../actions/EXMLAction');
 var CopyFiles = require('../actions/CopyFiles');
 var CompileProject = require('../actions/CompileProject');
 var CompileTemplate = require('../actions/CompileTemplate');
@@ -22,6 +23,7 @@ var PublishCommand = (function () {
             return result.exitStatus;
         utils.minify(options.out, options.out);
         CopyFiles.copyProjectFiles();
+        exml.updateSetting(true);
         CompileTemplate.compileTemplates(options, result.files);
         return result.exitStatus;
     };

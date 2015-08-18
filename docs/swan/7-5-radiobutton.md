@@ -1,15 +1,80 @@
 #Swan (UI库) 编程指南 - 单选按钮
 
-单选框组件可以让用户在一组互相排斥的内容中做出一种选择。通过 swan.RadioButton 可以添加一个单选按钮。多个单选按钮可以指定一套单选按钮组 RadioButtonGroup ，在按钮组里用户每次只能选择一个 RadioButton 组件。
 
-单选框组件继承自 ToggleButton 组件。可以使用 selected 属性以编程方式获取或设置此状态。当然他们都继承自 Button 组件，可以使用前几节 Button 组件的属性和方法。 
+单选按钮和复选框的区别在于，单选按钮不会单独使用，而是若干个单选按钮结成一组来使用，并且选择是排斥性的，如果你选择了A，那BCD则会自动切换到非选中状态。如果您的界面上，不止一组单选按钮，那么结组使用就更有必要了，并且必须保证不同的单选按钮组之间互不干扰。
+创建一个单选按钮的方式非常简单：
+``` TypeScript
+var rdb:swan.RadioButton = new swan.RadioButton();
+rdb.label = "选择1";
+rdb.value =1;
+this.addChild(rdb);
+```
 
-首先，我们准备好组件皮肤所需要的素材，如下图所示：
+```
+注意上面的value属性，您可以将您想附加的数据，设置在这个属性上，类型是不限的，可以是数字，字符串，甚至是一个自定义类型的对象都可以。
+这样当用户选择了某一个单选按钮，您就可以直接取出它上面附加的数据来使用。
+```
+当然，一个单选按钮没有实际意义，我们来看看如何创建多个单选按钮并结组：
 
-![](image/7-5-radiobutton-skin.png)
+#### 方式1：使用groupName
+``` TypeScript
+private initRadioButton():void {
+    var rdb: swan.RadioButton = new swan.RadioButton();
+    rdb.label = "选择我1";
+    rdb.value = 145;
+    rdb.groupName = "G1";
+    rdb.on(swan.UIEvent.CHANGE, this.radioChangeHandler, this);
+    this.addChild(rdb);
+    var rdb2: swan.RadioButton = new swan.RadioButton();
+    rdb2.y = 30;
+    rdb2.label = "选择我2";
+    rdb2.value = 272;
+    rdb2.selected = true;//默认选项
+    rdb2.groupName = "G1";
+    rdb2.on(swan.UIEvent.CHANGE, this.radioChangeHandler, this);
+    this.addChild(rdb2);
+}
+private radioChangeHandler(evt:swan.UIEvent):void {
+    lark.log(evt.target.value);
+}
+```
+得到的效果：
 
-在项目中src目录下新建一个 skins 目录，存放我们的皮肤 skins/RadioButtonSkin.exml ,具体内容如下（图片资源已经在相应路径内）:
+![](./image/7/7_5_1.png)
 
+这样的实现方式较为简单，但缺点是，如果想监视选项的变化，您需要在每个单选按钮上都添加egret.Event.CHANGE事件侦听。同样，如果您想得到最终选定的那个值，就必须循环判断，找到selected = true的那个单选按钮，取它的值。所以我们更推荐使用第二种方案：
+
+#### 方式2：使用RadioButtonGroup
+这种方式是，我们创建一个egret.gui.RadioButtonGroup的实例，并设置到每个单选按钮的group属性上。这样的好处在于，我们只需要处理RadioButtonGroup实例上的事件侦听，就能捕获数值的变化，要取得最终选择的那个值，也是从这个RadioButtonGroup实例上直接获取即可。示例代码：
+``` TypeScript
+private initRadioButtonWithGroup():void {
+    var radioGroup: swan.RadioButtonGroup = new swan.RadioButtonGroup();
+    radioGroup.on(swan.UIEvent.CHANGE, this.radioChangeHandler, this);
+    var rdb: swan.RadioButton = new swan.RadioButton();
+    rdb.label = "选择我1";
+    rdb.value = 145;
+    rdb.group = radioGroup;
+    this.addChild(rdb);
+    var rdb2: swan.RadioButton = new swan.RadioButton();
+    rdb2.y = 30;
+    rdb2.label = "选择我2";
+    rdb2.value = 272;
+    rdb2.selected = true;//默认选项
+    rdb2.group = radioGroup;
+    this.addChild(rdb2);
+}
+private radioChangeHandler(evt:swan.UIEvent):void {
+    var radioGroup: swan.RadioButtonGroup = evt.target;
+    lark.log(radioGroup.selectedValue);
+}
+```
+实现的效果和方式1是一样的，但方式2代码上看着更清爽一些，如无特殊需求，我们建议尽量使用方式2。
+
+下面为本章节使用到的皮肤组件代码，供您参考。
+
+souce为图片路径，请替换成您的图片。
+
+RadioButtonSkin.exml皮肤的代码如下：
 ``` XML
 <?xml version="1.0" encoding="utf-8"?>
 <s:Skin class="skins.RadioButtonSkin" states="up,down,disabled,upAndSelected,downAndSelected,disabledAndSelected" xmlns:s="http://ns.egret.com/swan">
@@ -28,120 +93,4 @@
     </s:Group>
 </s:Skin>
 ```
-
-接下来我们创建一个单选框，在程序中我们新建一个 RadioButtonDemo 类，并添加一个 myRadioButton。代码如下:
-
-``` TypeScript
-class RadioButtonDemo extends swan.Group {
-   
-   public constructor () {
-        super();
-    }
-    private myRadioButton:swan.RadioButton = new swan.RadioButton(); //新建一个单选按钮
-}
-```
-
-跟前面的章节一样，我们需要给组件指定皮肤才可以让他显示出来。我们可以在构造函数中使用skinName属性指定我们刚才准备好的皮肤资源。这里皮肤资源可以是外部文件，也可以是直接指定。若是外部文件资源可以监听其加载完成。修改上面的代码如下：
-
-``` TypeScript
-    public constructor () {
-        super();
-        this.myRadioButton.skinName = "skins/RadioButtonSkin.exml";  //指定外部皮肤
-        this.myRadioButton.once(lark.Event.COMPLETE,this.loaded,this); // 监听皮肤加载完成事件
-    }
-    
-    private loaded(e:lark.Event):void { //添加处理函数
-        console.log(" myRadioButton skin is loaded"); 
-        this.addChild(this.myRadioButton); //将单选按钮添加到显示列表当中.
-    }
-```
-
-需要注意的是，我们的 RadioButtonDemo 类的实例需要被添加至舞台，具体可参见其他章节。编译运行项目我们可以看到 RadioButtonDemo 已经显示出来了。
-
-![](image/7-5-radiobutton-1.png)
-
-同Button一样，我们可以指定其label属性，来添加一段描述性的文字。在以上 loaded 函数中添加如下代码，指定其描述文字.
-
-``` TypeScript
-    private loaded(e:lark.Event):void {
-        console.log(" myRadioButton skin is loaded");
-        this.myRadioButton.label = "this is a single radio button"; //添加描述lable文字描述
-        this.addChild(this.myRadioButton);
-    }
-```
-
-## 设置按钮组
-
-单选按钮一般跟其他单选按钮组成一个按钮组，通过指定 groupName 属性来确定属于哪一个组。下面我们继续完善我们的 RadioButtonDemo 类。添加一个 myRadioButtonGroup 属性，并添加一个 myGroup() 方法，给他加入三个单选按钮。代码如下：
-
-``` TypeScript
-private loaded(e:lark.Event):void {
-
-        console.log(" myRadioButton skin is loaded");
-        this.myRadioButton.label = "this is a single radio button";
-        this.addChild(this.myRadioButton);
-        
-        this.myGroup(); // 下一步 添加我的单选按钮组
-    }
-
-    private myRadioButtonGroup:swan.RadioButtonGroup = new swan.RadioButtonGroup(); //新建我的单选按钮组
-
-    private myGroup():void{
-    
-        var skin = this.myRadioButton.skinName;         //使用上面的皮肤来完成下面的按钮
-
-        var myRadioButton1:swan.RadioButton = new swan.RadioButton();
-        myRadioButton1.label = "swan is a bird";
-        myRadioButton1.skinName = skin;
-        myRadioButton1.y = this.myRadioButton.y + this.myRadioButton.height +25;
-        myRadioButton1.value = "bird";
-        myRadioButton1.group = this.myRadioButtonGroup; //设置单选按钮组
-        this.addChild(myRadioButton1);
-
-        var myRadioButton2:swan.RadioButton = new swan.RadioButton();
-        myRadioButton2.label = "swan is a program";
-        myRadioButton2.skinName = skin;
-        myRadioButton2.y = myRadioButton1.y + myRadioButton1.height;
-        myRadioButton2.value = "program";
-        myRadioButton2.group = this.myRadioButtonGroup;  //设置单选按钮组
-        this.addChild(myRadioButton2);
-
-        var myRadioButton3:swan.RadioButton = new swan.RadioButton();
-        myRadioButton3.label = "swan is an UI package provide by egret";
-        myRadioButton3.skinName = skin;
-        myRadioButton3.y = myRadioButton2.y + myRadioButton2.height;
-        myRadioButton3.value = "UI";
-        myRadioButton3.group = this.myRadioButtonGroup;  //设置单选按钮组
-        this.addChild(myRadioButton3);
-    }
-
-```
-
-这样我们就得到了一组单选按钮，并设置成我的按钮组。可以跟上面的单选按钮 myRadioButton 对比一下，我们后来创建的单选按钮同一个按钮组里，只能单选一个按钮，而未设置按钮组的 myRadioButton 将不影响这一个组中的按钮，效果如下图：
-
-![](image/7-5-radiobutton-2.png)
-
-添加完成之后我们也可以很容易的操作这些单选框，您可能注意到上面的代码里每一个单选框都设置了其value属性，下面我们通过监听按钮组的CHANGE事件可以很容易的获得其value值。
-
-在上面的myGroup()里添加如下代码，监听其 CHANGE 事件：
-
-``` TypeScript
-
- this.myRadioButtonGroup.on(lark.Event.CHANGE,this.onChange,this);
- 
-```
-
-再添加onChange函数来处理，以上事件:
-
-``` TypeScript
-private onChange(e:lark.Event){              //在RadioButtonDemo类中添加
-        console.log(e.target.selectedValue);  //通过RadioButtonGroup的selectedValue值来获取当前单选按钮的value值
-    }
-```
-
-我们可以看到最终输出：
-
-![](image/7-5-radiobutton-3.png)
-
-* 上一节 [复选框](7-4-checkbox.md)
-* 下一节 [切换按钮](7-6-toggle.md)
+其中的 ```<s:Label id="labelDisplay"/>``` 表示单选按钮上的默认文本组件，如果不设置该id，将无法使用 radioButton.label="xxxx" 显示文本。

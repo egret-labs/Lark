@@ -29,10 +29,23 @@
 
 module swan {
 
+    
+
+    interface ThemeData {
+        skins: { [component: string]: string };
+        exmls?: Array<string|EXMLFile>;
+    }
+
+    interface EXMLFile {
+        path: string;
+        content?: string;
+    }
+
     /**
      * @language en_US
      * Note: The skin name values in the skin theme are used as default values,which can not be changed while running.
      * You can change the skin of a component with the skinName property.
+     * @event lark.Event.COMPLETE Emit when EXML used in this theme is loaded and parsed.
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -41,6 +54,7 @@ module swan {
     /**
      * @language zh_CN
      * 皮肤主题。注意：皮肤主题是一次性设置的默认值,并不能运行时切换所有组件默认皮肤。切换单个皮肤您可以自行对Component.skinName赋值来修改。
+     * @event lark.Event.COMPLETE 当主题关联的EXML加载解析完成时派发
      * @version Lark 1.0
      * @version Swan 1.0
      * @platform Web,Native
@@ -94,8 +108,14 @@ module swan {
             var request = new lark.HttpRequest();
             request.on(lark.Event.COMPLETE, this.onConfigLoaded, this);
             request.on(lark.Event.IO_ERROR, this.onConfigLoaded, this);
+            //if lark
             request.open(url);
             request.send();
+            //endif*/
+            /*//if egret
+            request.dataFormat = egret.URLLoaderDataFormat.TEXT;
+            request.load(new egret.URLRequest(url));
+            //endif*/
         }
 
         /**
@@ -106,7 +126,12 @@ module swan {
         private onConfigLoaded(event:lark.Event):void {
             var request:lark.HttpRequest = event.target;
             try {
+                //if lark
                 var data = JSON.parse(request.response);
+                //endif*/
+                /*//if egret
+                var data = JSON.parse(request.data);
+                 //endif*/
             }
             catch (e) {
                 if (DEBUG) {
@@ -126,8 +151,21 @@ module swan {
                     }
                 }
             }
+            // In release version, exml content is packaged in the theme file
+            if (data.exmls[0]['content']) {
+                data.exmls.forEach((exml) => EXML.$parseURLContent((<EXMLFile>exml).path, (<EXMLFile>exml).content));
+                this.onLoaded();
+            }
+            else {
+                EXML.$loadAll(<string[]>data.exmls, this.onLoaded, this, true);
+                }
+
+            }
+
+        private onLoaded(classes?:any[],urls?:string[]) {
             this.initialized = true;
             this.handleDelayList();
+            this.emitWith(lark.Event.COMPLETE);
         }
 
         /**

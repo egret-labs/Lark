@@ -22,7 +22,6 @@ class VideoExample extends lark.Sprite {
         video.poster = "resources/posterfullscreen.jpg";
 
         video.once(lark.TouchEvent.TOUCH_TAP, this.playVideo, this);
-        video.load();
         this.addChild(video);
 
         var text = new lark.TextField('Loading');

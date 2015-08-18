@@ -5,6 +5,7 @@ import utils = require('../lib/utils');
 import server = require('../server/server');
 import service = require('../service/index');
 import FileUtil = require('../lib/FileUtil');
+import exml = require('../actions/EXMLAction');
 import CopyFiles = require('../actions/CopyFiles');
 import CompileProject = require('../actions/CompileProject');
 import CompileTemplate = require('../actions/CompileTemplate');
@@ -26,7 +27,8 @@ class PublishCommand implements lark.Command {
             return result.exitStatus;
         utils.minify(options.out,options.out);
         CopyFiles.copyProjectFiles();
-        CompileTemplate.compileTemplates(options,result.files);
+        exml.updateSetting(true);
+        CompileTemplate.compileTemplates(options, result.files);
         
         return result.exitStatus;
     }

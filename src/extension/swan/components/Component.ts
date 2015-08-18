@@ -47,7 +47,6 @@ module swan.sys {
 
 module swan {
 
-    var parsedClasses:any = {};
 
     /**
      * @language en_US
@@ -98,10 +97,13 @@ module swan {
                 3: true,         //enabled,
                 4: false,        //stateIsDirty,
                 5: false,        //skinNameExplicitlySet,
-                6: false,        //explicitTouchChildren,
-                7: false,        //explicitTouchEnabled
+                6: true,        //explicitTouchChildren,
+                7: true,        //explicitTouchEnabled
                 8: null          //skin
             };
+            /*//if egret
+            this.$touchEnabled = true;
+             //endif*/
         }
 
         $Component:Object;
@@ -180,12 +182,8 @@ module swan {
                         clazz = EXML.parse(text);
                     }
                     else if (text.substr(text.length - 5, 5).toLowerCase() == ".exml") {
-                        clazz = parsedClasses[skinName];
-                        if(!clazz){
-                            EXML.load(skinName,this.onExmlLoaded,this);
-                            return;
-                        }
-                        this.emitWith(lark.Event.COMPLETE);
+                        EXML.load(skinName, this.onExmlLoaded, this, true);
+                        return;
                     }
                     else{
                         clazz = lark.getDefinitionByName(skinName);
@@ -210,7 +208,6 @@ module swan {
          * @param url 
          */
         private onExmlLoaded(clazz:any,url:string):void {
-            parsedClasses[url] = clazz;
             if(this.skinName!=url){
                 return;
             }
@@ -477,12 +474,12 @@ module swan {
             }
             values[sys.ComponentKeys.enabled] = value;
             if (value) {
-                values[sys.ComponentKeys.explicitTouchEnabled] = this.$touchEnabled;
-                values[sys.ComponentKeys.explicitTouchChildren] = this.$touchChildren;
+                this.$touchEnabled = values[sys.ComponentKeys.explicitTouchEnabled];
+                this.$touchChildren = values[sys.ComponentKeys.explicitTouchChildren];
             }
             else {
-                super.$setTouchEnabled(values[sys.ComponentKeys.explicitTouchEnabled]);
-                super.$setTouchChildren(values[sys.ComponentKeys.explicitTouchChildren]);
+                this.$touchEnabled = false;
+                this.$touchChildren = false;
             }
             this.invalidateState();
         }

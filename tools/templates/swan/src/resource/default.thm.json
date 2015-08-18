@@ -1,0 +1,29 @@
+{
+  "skins": {
+    "swan.Button": "skins/ButtonSkin.exml",
+    "swan.CheckBox": "skins/CheckBoxSkin.exml",
+    "swan.HScrollBar": "skins/HScrollBarSkin.exml",
+    "swan.HSlider": "skins/HSliderSkin.exml",
+    "swan.Panel": "skins/PanelSkin.exml",
+    "swan.ProgressBar": "skins/ProgressBarSkin.exml",
+    "swan.RadioButton": "skins/RadioButtonSkin.exml",
+    "swan.Scroller": "skins/ScrollerSkin.exml",
+    "swan.ToggleSwitch": "skins/ToggleSwitchSkin.exml",
+    "swan.VScrollBar": "skins/VScrollBarSkin.exml",
+    "swan.VSlider": "skins/VSliderSkin.exml"
+  },
+  "autoGenerateExmlsList": true,
+  "exmls": [
+    "skins/ButtonSkin.exml",
+    "skins/CheckBoxSkin.exml",
+    "skins/HScrollBarSkin.exml",
+    "skins/HSliderSkin.exml",
+    "skins/PanelSkin.exml",
+    "skins/ProgressBarSkin.exml",
+    "skins/RadioButtonSkin.exml",
+    "skins/ScrollerSkin.exml",
+    "skins/ToggleSwitchSkin.exml",
+    "skins/VScrollBarSkin.exml",
+    "skins/VSliderSkin.exml"
+  ]
+}

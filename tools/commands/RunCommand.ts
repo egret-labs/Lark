@@ -12,7 +12,9 @@ import CompileProject = require('../actions/CompileProject');
 import CompileTemplate = require('../actions/CompileTemplate');
 
 class RunCommand implements lark.Command {
-	
+
+    private serverStarted = false;
+
     execute(): number {
         var build = new Build();
         build.execute(this.onBuildFinish);
@@ -20,12 +22,17 @@ class RunCommand implements lark.Command {
     }
 
     private onBuildFinish = (exitCode: number) => {
-
+        if (this.serverStarted)
+            return;
         if (exitCode != 0) {
             process.exit(exitCode);
         }
-
-        utils.getAvailablePort(port=> this.onGotPort(port), lark.options.port);
+        if (lark.options.platform == undefined || lark.options.platform == 'web') {
+            utils.getAvailablePort(port=> this.onGotPort(port), lark.options.port);
+        }
+        else {
+            process.exit(0);
+        }
     }
 
     private onGotPort(port: number) {
@@ -35,6 +42,7 @@ class RunCommand implements lark.Command {
         if (addresses.length > 0) {
             lark.options.host = addresses[0];
         }
+        this.serverStarted = true;
         server.startServer(lark.options, lark.options.startUrl);
         console.log("    " + utils.tr(10013, ''));
         console.log('\n');

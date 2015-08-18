@@ -1,5 +1,6 @@
 {
     "version": "1.0.1",
+    "registerClass":"lark",
     "modules": [
         {
             "name": "lark",
@@ -59,13 +60,23 @@
         {
             "name": "web",
             "description": "Web"
+        },
+        {
+          "name": "native",
+          "description": "Native"
         }
     ],
     "templates": [
-        {
-            "name": "Empty",
-            "description": "空项目"
-        }
+    {
+      "name": "swan",
+      "description": "使用 swan 扩展库创建友好的交互界面",
+      "modules": [ "lark","swan","resource" ]
+    },
+    {
+      "name": "empty",
+      "description": "创建一个空项目",
+      "modules": [ "lark","swan","resource" ]
+    }
     ],
     "scaleModes": [
         {
