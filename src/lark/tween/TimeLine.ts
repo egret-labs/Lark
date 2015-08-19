@@ -65,11 +65,9 @@ module lark {
 
         private update(timeStamp:number):boolean {
             var totalTime = this.getTotalTime();
-            if (this._currentTime >= totalTime) {
-                this._currentTime = 0;
-            }
             this._currentTime += timeStamp - this.lastTime;
             this.lastTime = timeStamp;
+
             if (this._currentTime >= totalTime) {
                 this._currentTime = totalTime;
                 this._loop--;
@@ -77,21 +75,27 @@ module lark {
                     this.setPlaying(false);
                 }
             }
+
             var tweens = this.tweens;
             var tween:Tween;
+            var calls = this.calls;
+            var call;
+
             for (var i = 0, len = tweens.length; i < len; i++) {
                 tween = tweens[i];
                 if (tween.$startTime <= this._currentTime || tween.$startTime + tween.$time >= this.lastTime && tween.$startTime + tween.$time < this.currentTime) {
                     tweens[i].$update(this._currentTime);
                 }
             }
-            var calls = this.calls;
-            var call;
             for (i = calls.length, len = calls.length; i < len; i++) {
                 call = calls[i];
                 if (call.time >= this.lastTime && call.time <= this._currentTime) {
                     call.callBack.apply(call.thisObj, call.args);
                 }
+            }
+
+            if (this._currentTime == totalTime && this._loop) {
+                this._currentTime = 0;
             }
             return true;
         }

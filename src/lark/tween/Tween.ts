@@ -96,6 +96,9 @@ module lark {
         public set time(value:number) {
             value = +value | 0;
             this.$time = +value;
+            if (this._timeLine) {
+                this._timeLine.$invalidateTotalTime();
+            }
         }
 
         public get startTime():number {
@@ -146,6 +149,7 @@ module lark {
 
         public set target(value:any) {
             this._target = value;
+            this.invalidProperty = false;
         }
 
         /**
