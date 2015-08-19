@@ -15,7 +15,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        init(tween:Tween,params:Object);
+        init(tween:Tween, propertiesTo:Object, propertiesFrom:Object):Array<string>;
 
         /**
          * @language en_US

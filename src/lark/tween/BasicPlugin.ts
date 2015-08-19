@@ -1,8 +1,9 @@
 module lark {
 
-    export class BasicPlugin implements IPlugin {
+    export class BasicPlugin extends lark.HashObject implements IPlugin {
 
         public constructor() {
+            super();
         }
 
         /**
@@ -10,20 +11,26 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public init(tween:Tween,params:Object):void {
+        public init(tween:Tween, propertiesTo:Object, propertiesFrom:Object):Array<string> {
             this._tween = tween;
-            this._attributes = params;
-            this.keys = Object.keys(params);
+            this._attributes = propertiesTo;
+            this.keys = Object.keys(propertiesTo);
 
             var target = this._tween.target;
             var startAttributes = {};
             var keys = this.keys;
             var length = keys.length;
-            for(var i  = 0; i < length; i++) {
+            for (var i = 0; i < length; i++) {
                 var key = keys[i];
-                startAttributes[key] = target[key];
+                if (propertiesFrom && key in propertiesFrom) {
+                    startAttributes[key] = propertiesFrom[key];
+                }
+                else {
+                    startAttributes[key] = target[key];
+                }
             }
             this.startAttributes = startAttributes;
+            return null;
         }
 
         /**
@@ -51,15 +58,14 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public update(value:number):void
-        {
+        public update(value:number):void {
             var target = this._tween.target;
             var keys = this.keys;
             var length = keys.length;
             var startAttributes = this.startAttributes;
-            for(var i = 0; i < length; i++) {
+            for (var i = 0; i < length; i++) {
                 var key = keys[i];
-                target[key] = (this._attributes[key] - startAttributes[key])*value + startAttributes[key];
+                target[key] = (this._attributes[key] - startAttributes[key]) * value + startAttributes[key];
             }
         }
     }

@@ -116,7 +116,7 @@ module lark {
             this.frames = frames;
             if (frames && frames.length) {
                 this.setPlaying(true);
-                if(this._currentFrame != -1) {
+                if (this._currentFrame != -1) {
                     this._currentFrame = 0;
                 }
                 this.gotoFrame(0);

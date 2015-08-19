@@ -3,11 +3,6 @@ module lark {
     /**
      * @private
      */
-    var initTweenFlag = true;
-
-    /**
-     * @private
-     */
     var easeCache = {};
 
     /**
@@ -37,68 +32,47 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public constructor(target:any, time:number, params:Object, ease?:string) {
+        public constructor(target:any, time:number, propertiesTo:Object, ease?:string, propertiesFrom?:Object) {
             super();
             time = +time;
-            this._time = time;
+            if (time < 0) {
+                time = 0;
+            }
+            this.$time = time;
             this._target = target;
-            if (time <= 0) return;
-            this.params = params;
+            this._propertiesTo = propertiesTo;
+            this._propertiesFrom = propertiesFrom;
             this.ease = ease;
             if (!this._ease) {
                 this.ease = Ease.None;
             }
-            if(initTweenFlag) {
-                this._startTime = lark.getTimer();
-                this._isPlaying = true;
-                this.initParmas();
-            } else {
-                this._isPlaying = false;
-            }
+            var timeLine = new lark.TimeLine();
+            timeLine.addTween(this);
+            timeLine.play();
+        }
+
+        private invalidProperty:boolean = false;
+        /**
+         * @private
+         */
+        private _propertiesTo:Object;
+
+        public set propertiesTo(value:Object) {
+            this._propertiesTo = value;
+            this.invalidProperty = false;
+        }
+
+        private _propertiesFrom:Object;
+
+        public set propertiesFrom(value:Object) {
+            this._propertiesFrom = value;
+            this.invalidProperty = false;
         }
 
         /**
          * @private
          */
-        private params:Object;
-
-        /**
-         * @private
-         */
-        private initParmas():void {
-            var controller:IPlugin;
-            var params = this.params;
-            if (params) {
-                var keys = Object.keys(params);
-                for (var i = 0; i < keys.length; i++) {
-                    var key = keys[i];
-                    if (typeof (key) != "string") {
-                        delete params[key];
-                        keys.splice(i, 1);
-                        i--;
-                        continue;
-                    }
-                    var attribute = params[key];
-                    if (typeof (attribute) != "number" || !(key in this._target)) {
-                        delete params[key];
-                        keys.splice(i, 1);
-                        i--;
-                        continue;
-                    }
-                }
-                if (keys.length) {
-                    controller = new BasicPlugin();
-                    controller.init(this, params);
-                    this._pugins.push(controller);
-                }
-            }
-            lark.startTick(this.update, this);
-        }
-
-        /**
-         * @private
-         */
-        _time:number;
+        $time:number;
 
 
         /**
@@ -116,36 +90,38 @@ module lark {
          * @platform Web,Native
          */
         public get time():number {
-            return this._time;
+            return this.$time;
+        }
+
+        public set time(value:number) {
+            value = +value | 0;
+            this.$time = +value;
+        }
+
+        public get startTime():number {
+            return this.$startTime;
+        }
+
+        public set startTime(value:number) {
+            value = +value | 0;
+            if (value < 0) {
+                value = 0;
+            }
+            this.$startTime = value;
+            if (this._timeLine) {
+                this._timeLine.$invalidateTotalTime();
+            }
         }
 
         /**
          * @private
          */
-        _startTime:number = -1;
+        $startTime:number = 0;
 
         /**
          * @private
          */
         _currentTime:number = 0;
-
-        /**
-         * @language en_US
-         * The current transformation time.
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当前的变换时间。
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public get currentTime():number {
-            return this._currentTime;
-        }
 
         /**
          * @private
@@ -164,8 +140,12 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public get target():void {
+        public get target():any {
             return this._target;
+        }
+
+        public set target(value:any) {
+            this._target = value;
         }
 
         /**
@@ -197,15 +177,15 @@ module lark {
         }
 
         public set ease(val:string) {
-            if(!easeCache[val]) {
+            if (!easeCache[val]) {
                 var func = EaseFunction[val];
-                if(func == null) {
+                if (func == null) {
                     //warn
                     return;
                 }
                 var cache = [];
-                for(var i = 0; i <= 2000; i++) {
-                    cache[i] = func(i/2000);
+                for (var i = 0; i <= 2000; i++) {
+                    cache[i] = func(i / 2000);
                 }
                 easeCache[val] = cache;
             }
@@ -213,101 +193,57 @@ module lark {
             this._easeData = easeCache[val];
         }
 
-        /**
-         * @private
-         */
-        _nextTween:Tween;
+        private _timeLine:TimeLine;
 
-        /**
-         * @language en_US
-         * The next tween.
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 下一个Tween。
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public get nextTween():Tween {
-            return this._nextTween;
+        public get timeLine():TimeLine {
+            if (!this._timeLine) {
+                this._timeLine = new lark.TimeLine();
+                this._timeLine.addTween(this);
+            }
+            return this._timeLine;
         }
 
-        public set nextTween(tween:Tween) {
-            this._nextTween = tween;
+        $setTimeLine(value:TimeLine) {
+            this._timeLine = value;
         }
 
         /**
          * @private
          */
-        _pugins:IPlugin[] = [];
-
-        /**
-         * @language en_US
-         * Pauses the current Tween.
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 暂停当前 Tween。
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public pause():void {
-            this._isPlaying = false;
-        }
+        pugins:IPlugin[] = [];
 
         /**
          * @private
          */
-        private _isPlaying:boolean;
-
-        /**
-         * @language en_US
-         * The tween is playing or not.
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当前 Tween 是否正则播放。
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public isPlaying():boolean {
-            return this._isPlaying;
-        }
-
-        /**
-         * @language en_US
-         * Plays the current Tween. If you pause before too, we will continue to play.
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 播放当前 Tween。如果之前暂停过，会继续播放。
-         * @see lark.Tween
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public play():void {
-            this._isPlaying = true;
-        }
-
-        $initPlay(time:number):void {
-            this._startTime = time;
-            this._isPlaying = true;
-            this.initParmas();
+        private initParmas():void {
+            var controller:IPlugin;
+            var params = this._propertiesTo;
+            if (params) {
+                var keys = Object.keys(params);
+                for (var i = 0; i < keys.length; i++) {
+                    var key = keys[i];
+                    if (typeof (key) != "string") {
+                        delete params[key];
+                        keys.splice(i, 1);
+                        i--;
+                        continue;
+                    }
+                    var attribute = params[key];
+                    if (typeof (attribute) != "number" || !(key in this._target)) {
+                        delete params[key];
+                        keys.splice(i, 1);
+                        i--;
+                        continue;
+                    }
+                }
+                if (keys.length) {
+                    controller = new BasicPlugin();
+                    controller.init(this, params, this._propertiesFrom);
+                    this.pugins.push(controller);
+                }
+            }
+            this.invalidProperty = true;
+            console.log("验证属性");
         }
 
         /**
@@ -338,139 +274,37 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public call(callBack:Function,thisObj?:any,params?:any):Tween {
+        public call(callBack:Function, thisObj?:any, ...args):Tween {
             this._complete = callBack;
             this._completeThis = thisObj;
-            this._completeParams = params;
+            this._completeParams = args;
             return this;
         }
-
-        /**
-         * @language en_US
-         * Completely stop the current Tween. And recycling of cyberspace.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 完全停止当前 Tween。并回收资源。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public kill():void {
-            this._isPlaying = false;
-            lark.stopTick(this.update, this);
-        }
-
-        /**
-         * @private
-         */
-        private _bePlay:boolean = false;
 
         /**
          * @private
          * @param time
          * @returns {boolean}
          */
-        private update(time:number):boolean {
-            if (this._isPlaying == false) {
-                return true;
+        $update(time:number):boolean {
+            if (!this.invalidProperty) {
+                this.initParmas();
             }
-            this._bePlay = true;
-            this._currentTime = time - this._startTime;
-            if (this._currentTime > this._time) {
-                this._currentTime = this._time;
+            this._currentTime = time - this.$startTime;
+            if (this._currentTime > this.$time) {
+                this._currentTime = this.$time;
             }
-            var length = this._pugins.length;
-            var s = this._easeData[2000*(this._currentTime/this._time)|0];
-            for(var i = 0; i < length; i++) {
-                this._pugins[i].update(s);
+            var length = this.pugins.length;
+            var s = this._easeData[2000 * (this._currentTime / this.$time) | 0];
+            for (var i = 0; i < length; i++) {
+                this.pugins[i].update(s);
             }
-            if (this._currentTime == this._time) {
-                lark.stopTick(this.update, this);
-                if(this._complete != null) {
-                    this._complete.apply(this._completeThis,this._completeParams);
-                }
-                if(this._waitTime) {
-                    this._waitTime += lark.getTimer();
-                    lark.startTick(this.waitEndTime,this);
-                }
-                else {
-                    if (this._nextTween) {
-                        this._nextTween.$initPlay(time);
-                    }
+            if (this._currentTime == this.$time) {
+                if (this._complete != null) {
+                    this._complete.apply(this._completeThis, this._completeParams);
                 }
             }
             return true;
-        }
-
-        /**
-         * @private
-         */
-        private waitEndTime(time:number):boolean {
-            if(time > this._waitTime) {
-                lark.stopTick(this.waitEndTime,this);
-                if (this._nextTween) {
-                    this._nextTween.$initPlay(time);
-                }
-            }
-            return true;
-        }
-
-        /**
-         * @private
-         * @param tween
-         * @returns {Tween}
-         */
-        private concatTween(tween:Tween):Tween {
-            var lastTween = this;
-            while (lastTween.nextTween) {
-                lastTween = lastTween.nextTween;
-            }
-            lastTween.nextTween = tween;
-            return tween;
-        }
-
-        /**
-         * @language en_US
-         * Link to a Tween. Tween from the current target will have been looking back, until it finds a Tween object is not set nextTween property, and is connected to the back of Tween.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 链接一个 Tween 。会从当前 Tween 对象一直往后找，直到发现一个 Tween 对象没有设置 nextTween 属性，并连到那个 Tween 后面。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public to(target:any, time:number, params?:Object, ease?:any):Tween {
-            initTweenFlag = false;
-            var tween = new Tween(target, time, params, ease);
-            initTweenFlag = true;
-            return this.concatTween(tween);
-        }
-
-        /**
-         * @privbate
-         */
-        _waitTime:number = 0;
-
-        /**
-         * @language en_US
-         * The time to wait before the next tween starts.
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 在下一个动画开始前等待多少时间。
-         * @version Lark 1.0
-         * @platform Web,Native
-         */
-        public wait(time:number):Tween {
-            time = +time;
-            this._waitTime = time;
-            return this;
         }
 
         /**
@@ -485,15 +319,13 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static get(target:any, time:number, params?:Object, ease?:any):Tween {
-            initTweenFlag = true;
-            var tween = new Tween(target, time, params, ease);
-            return tween;
+        public static to(target:any, time:number, propertiesTo:Object, ease?:string, propertiesFrom?:Object):Tween {
+            return new Tween(target, time, propertiesTo, ease, propertiesFrom);
         }
 
         private static plugins = {};
 
-        public static registerPlugin(paramName:string,plugin:IPlugin) {
+        public static registerPlugin(paramName:string, plugin:IPlugin) {
             Tween.plugins[paramName] = plugin;
         }
     }
