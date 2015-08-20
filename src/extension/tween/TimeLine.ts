@@ -72,8 +72,8 @@ module lark {
                     this.$setPlaying(false);
                 }
             }
-            while(loopTime > -1) {
-                if(loopTime && currentTime != -1) {
+            while (loopTime > -1) {
+                if (loopTime && currentTime != -1) {
                     this._currentTime = totalTime;
                 }
                 var calls = this.calls;
@@ -93,17 +93,17 @@ module lark {
                     }
                 }
                 loopTime--;
-                if(loopTime == 0) {
-                    if(currentTime != -1) {
+                if (loopTime == 0) {
+                    if (currentTime != -1) {
                         lastTime = 0;
                         this._currentTime = currentTime;
                     }
                 } else {
-                    if(loopTime) {
+                    if (loopTime) {
                         lastTime = 0;
                     }
                 }
-                if(this._loop == false) {
+                if (this._loop == false) {
                     break;
                 }
             }
@@ -200,6 +200,19 @@ module lark {
         //添加回调函数。
         public call(time:number, callBack:Function, thisObj?:any, ...args):void {
             this.calls.push({"time": time, "callBack": callBack, "thisObj": thisObj, "args": args});
+        }
+
+        public release():void {
+            TimeLine.timeLines.push(this);
+        }
+
+        private static timeLines:TimeLine[] = [];
+
+        public static create():TimeLine {
+            if (TimeLine.timeLines.length) {
+                return TimeLine.timeLines.pop();
+            }
+            return new TimeLine();
         }
     }
 }

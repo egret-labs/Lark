@@ -1,6 +1,6 @@
 module lark {
 
-    export class TweenPath extends BasicPlugin {
+    export class TweenPath extends HashObject implements IPlugin {
 
         constructor() {
             super();
@@ -35,12 +35,12 @@ module lark {
             for (i = 1; i < len; i++) {
                 this.pathSum[i] = this.pathSum[i] / sum;
             }
-            return ["path"];
+            return useAttributes;
         }
 
+        private tween:Tween;
         private pathSum:number[];
         private path:Point[];
-
 
         public update(value:number):void {
             var path = this.path;
@@ -66,7 +66,16 @@ module lark {
         public static to(target:any, time:number, path:Point[], ease?:string):Tween {
             return new Tween(target, time, {"path": path}, ease);
         }
+
+        public static vto(target:any, v:number, path:Point[], ease?:string):Tween {
+            var sum = 0;
+            for(var i = 1, len = path.length; i < len; i++) {
+                sum += Math.sqrt((path[i].y -path[i-1].y)*(path[i].y -path[i-1].y) + (path[i].y -path[i-1].y)*(path[i].y -path[i-1].y));
+            }
+            var time = sum*1000/v;
+            return new Tween(target, time, {"path": path}, ease);
+        }
     }
 
-    Tween.registerPlugin("path", TweenPath);
+    Tween.registerPlugin("path", lark.TweenPath);
 }

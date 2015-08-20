@@ -91,12 +91,12 @@ module lark {
          * @platform Web,Native
          */
         public get time():number {
-            return this.$time;
+            return this.$time*1000;
         }
 
         public set time(value:number) {
             value = +value | 0;
-            this.$time = +value;
+            this.$time = (+value)/1000;
             if (this._timeLine) {
                 this._timeLine.$invalidateTotalTime();
             }
@@ -108,7 +108,7 @@ module lark {
         $startTime:number = 0;
 
         public get startTime():number {
-            return this.$startTime;
+            return this.$startTime*1000;
         }
 
         public set startTime(value:number) {
@@ -116,7 +116,7 @@ module lark {
             if (value < 0) {
                 value = 0;
             }
-            this.$startTime = value;
+            this.$startTime = value/1000;
             if (this._timeLine) {
                 this._timeLine.$invalidateTotalTime();
             }
@@ -357,6 +357,15 @@ module lark {
             }
             return true;
         }
+
+        private _autoRelease:boolean = true;
+        //public
+
+        public release():void {
+            Tween.tweens.push(this);
+        }
+
+        private static tweens:Tween[] = [];
 
         /**
          * @language en_US

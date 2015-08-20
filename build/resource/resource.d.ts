@@ -335,6 +335,111 @@ declare module RES {
 }
 declare module RES {
     /**
+     * @class RES.ResourceLoader
+     * @classdesc
+     * @extends egret.EventDispatcher
+     * @private
+     */
+    class ResourceLoader extends lark.EventEmitter {
+        /**
+         * 构造函数
+         * @method RES.ResourceLoader#constructor
+         */
+        constructor(resInstance: Resource);
+        /**
+         * 最大并发加载数
+         */
+        thread: number;
+        /**
+         * 正在加载的线程计数
+         */
+        private loadingCount;
+        /**
+         * 一项加载结束回调函数。无论加载成功或者出错都将执行回调函数。示例：callBack(resItem:ResourceItem):void;
+         * @member {Function} RES.ResourceLoader#callBack
+         */
+        callBack: Function;
+        /**
+         * RES单例的引用
+         * @member {any} RES.ResourceLoader#resInstance
+         */
+        private resInstance;
+        /**
+         * 当前组加载的项总个数,key为groupName
+         */
+        private groupTotalDic;
+        /**
+         * 已经加载的项个数,key为groupName
+         */
+        private numLoadedDic;
+        /**
+         * 正在加载的组列表,key为groupName
+         */
+        private itemListDic;
+        /**
+         * 加载失败的组,key为groupName
+         */
+        private groupErrorDic;
+        private retryTimesDic;
+        maxRetryTimes: number;
+        private failedList;
+        /**
+         * 优先级队列,key为priority，value为groupName列表
+         */
+        private priorityQueue;
+        /**
+         * 检查指定的组是否正在加载中
+         * @method RES.ResourceLoader#isGroupInLoading
+         * @param groupName {string}
+         * @returns {boolean}
+         */
+        isGroupInLoading(groupName: string): boolean;
+        /**
+         * 开始加载一组文件
+         * @method RES.ResourceLoader#loadGroup
+         * @param list {egret.Array<ResourceItem>} 加载项列表
+         * @param groupName {string} 组名
+         * @param priority {number} 加载优先级
+         */
+        loadGroup(list: ResourceItem[], groupName: string, priority?: number): void;
+        /**
+         * 延迟加载队列
+         */
+        private lazyLoadList;
+        /**
+         * 加载一个文件
+         * @method RES.ResourceLoader#loadItem
+         * @param resItem {egret.ResourceItem} 要加载的项
+         */
+        loadItem(resItem: ResourceItem): void;
+        /**
+         * 资源解析库字典类
+         */
+        private analyzerDic;
+        /**
+         * 加载下一项
+         */
+        private next();
+        /**
+         * 当前应该加载同优先级队列的第几列
+         */
+        private queueIndex;
+        /**
+         * 获取下一个待加载项
+         */
+        private getOneResourceItem();
+        /**
+         * 加载结束
+         */
+        private onItemComplete(resItem);
+        /**
+         * 从优先级队列中移除指定的组名
+         */
+        private removeGroupName(groupName);
+    }
+}
+declare module RES {
+    /**
      * @language en_US
      * The events of resource loading.
      * @version Lark 1.0
@@ -529,111 +634,6 @@ declare module RES {
          * @returns {boolean}
          */
         static emitResourceEvent(target: lark.IEventEmitter, type: string, groupName?: string, resItem?: ResourceItem, itemsLoaded?: number, itemsTotal?: number): boolean;
-    }
-}
-declare module RES {
-    /**
-     * @class RES.ResourceLoader
-     * @classdesc
-     * @extends egret.EventDispatcher
-     * @private
-     */
-    class ResourceLoader extends lark.EventEmitter {
-        /**
-         * 构造函数
-         * @method RES.ResourceLoader#constructor
-         */
-        constructor(resInstance: Resource);
-        /**
-         * 最大并发加载数
-         */
-        thread: number;
-        /**
-         * 正在加载的线程计数
-         */
-        private loadingCount;
-        /**
-         * 一项加载结束回调函数。无论加载成功或者出错都将执行回调函数。示例：callBack(resItem:ResourceItem):void;
-         * @member {Function} RES.ResourceLoader#callBack
-         */
-        callBack: Function;
-        /**
-         * RES单例的引用
-         * @member {any} RES.ResourceLoader#resInstance
-         */
-        private resInstance;
-        /**
-         * 当前组加载的项总个数,key为groupName
-         */
-        private groupTotalDic;
-        /**
-         * 已经加载的项个数,key为groupName
-         */
-        private numLoadedDic;
-        /**
-         * 正在加载的组列表,key为groupName
-         */
-        private itemListDic;
-        /**
-         * 加载失败的组,key为groupName
-         */
-        private groupErrorDic;
-        private retryTimesDic;
-        maxRetryTimes: number;
-        private failedList;
-        /**
-         * 优先级队列,key为priority，value为groupName列表
-         */
-        private priorityQueue;
-        /**
-         * 检查指定的组是否正在加载中
-         * @method RES.ResourceLoader#isGroupInLoading
-         * @param groupName {string}
-         * @returns {boolean}
-         */
-        isGroupInLoading(groupName: string): boolean;
-        /**
-         * 开始加载一组文件
-         * @method RES.ResourceLoader#loadGroup
-         * @param list {egret.Array<ResourceItem>} 加载项列表
-         * @param groupName {string} 组名
-         * @param priority {number} 加载优先级
-         */
-        loadGroup(list: ResourceItem[], groupName: string, priority?: number): void;
-        /**
-         * 延迟加载队列
-         */
-        private lazyLoadList;
-        /**
-         * 加载一个文件
-         * @method RES.ResourceLoader#loadItem
-         * @param resItem {egret.ResourceItem} 要加载的项
-         */
-        loadItem(resItem: ResourceItem): void;
-        /**
-         * 资源解析库字典类
-         */
-        private analyzerDic;
-        /**
-         * 加载下一项
-         */
-        private next();
-        /**
-         * 当前应该加载同优先级队列的第几列
-         */
-        private queueIndex;
-        /**
-         * 获取下一个待加载项
-         */
-        private getOneResourceItem();
-        /**
-         * 加载结束
-         */
-        private onItemComplete(resItem);
-        /**
-         * 从优先级队列中移除指定的组名
-         */
-        private removeGroupName(groupName);
     }
 }
 declare module RES {
@@ -876,26 +876,6 @@ declare module RES {
     /**
      * @private
      */
-    class XMLAnalyzer extends BinAnalyzer {
-        constructor();
-        /**
-         * 解析并缓存加载成功的数据
-         */
-        analyzeData(resItem: ResourceItem, data: any): void;
-    }
-}
-declare module RES {
-    /**
-     * @private
-     */
-    class TextAnalyzer extends BinAnalyzer {
-        constructor();
-    }
-}
-declare module RES {
-    /**
-     * @private
-     */
     class JsonAnalyzer extends BinAnalyzer {
         constructor();
         /**
@@ -936,6 +916,26 @@ declare module RES {
         private recyclerIamge;
         private loadImage(url, data);
         private getImageLoader();
+    }
+}
+declare module RES {
+    /**
+     * @private
+     */
+    class TextAnalyzer extends BinAnalyzer {
+        constructor();
+    }
+}
+declare module RES {
+    /**
+     * @private
+     */
+    class XMLAnalyzer extends BinAnalyzer {
+        constructor();
+        /**
+         * 解析并缓存加载成功的数据
+         */
+        analyzeData(resItem: ResourceItem, data: any): void;
     }
 }
 declare module RES {
