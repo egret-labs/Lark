@@ -15,7 +15,6 @@ module lark {
             this._tween = tween;
             this._attributes = propertiesTo;
             this.keys = Object.keys(propertiesTo);
-
             var target = this._tween.target;
             var startAttributes = {};
             var keys = this.keys;

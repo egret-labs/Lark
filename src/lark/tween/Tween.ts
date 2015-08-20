@@ -44,7 +44,7 @@ module lark {
             this._propertiesFrom = propertiesFrom;
             this.ease = ease;
             if (!this._ease) {
-                this.ease = Ease.None;
+                this.ease = Ease.NONE;
             }
             var timeLine = new lark.TimeLine();
             timeLine.addTween(this);
@@ -52,6 +52,11 @@ module lark {
         }
 
         private invalidProperty:boolean = false;
+
+        $invalid():void {
+            this.invalidProperty = false;
+        }
+
         /**
          * @private
          */
@@ -101,6 +106,11 @@ module lark {
             }
         }
 
+        /**
+         * @private
+         */
+        $startTime:number = 0;
+
         public get startTime():number {
             return this.$startTime;
         }
@@ -115,11 +125,6 @@ module lark {
                 this._timeLine.$invalidateTotalTime();
             }
         }
-
-        /**
-         * @private
-         */
-        $startTime:number = 0;
 
         /**
          * @private
@@ -197,6 +202,9 @@ module lark {
             this._easeData = easeCache[val];
         }
 
+        /**
+         * @private
+         */
         private _timeLine:TimeLine;
 
         public get timeLine():TimeLine {
@@ -207,7 +215,13 @@ module lark {
             return this._timeLine;
         }
 
+        /**
+         * @private
+         */
         $setTimeLine(value:TimeLine) {
+            if (this._timeLine) {
+                this._timeLine.removeTween(this);
+            }
             this._timeLine = value;
         }
 
@@ -247,7 +261,6 @@ module lark {
                 }
             }
             this.invalidProperty = true;
-            console.log("验证属性");
         }
 
         /**
@@ -327,8 +340,23 @@ module lark {
             return new Tween(target, time, propertiesTo, ease, propertiesFrom);
         }
 
+        /**
+         * @private
+         */
         private static plugins = {};
 
+        /**
+         * @language en_US
+         * Register a Tween parameter parser.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 注册一个 Tween 参数解析器。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         public static registerPlugin(paramName:string, plugin:IPlugin) {
             Tween.plugins[paramName] = plugin;
         }

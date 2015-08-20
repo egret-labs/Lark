@@ -9,11 +9,6 @@ module lark {
         private lastTime:number = -1;
         private _currentTime:number = 0;
 
-        //获取当前时间
-        public get currentTime():number {
-            return this._currentTime;
-        }
-
         //获取总时间。
         public get totalTime():number {
             return this.getTotalTime();
@@ -34,6 +29,7 @@ module lark {
                 }
             }
             this._totalTime = endTime;
+            return endTime;
         }
 
         private _totalTime:number = 0;
@@ -46,14 +42,14 @@ module lark {
             this.invalidTotalTime = false;
         }
 
-        private _loop:number = 1;
+        private _loop:boolean = false;
 
         //是否循环播放
-        public get loop():number {
+        public get loop():boolean {
             return this._loop;
         }
 
-        public set loop(value:number) {
+        public set loop(value:boolean) {
             this._loop = value;
         }
 
@@ -65,54 +61,69 @@ module lark {
 
         private update(timeStamp:number):boolean {
             var totalTime = this.getTotalTime();
+            var lastTime = this._currentTime;
             this._currentTime += timeStamp - this.lastTime;
-            this.lastTime = timeStamp;
-
+            var currentTime = -1;
+            var loopTime = 0;
             if (this._currentTime >= totalTime) {
-                this._currentTime = totalTime;
-                this._loop--;
+                currentTime = this._currentTime % totalTime;
+                loopTime = Math.floor(this._currentTime / totalTime);
                 if (!this._loop) {
-                    this.setPlaying(false);
+                    this.$setPlaying(false);
                 }
             }
-
-            var tweens = this.tweens;
-            var tween:Tween;
-            var calls = this.calls;
-            var call;
-
-            for (var i = 0, len = tweens.length; i < len; i++) {
-                tween = tweens[i];
-                if (tween.$startTime <= this._currentTime || tween.$startTime + tween.$time >= this.lastTime && tween.$startTime + tween.$time < this.currentTime) {
-                    tweens[i].$update(this._currentTime);
+            while(loopTime > -1) {
+                if(loopTime && currentTime != -1) {
+                    this._currentTime = totalTime;
+                }
+                var calls = this.calls;
+                var call;
+                for (i = 0, len = calls.length; i < len; i++) {
+                    call = calls[i];
+                    if (call.time > lastTime && call.time <= this._currentTime || (call.time == 0 && lastTime == 0)) {
+                        call.callBack.apply(call.thisObj, call.args);
+                    }
+                }
+                var tweens = this.tweens;
+                var tween:Tween;
+                for (var i = 0, len = tweens.length; i < len; i++) {
+                    tween = tweens[i];
+                    if (tween.$startTime + tween.$time > lastTime && tween.$startTime <= this._currentTime || (tween.$startTime == 0 && lastTime == 0)) {
+                        tween.$update(this._currentTime);
+                    }
+                }
+                loopTime--;
+                if(loopTime == 0) {
+                    if(currentTime != -1) {
+                        lastTime = 0;
+                        this._currentTime = currentTime;
+                    }
+                } else {
+                    if(loopTime) {
+                        lastTime = 0;
+                    }
+                }
+                if(this._loop == false) {
+                    break;
                 }
             }
-            for (i = calls.length, len = calls.length; i < len; i++) {
-                call = calls[i];
-                if (call.time >= this.lastTime && call.time <= this._currentTime) {
-                    call.callBack.apply(call.thisObj, call.args);
-                }
-            }
-
-            if (this._currentTime == totalTime && this._loop) {
-                this._currentTime = 0;
-            }
+            this.lastTime = timeStamp;
             return true;
         }
 
         //播放。时间轴默认是停止的。调用此方法可以开始播放，也可以在停止后调用此方法继续播放。
         public play():void {
             var now = lark.getTimer();
-            this.setPlaying(true, now);
+            this.$setPlaying(true, now);
             this.update(now);
         }
 
         //暂停播放。
         public stop():void {
-            this.setPlaying(false);
+            this.$setPlaying(false);
         }
 
-        private setPlaying(value:boolean, time?:number):void {
+        $setPlaying(value:boolean, time?:number):void {
             if (this._isPlaying == value) {
                 return;
             }
@@ -120,12 +131,6 @@ module lark {
             if (value) {
                 lark.startTick(this.update, this);
                 this.lastTime = time;
-                //var tweens = this.tweens;
-                //for (var i = 0, len = tweens.length; i < len; i++) {
-                //    if (tweens[i].$initFlag == false) {
-                //        tweens[i].start();
-                //    }
-                //}
             } else {
                 lark.stopTick(this.update, this);
             }
@@ -143,7 +148,7 @@ module lark {
             }
             this._currentTime = time;
             var now = lark.getTimer();
-            this.setPlaying(true, now);
+            this.$setPlaying(true, now);
             this.update(now);
         }
 
@@ -159,7 +164,7 @@ module lark {
             }
             this._currentTime = time;
             var now = lark.getTimer();
-            this.setPlaying(false);
+            this.$setPlaying(false);
             this.update(now);
         }
 
@@ -169,6 +174,7 @@ module lark {
         public addTween(tween:Tween):Tween {
             this.tweens.push(tween);
             tween.$setTimeLine(this);
+            tween.$invalid();
             this.$invalidateTotalTime();
             return tween;
         }
@@ -182,6 +188,9 @@ module lark {
                     this.$invalidateTotalTime();
                     break;
                 }
+            }
+            if (tweens.length == 0) {
+                this.$setPlaying(false);
             }
         }
 

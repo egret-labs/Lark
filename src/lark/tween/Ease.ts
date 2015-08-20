@@ -26,7 +26,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static None = "None";
+        public static NONE = "None";
 
         /**
          * @language en_US
@@ -40,7 +40,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static SineEaseIn = "SineEaseIn";
+        public static SINE_EASE_IN = "SineEaseIn";
 
         /**
          * @language en_US
@@ -68,7 +68,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,NativeEaseInOutSine
          */
-        public static SineEaseInOut = "SineEaseInOut";
+        public static SINE_EASE_IN_OUT = "SineEaseInOut";
 
         /**
          * @language en_US
@@ -96,7 +96,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static QuadEaseIn = "QuadEaseIn";
+        public static QUAD_EASE_IN = "QuadEaseIn";
 
         /**
          * @language en_US
@@ -110,7 +110,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static QuadEaseOut = "QuadEaseOut";
+        public static QUAD_EASE_OUT = "QuadEaseOut";
 
         /**
          * @language en_US
@@ -124,7 +124,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static QuadEaseInOut = "QuadEaseInOut";
+        public static QUAD_EASE_IN_OUT = "QuadEaseInOut";
 
         /**
          * @language en_US
@@ -138,7 +138,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static QuadEaseOutIn = "QuadEaseOutIn";
+        public static QUAD_EASE_OUT_IN = "QuadEaseOutIn";
 
         /**
          * @language en_US
@@ -152,7 +152,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static CubicEaseIn = "CubicEaseIn";
+        public static CUBIC_EASE_IN = "CubicEaseIn";
 
         /**
          * @language en_US
@@ -166,7 +166,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static CubicEaseOut = "CubicEaseOut";
+        public static CUBIC_EASE_OUT = "CubicEaseOut";
 
         /**
          * @language en_US
@@ -180,7 +180,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static CubicEaseInOut = "CubicEaseInOut";
+        public static CUBIC_EASE_IN_OUT = "CubicEaseInOut";
 
         /**
          * @language en_US
@@ -194,7 +194,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static CubicEaseOutIn = "CubicEaseOutIn";
+        public static CUBIC_EASE_OUT_IN = "CubicEaseOutIn";
 
         /**
          * @language en_US
@@ -208,7 +208,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static QuartEaseIn = "QuartEaseIn";
+        public static QUART_EASE_IN = "QuartEaseIn";
 
         /**
          * @language en_US
@@ -222,7 +222,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static QuartEaseOut = "QuartEaseOut";
+        public static QUART_EASE_OUT = "QuartEaseOut";
 
         /**
          * @language en_US
@@ -236,7 +236,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static QuartEaseInOut = "QuartEaseInOut";
+        public static QUART_EASE_IN_OUT = "QuartEaseInOut";
 
         /**
          * @language en_US
@@ -250,7 +250,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static QuartEaseOutIn = "QuartEaseOutIn";
+        public static QUART_EASE_OUT_IN = "QuartEaseOutIn";
 
         /**
          * @language en_US
@@ -264,7 +264,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static QuintEaseIn = "QuintEaseIn";
+        public static QUINT_EASE_IN = "QuintEaseIn";
 
         /**
          * @language en_US
@@ -278,7 +278,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static QuintEaseOut = "QuintEaseOut";
+        public static QUINT_EASE_OUT = "QuintEaseOut";
 
         /**
          * @language en_US
@@ -292,7 +292,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static QuintEaseInOut = "QuintEaseInOut";
+        public static QUINT_EASE_IN_OUT = "QuintEaseInOut";
 
         /**
          * @language en_US
@@ -306,7 +306,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static QuintEaseOutIn = "QuintEaseOutIn";
+        public static QUINT_EASE_OUT_IN = "QuintEaseOutIn";
 
         /**
          * @language en_US
@@ -320,7 +320,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static ExpoEaseIn = "ExpoEaseIn";
+        public static EXPO_EASE_IN = "ExpoEaseIn";
 
         /**
          * @language en_US
@@ -334,7 +334,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static ExpoEaseOut = "ExpoEaseOut";
+        public static EXPO_EASE_OUT = "ExpoEaseOut";
 
         /**
          * @language en_US
@@ -348,7 +348,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static ExpoEaseInOut = "ExpoEaseInOut";
+        public static EXPO_EASE_IN_OUT = "ExpoEaseInOut";
 
         /**
          * @language en_US
@@ -362,7 +362,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static ExpoEaseOutIn = "ExpoEaseOutIn";
+        public static EXPO_EASE_OUT_IN = "ExpoEaseOutIn";
 
         /**
          * @language en_US
@@ -376,7 +376,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static CircEaseIn = "CircEaseIn";
+        public static CIRC_EASE_IN = "CircEaseIn";
 
         /**
          * @language en_US
@@ -390,7 +390,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static CircEaseOut = "CircEaseOut";
+        public static CIRC_EASE_OUT = "CircEaseOut";
 
         /**
          * @language en_US
@@ -404,7 +404,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static CircEaseInOut = "CircEaseInOut";
+        public static CIRC_EASE_IN_OUT = "CircEaseInOut";
 
         /**
          * @language en_US
@@ -418,7 +418,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static CircEaseOutIn = "CircEaseOutIn";
+        public static CIRC_EASE_OUT_IN = "CircEaseOutIn";
 
         /**
          * @language en_US
@@ -432,7 +432,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static BackEaseIn = "BackEaseIn";
+        public static BACK_EASE_IN = "BackEaseIn";
 
         /**
          * @language en_US
@@ -446,7 +446,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static BackEaseOut = "BackEaseOut";
+        public static BACK_EASE_OUT = "BackEaseOut";
 
         /**
          * @language en_US
@@ -460,7 +460,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static BackEaseInOut = "BackEaseInOut";
+        public static BACK_EASE_IN_OUT = "BackEaseInOut";
 
         /**
          * @language en_US
@@ -474,7 +474,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static BackEaseOutIn = "BackEaseOutIn";
+        public static BACK_EASE_OUT_IN = "BackEaseOutIn";
 
         /**
          * @language en_US
@@ -488,7 +488,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static ElasticEaseIn = "ElasticEaseIn";
+        public static ELASTIC_EASE_IN = "ElasticEaseIn";
 
         /**
          * @language en_US
@@ -502,7 +502,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static ElasticEaseOut = "ElasticEaseOut";
+        public static ELASTIC_EASE_OUT = "ElasticEaseOut";
 
         /**
          * @language en_US
@@ -516,7 +516,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static ElasticEaseInOut = "ElasticEaseInOut";
+        public static ELASTIC_EASE_IN_OUT = "ElasticEaseInOut";
 
         /**
          * @language en_US
@@ -530,7 +530,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static ElasticEaseOutIn = "ElasticEaseOutIn";
+        public static ELASTIC_EASE_OUT_IN = "ElasticEaseOutIn";
 
         /**
          * @language en_US
@@ -544,7 +544,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static BounceEaseIn = "BounceEaseIn";
+        public static BOUNCE_EASE_IN = "BounceEaseIn";
 
         /**
          * @language en_US
@@ -571,7 +571,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static BounceEaseInOut = "BounceEaseInOut";
+        public static BOUNCE_EASE_IN_OUT = "BounceEaseInOut";
 
         /**
          * @language en_US
@@ -585,6 +585,22 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static BounceEaseOutIn = "BounceEaseOutIn";
+        public static BOUNCE_EASE_OUT_IN = "BounceEaseOutIn";
+
+        /**
+         * @language en_US
+         * Register custom ease function.
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 注册自定义缓动函数。
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
+        public static registerEaseFunction(name:string,ease:Function):void {
+            EaseFunction[name] = ease;
+        }
     }
 }
