@@ -174,7 +174,6 @@ module lark {
         public addTween(tween:Tween):Tween {
             this.tweens.push(tween);
             tween.$setTimeLine(this);
-            tween.$invalid();
             this.$invalidateTotalTime();
             return tween;
         }

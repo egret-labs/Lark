@@ -53,10 +53,6 @@ module lark {
 
         private invalidProperty:boolean = false;
 
-        $invalid():void {
-            this.invalidProperty = false;
-        }
-
         /**
          * @private
          */
@@ -124,6 +120,7 @@ module lark {
             if (this._timeLine) {
                 this._timeLine.$invalidateTotalTime();
             }
+            this.invalidProperty = false;
         }
 
         /**
@@ -189,7 +186,10 @@ module lark {
             if (!easeCache[val]) {
                 var func = EaseFunction[val];
                 if (func == null) {
-                    //warn
+                    /**
+                     * to do
+                     * warn can't find the ease function
+                     */
                     return;
                 }
                 var cache = [];
