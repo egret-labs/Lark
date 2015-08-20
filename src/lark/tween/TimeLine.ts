@@ -80,7 +80,7 @@ module lark {
                 var call;
                 for (i = 0, len = calls.length; i < len; i++) {
                     call = calls[i];
-                    if (call.time > lastTime && call.time <= this._currentTime || (call.time == 0 && lastTime == 0)) {
+                    if (call.time > lastTime && call.time <= this._currentTime || (call.time == 0 && lastTime == 0 && this._currentTime)) {
                         call.callBack.apply(call.thisObj, call.args);
                     }
                 }
@@ -88,7 +88,7 @@ module lark {
                 var tween:Tween;
                 for (var i = 0, len = tweens.length; i < len; i++) {
                     tween = tweens[i];
-                    if (tween.$startTime + tween.$time > lastTime && tween.$startTime <= this._currentTime || (tween.$startTime == 0 && lastTime == 0)) {
+                    if (tween.$startTime + tween.$time > lastTime && tween.$startTime <= this._currentTime || (tween.$startTime == 0 && lastTime == 0 && this._currentTime)) {
                         tween.$update(this._currentTime);
                     }
                 }
@@ -115,7 +115,7 @@ module lark {
         public play():void {
             var now = lark.getTimer();
             this.$setPlaying(true, now);
-            this.update(now);
+            //this.update(now);
         }
 
         //暂停播放。
@@ -124,13 +124,15 @@ module lark {
         }
 
         $setPlaying(value:boolean, time?:number):void {
+            if (value) {
+                this.lastTime = time;
+            }
             if (this._isPlaying == value) {
                 return;
             }
             this._isPlaying = value;
             if (value) {
                 lark.startTick(this.update, this);
-                this.lastTime = time;
             } else {
                 lark.stopTick(this.update, this);
             }
@@ -149,7 +151,7 @@ module lark {
             this._currentTime = time;
             var now = lark.getTimer();
             this.$setPlaying(true, now);
-            this.update(now);
+            //this.update(now);
         }
 
         //跳到指定的帧并停止。
@@ -165,7 +167,7 @@ module lark {
             this._currentTime = time;
             var now = lark.getTimer();
             this.$setPlaying(false);
-            this.update(now);
+            //this.update(now);
         }
 
         private tweens:Tween[] = [];
