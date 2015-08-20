@@ -5,17 +5,17 @@ module lark {
 
         /**
          * @language en_US
-         * Tween ready. Measurement start value of the property.
+         * Initialization Tween parser.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * Tween 准备就绪。测量属性的开始值。
+         * 初始化 Tween 解析器。
          * @version Lark 1.0
          * @platform Web,Native
          */
-        init(tween:Tween, propertiesTo:Object, propertiesFrom:Object):Array<string>;
+        init(tween:Tween, propertiesTo:Object, propertiesFrom:Object):string[];
 
         /**
          * @language en_US

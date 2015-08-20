@@ -12,10 +12,10 @@ module lark {
          * @platform Web,Native
          */
         public init(tween:Tween, propertiesTo:Object, propertiesFrom:Object):Array<string> {
-            this._tween = tween;
+            this.tween = tween;
             this._attributes = propertiesTo;
             this.keys = Object.keys(propertiesTo);
-            var target = this._tween.target;
+            var target = tween.target;
             var startAttributes = {};
             var keys = this.keys;
             var length = keys.length;
@@ -35,7 +35,7 @@ module lark {
         /**
          * @private
          */
-        _tween:Tween;
+        protected tween:Tween;
 
         /**
          * @private
@@ -58,7 +58,7 @@ module lark {
          * @platform Web,Native
          */
         public update(value:number):void {
-            var target = this._tween.target;
+            var target = this.tween.target;
             var keys = this.keys;
             var length = keys.length;
             var startAttributes = this.startAttributes;

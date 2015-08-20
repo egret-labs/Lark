@@ -236,9 +236,18 @@ module lark {
         private initParmas():void {
             var controller:IPlugin;
             var params = this._propertiesTo;
+            var allPlugins = Tween.plugins;
             if (params) {
-                var keys = Object.keys(params);
-                for (var i = 0; i < keys.length; i++) {
+                var keys = Object.keys(allPlugins);
+                for (var i = 0, len = keys.length; i < len; i++) {
+                    if (keys[i] in params) {
+                        controller = new allPlugins[keys[i]];
+                        controller.init(this, params, this._propertiesFrom);
+                        this.pugins.push(controller);
+                    }
+                }
+                keys = Object.keys(params);
+                for (i = 0; i < keys.length; i++) {
                     var key = keys[i];
                     if (typeof (key) != "string") {
                         delete params[key];
@@ -300,6 +309,28 @@ module lark {
 
         /**
          * @private
+         */
+        _update:Function;
+
+        /**
+         * @private
+         */
+        _updateThis:any;
+
+        /**
+         * @private
+         */
+        _updateParams:any;
+
+        public update(callBack:Function, thisObj?:any, ...args):Tween {
+            this._update = callBack;
+            this._updateThis = thisObj;
+            this._updateParams = args;
+            return this;
+        }
+
+        /**
+         * @private
          * @param time
          * @returns {boolean}
          */
@@ -315,6 +346,9 @@ module lark {
             var s = this._easeData[2000 * (this._currentTime / this.$time) | 0];
             for (var i = 0; i < length; i++) {
                 this.pugins[i].update(s);
+            }
+            if (this._update != null) {
+                this._update.apply(this._updateThis, this._updateParams);
             }
             if (this._currentTime == this.$time) {
                 if (this._complete != null) {
@@ -357,7 +391,7 @@ module lark {
          * @version Lark 1.0
          * @platform Web,Native
          */
-        public static registerPlugin(paramName:string, plugin:IPlugin) {
+        public static registerPlugin(paramName:string, plugin:any):void {
             Tween.plugins[paramName] = plugin;
         }
     }
