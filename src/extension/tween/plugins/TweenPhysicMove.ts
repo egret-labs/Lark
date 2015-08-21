@@ -36,9 +36,9 @@ module lark {
         private endY:number;
 
         public update(value:number):void {
-            var target = this.tween.target;
-            target.x = this.startX + this.vx*value + .5*this.vx;
-            target.y = value * (path[i].y - path[i - 1].y) + path[i - 1].y;
+            //var target = this.tween.target;
+            //target.x = this.startX + this.vx*value + .5*this.vx;
+            //target.y = value * (path[i].y - path[i - 1].y) + path[i - 1].y;
         }
 
         public static freeFallTo(target:any, time:number, groundY:number):Tween {

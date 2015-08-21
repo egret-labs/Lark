@@ -6,6 +6,11 @@ module lark {
             super();
         }
 
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         public init(tween:Tween, propertiesTo:Object, propertiesFrom:Object):string[] {
             this.tween = tween;
             var useAttributes = ["path"];
@@ -42,6 +47,11 @@ module lark {
         private pathSum:number[];
         private path:Point[];
 
+        /**
+         * @inheritDoc
+         * @version Lark 1.0
+         * @platform Web,Native
+         */
         public update(value:number):void {
             var path = this.path;
             var target = this.tween.target;
@@ -64,7 +74,7 @@ module lark {
         }
 
         public static to(target:any, time:number, path:Point[], ease?:string):Tween {
-            return new Tween(target, time, {"path": path}, ease);
+            return Tween.to(target, time, {"path": path}, ease);
         }
 
         public static vto(target:any, v:number, path:Point[], ease?:string):Tween {
@@ -72,8 +82,8 @@ module lark {
             for(var i = 1, len = path.length; i < len; i++) {
                 sum += Math.sqrt((path[i].y -path[i-1].y)*(path[i].y -path[i-1].y) + (path[i].y -path[i-1].y)*(path[i].y -path[i-1].y));
             }
-            var time = sum*1000/v;
-            return new Tween(target, time, {"path": path}, ease);
+            var time = sum/v;
+            return Tween.to(target, time, {"path": path}, ease);
         }
     }
 

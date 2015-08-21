@@ -1,7 +1,6 @@
 module lark {
 
-    export interface IPlugin {
-
+    export interface IPlugin extends HashObject {
 
         /**
          * @language en_US
@@ -11,7 +10,7 @@ module lark {
          */
         /**
          * @language zh_CN
-         * 初始化 Tween 解析器。
+         * 初始化 Tween 插件。
          * @version Lark 1.0
          * @platform Web,Native
          */

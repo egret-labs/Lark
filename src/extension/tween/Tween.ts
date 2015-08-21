@@ -38,7 +38,7 @@ module lark {
             if (time < 0) {
                 time = 0;
             }
-            this.$time = time;
+            this.$time = time * 1000;
             this._target = target;
             this._propertiesTo = propertiesTo;
             this._propertiesFrom = propertiesFrom;
@@ -48,7 +48,6 @@ module lark {
             }
             var timeLine = new lark.TimeLine();
             timeLine.addTween(this);
-            timeLine.play();
         }
 
         private invalidProperty:boolean = false;
@@ -59,6 +58,9 @@ module lark {
         private _propertiesTo:Object;
 
         public set propertiesTo(value:Object) {
+            if (value == this._propertiesTo) {
+                return;
+            }
             this._propertiesTo = value;
             this.invalidProperty = false;
         }
@@ -66,6 +68,9 @@ module lark {
         private _propertiesFrom:Object;
 
         public set propertiesFrom(value:Object) {
+            if (value == this._propertiesFrom) {
+                return;
+            }
             this._propertiesFrom = value;
             this.invalidProperty = false;
         }
@@ -91,12 +96,12 @@ module lark {
          * @platform Web,Native
          */
         public get time():number {
-            return this.$time*1000;
+            return this.$time / 1000;
         }
 
         public set time(value:number) {
             value = +value | 0;
-            this.$time = (+value)/1000;
+            this.$time = (+value) * 1000;
             if (this._timeLine) {
                 this._timeLine.$invalidateTotalTime();
             }
@@ -108,7 +113,7 @@ module lark {
         $startTime:number = 0;
 
         public get startTime():number {
-            return this.$startTime*1000;
+            return this.$startTime / 1000;
         }
 
         public set startTime(value:number) {
@@ -116,7 +121,10 @@ module lark {
             if (value < 0) {
                 value = 0;
             }
-            this.$startTime = value/1000;
+            if (value == this.$startTime) {
+                return;
+            }
+            this.$startTime = value * 1000;
             if (this._timeLine) {
                 this._timeLine.$invalidateTotalTime();
             }
@@ -150,8 +158,13 @@ module lark {
         }
 
         public set target(value:any) {
+            if (value == this.target) {
+                return;
+            }
+            this.removeTargetEvent();
             this._target = value;
             this.invalidProperty = false;
+            this.addTargetEvent();
         }
 
         /**
@@ -200,6 +213,67 @@ module lark {
             }
             this._ease = val;
             this._easeData = easeCache[val];
+        }
+
+        private _startEvent:string = "";
+
+        public get startEvent():string {
+            return this._startEvent;
+        }
+
+        public set startEvent(type:string) {
+            this.removeTargetEvent();
+            this._startEvent = type;
+            this.addTargetEvent();
+        }
+
+        private _startTarget:IEventEmitter;
+
+        public get startTarget():IEventEmitter {
+            return this._startTarget;
+        }
+
+        public set startTarget(value:IEventEmitter) {
+            this.removeTargetEvent();
+            this._startTarget = value;
+            this.addTargetEvent();
+        }
+
+        /**
+         * @private
+         */
+        private removeTargetEvent():void {
+            var target:IEventEmitter;
+            if (this._startTarget) {
+                target = this._startTarget;
+            } else {
+                target = this._target;
+            }
+            if (target && this._startEvent && this._startEvent != "") {
+                target.removeListener(this._startEvent, this.startByEvent, this);
+            }
+        }
+
+        /**
+         * @private
+         */
+        private addTargetEvent():void {
+            var target:IEventEmitter;
+            if (this._startTarget) {
+                target = this._startTarget;
+            } else {
+                target = this._target;
+            }
+            if (target && this._startEvent && this._startEvent != "") {
+                target.on(this._startEvent, this.startByEvent, this);
+            }
+        }
+
+        /**
+         * @private
+         */
+        private startByEvent():void {
+            this._timeLine.gotoAndPlay(0);
         }
 
         /**
@@ -272,6 +346,10 @@ module lark {
             this.invalidProperty = true;
         }
 
+        public invalidate():void {
+            this.invalidProperty = false;
+        }
+
         /**
          * @private
          */
@@ -286,7 +364,6 @@ module lark {
          * @private
          */
         _completeParams:any;
-
 
         /**
          * @language en_US
@@ -358,15 +435,6 @@ module lark {
             return true;
         }
 
-        private _autoRelease:boolean = true;
-        //public
-
-        public release():void {
-            Tween.tweens.push(this);
-        }
-
-        private static tweens:Tween[] = [];
-
         /**
          * @language en_US
          * Create a Tween object.
@@ -380,7 +448,9 @@ module lark {
          * @platform Web,Native
          */
         public static to(target:any, time:number, propertiesTo:Object, ease?:string, propertiesFrom?:Object):Tween {
-            return new Tween(target, time, propertiesTo, ease, propertiesFrom);
+            var tween = new Tween(target, time, propertiesTo, ease, propertiesFrom);
+            tween.timeLine.play();
+            return tween;
         }
 
         /**
@@ -390,13 +460,13 @@ module lark {
 
         /**
          * @language en_US
-         * Register a Tween parameter parser.
+         * Register a Tween plugin.
          * @version Lark 1.0
          * @platform Web,Native
          */
         /**
          * @language zh_CN
-         * 注册一个 Tween 参数解析器。
+         * 注册一个 Tween 插件。
          * @version Lark 1.0
          * @platform Web,Native
          */

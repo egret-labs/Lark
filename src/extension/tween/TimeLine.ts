@@ -28,7 +28,7 @@ module lark {
                     endTime = time;
                 }
             }
-            this._totalTime = endTime;
+            this._totalTime = endTime*1000;
             return endTime;
         }
 
@@ -115,7 +115,6 @@ module lark {
         public play():void {
             var now = lark.getTimer();
             this.$setPlaying(true, now);
-            //this.update(now);
         }
 
         //暂停播放。
@@ -151,7 +150,6 @@ module lark {
             this._currentTime = time;
             var now = lark.getTimer();
             this.$setPlaying(true, now);
-            //this.update(now);
         }
 
         //跳到指定的帧并停止。
@@ -167,7 +165,6 @@ module lark {
             this._currentTime = time;
             var now = lark.getTimer();
             this.$setPlaying(false);
-            //this.update(now);
         }
 
         private tweens:Tween[] = [];
@@ -200,19 +197,6 @@ module lark {
         //添加回调函数。
         public call(time:number, callBack:Function, thisObj?:any, ...args):void {
             this.calls.push({"time": time, "callBack": callBack, "thisObj": thisObj, "args": args});
-        }
-
-        public release():void {
-            TimeLine.timeLines.push(this);
-        }
-
-        private static timeLines:TimeLine[] = [];
-
-        public static create():TimeLine {
-            if (TimeLine.timeLines.length) {
-                return TimeLine.timeLines.pop();
-            }
-            return new TimeLine();
         }
     }
 }
