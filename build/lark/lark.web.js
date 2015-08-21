@@ -1459,6 +1459,7 @@ var lark;
                 this._xhr = new XMLHttpRequest();
                 this._xhr.onreadystatechange = this.onReadyStateChange;
                 this._xhr.onprogress = this.updateProgress;
+                this._xhr.open(method, url, true);
                 if (this._responseType != null) {
                     this._xhr.responseType = this.responseType;
                 }
@@ -1468,7 +1469,6 @@ var lark;
                 if (this.header != null) {
                     this._xhr.setRequestHeader(this.header, this.headerValue);
                 }
-                this._xhr.open(method, url, true);
             };
             /**
              * @private
