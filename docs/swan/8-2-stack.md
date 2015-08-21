@@ -70,6 +70,7 @@ this.addChild( this.viewStack );
 ```
 > 注意上面我们为循环产生的group设置了名称(通过name属性)，这样TabBar的显示，就可以根据Group的名称来做。由于ViewStack实现的是ICollection接口，它默认会取子项的name属性，就是说，想显示在TabBar的文本，必须写在子项的name属性上。
   通过设置TabBar.dataProvider等于ViewStack实例，来实现两者的绑定。     
+
 效果：    
 ![][8-2-tabbar-A]     
 #####  用法2：结合ArrayCollection   
