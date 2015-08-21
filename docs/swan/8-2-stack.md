@@ -1,1 +1,67 @@
-#Swan (UI¿â) ±à³ÌÖ¸ÄÏ - ²ãµşÈİÆ÷²ãµşÈİÆ÷·ÖÎªÁ½ÖÖ£º ViewStack ºÍ TabBar ¡£#### ViewStackViewStack Ò²ÊÇÒ»¸öÈİÆ÷£¬Äú¿ÉÒÔÔÚÕâ¸öÈİÆ÷ÖĞÌí¼Ó¶à¸ö×ÓÏî£¬µ«Ö»ÄÜÏÔÊ¾ÆäÖĞµÄÒ»¸ö¡£Äú¿ÉÒÔÍ¨¹ıÉèÖÃ selectedIndex »òÕß selectedChild ÊôĞÔ£¬À´¿ØÖÆµ±Ç°Ó¦¸ÃÏÔÊ¾µÄ×ÓÏî¡£Ê×ÏÈÎÒÃÇ´´½¨Ò»¸ö×¨ÓÃÓÚÏÔÊ¾ ViewStack µÄÀà£º``` TypeScriptmodule uiContainer {    export class ViewStackDemo extends swan.Group {        private viewStack:swan.ViewStack;        public constructor() {            super();        }        public createChildren():void {            super.createChildren();            this.viewStack = new swan.ViewStack();            var btnA:swan.Button = new swan.Button();            btnA.label = "Lark Button A";            this.viewStack.addChild( btnA );            var btnB:swan.Button = new swan.Button();            btnB.label = "Lark Button B";            this.viewStack.addChild( btnB );            //ÉèÖÃÄ¬ÈÏÑ¡Ïî            this.viewStack.selectedIndex = 1;            //timer¿ØÖÆÑ¡ÏîÇĞ»»            var timer:lark.Timer = new lark.Timer( 500 );            timer.on( lark.TimerEvent.TIMER, this.changeIndexByTimer, this );            timer.start();            //show            this.addChild( this.viewStack );        }        private changeIndexByTimer( evt:lark.TimerEvent ):void {            this.viewStack.selectedIndex = this.viewStack.selectedIndex == 0 ? 1 : 0 ;        }    }}```ÔÚÎÄµµÀàËù¸²¸ÇµÄ createChildren ÖĞ¼ÓÈë¶ÔÒÔÉÏÀàµÄµ÷ÓÃ£º ``` TypeScriptvar stackdemo:swan.Group = new uiContainer.ViewStackDemo;stackdemo.x = 100;stackdemo.y = 100;this.addChild( stackdemo );```¼´¿É¿´µ½¸ÃÈİÆ÷µÄÁ½¸ö²¿·Ö°´ÕÕÉè¶¨µÄ¼ä¸ô×Ô¶¯±ä»»µÄĞ§¹û£º ![][8-2-stack-A]  ![][8-2-stack-B]#### TabBarÔÚÉÏÒ»½ÚÎÒÃÇ½éÉÜÁËViewStack£¬ÄÇÃ´ÈÃÓÃ»§ÓÃÊ²Ã´¿ØÖÆViewStackµÄÏÔÊ¾±È½ÏºÃÄØ£¿TabBarÊÇ¸ö²»´íµÄÑ¡Ôñ¡£TabBar½«¸ù¾İÊı¾İÔ´£¬ÏÔÊ¾Ò»×é°´Å¥£¬²¢ÇÒÔÚÍ¬Ò»Ê±¼ä£¬Ö»ÓĞÒ»¸ö°´Å¥»á±»Ñ¡ÖĞ£¬²¢ÇÒÈç¹ûÊı¾İÔ´ÊÇÒ»¸öViewStackµÄ»°£¬ÄÇÃ´TabBarµÄÑ¡ÖĞÏîË÷Òı½«ºÍViewStackµÄÑ¡ÖĞÏîË÷Òı±£³ÖÒ»ÖÂ¡£    #####  ÓÃ·¨1£º½áºÏViewStackÎÒÃÇĞŞ¸ÄÉÏÒ»½ÚµÄÀı×Ó£¬²»ÔÙÓÃtimer¿ØÖÆViewStackµÄÇĞ»»£¬¶øÊÇ°ó¶¨µ½TabBarÉÏÃæ£º   ``` TypeScript```[8-2-stack-A]: image/8/8-2-stack-A.jpg[8-2-stack-B]: image/8/8-2-stack-B.jpg
+#Swan (UIåº“) ç¼–ç¨‹æŒ‡å— - å±‚å å®¹å™¨
+
+å±‚å å®¹å™¨åˆ†ä¸ºä¸¤ç§ï¼š ViewStack å’Œ TabBar ã€‚
+
+#### ViewStack
+
+ViewStack ä¹Ÿæ˜¯ä¸€ä¸ªå®¹å™¨ï¼Œæ‚¨å¯ä»¥åœ¨è¿™ä¸ªå®¹å™¨ä¸­æ·»åŠ å¤šä¸ªå­é¡¹ï¼Œä½†åªèƒ½æ˜¾ç¤ºå…¶ä¸­çš„ä¸€ä¸ªã€‚æ‚¨å¯ä»¥é€šè¿‡è®¾ç½® selectedIndex æˆ–è€… selectedChild å±æ€§ï¼Œæ¥æ§åˆ¶å½“å‰åº”è¯¥æ˜¾ç¤ºçš„å­é¡¹ã€‚
+
+é¦–å…ˆæˆ‘ä»¬åˆ›å»ºä¸€ä¸ªä¸“ç”¨äºæ˜¾ç¤º ViewStack çš„ç±»ï¼š
+``` TypeScript
+module uiContainer {
+    export class ViewStackDemo extends swan.Group {
+        private viewStack:swan.ViewStack;
+
+        public constructor() {
+            super();
+        }
+
+        public createChildren():void {
+            super.createChildren();
+            this.viewStack = new swan.ViewStack();
+            var btnA:swan.Button = new swan.Button();
+            btnA.label = "Lark Button A";
+            this.viewStack.addChild( btnA );
+            var btnB:swan.Button = new swan.Button();
+            btnB.label = "Lark Button B";
+            this.viewStack.addChild( btnB );
+            //è®¾ç½®é»˜è®¤é€‰é¡¹
+            this.viewStack.selectedIndex = 1;
+            //timeræ§åˆ¶é€‰é¡¹åˆ‡æ¢
+            var timer:lark.Timer = new lark.Timer( 500 );
+            timer.on( lark.TimerEvent.TIMER, this.changeIndexByTimer, this );
+            timer.start();
+            //show
+            this.addChild( this.viewStack );
+        }
+
+        private changeIndexByTimer( evt:lark.TimerEvent ):void {
+            this.viewStack.selectedIndex = this.viewStack.selectedIndex == 0 ? 1 : 0 ;
+        }
+    }
+}
+```
+
+åœ¨æ–‡æ¡£ç±»æ‰€è¦†ç›–çš„ createChildren ä¸­åŠ å…¥å¯¹ä»¥ä¸Šç±»çš„è°ƒç”¨ï¼š 
+``` TypeScript
+var stackdemo:swan.Group = new uiContainer.ViewStackDemo;
+stackdemo.x = 100;
+stackdemo.y = 100;
+this.addChild( stackdemo );
+```
+
+å³å¯çœ‹åˆ°è¯¥å®¹å™¨çš„ä¸¤ä¸ªéƒ¨åˆ†æŒ‰ç…§è®¾å®šçš„é—´éš”è‡ªåŠ¨å˜æ¢çš„æ•ˆæœï¼š 
+
+![][8-2-stack-A]  ![][8-2-stack-B]
+
+
+#### TabBar
+åœ¨ä¸Šä¸€èŠ‚æˆ‘ä»¬ä»‹ç»äº†ViewStackï¼Œé‚£ä¹ˆè®©ç”¨æˆ·ç”¨ä»€ä¹ˆæ§åˆ¶ViewStackçš„æ˜¾ç¤ºæ¯”è¾ƒå¥½å‘¢ï¼ŸTabBaræ˜¯ä¸ªä¸é”™çš„é€‰æ‹©ã€‚TabBarå°†æ ¹æ®æ•°æ®æºï¼Œæ˜¾ç¤ºä¸€ç»„æŒ‰é’®ï¼Œå¹¶ä¸”åœ¨åŒä¸€æ—¶é—´ï¼Œåªæœ‰ä¸€ä¸ªæŒ‰é’®ä¼šè¢«é€‰ä¸­ï¼Œå¹¶ä¸”å¦‚æœæ•°æ®æºæ˜¯ä¸€ä¸ªViewStackçš„è¯ï¼Œé‚£ä¹ˆTabBarçš„é€‰ä¸­é¡¹ç´¢å¼•å°†å’ŒViewStackçš„é€‰ä¸­é¡¹ç´¢å¼•ä¿æŒä¸€è‡´ã€‚    
+#####  ç”¨æ³•1ï¼šç»“åˆViewStack
+æˆ‘ä»¬ä¿®æ”¹ä¸Šä¸€èŠ‚çš„ä¾‹å­ï¼Œä¸å†ç”¨timeræ§åˆ¶ViewStackçš„åˆ‡æ¢ï¼Œè€Œæ˜¯ç»‘å®šåˆ°TabBarä¸Šé¢ï¼š   
+``` TypeScript
+```
+
+
+[8-2-stack-A]: image/8/8-2-stack-A.jpg
+[8-2-stack-B]: image/8/8-2-stack-B.jpg
