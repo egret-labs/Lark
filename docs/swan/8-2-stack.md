@@ -60,6 +60,13 @@ this.addChild( stackdemo );
 #####  用法1：结合ViewStack
 我们修改上一节的例子，不再用timer控制ViewStack的切换，而是绑定到TabBar上面：   
 ``` TypeScript
+var tabbar:swan.TabBar = new swan.TabBar;
+tabbar.dataProvider = this.viewStack;
+this.addChild( tabbar );
+console.log( "tabbar:", tabbar.numElements, tabbar.elementsContent );
+//show
+this.viewStack.y = 200;
+this.addChild( this.viewStack );
 ```
 
 
