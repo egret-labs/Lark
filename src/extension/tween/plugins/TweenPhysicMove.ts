@@ -30,28 +30,34 @@ module lark {
             var endX = startX;
             var endY = startY;
             if ("x" in propertiesTo) {
-                endX = propertiesTo["x"];
+                endX = +propertiesTo["x"];
                 useAttributes.push("x");
             }
             if ("y" in propertiesTo) {
-                endY = propertiesTo["y"];
+                endY = +propertiesTo["y"];
                 useAttributes.push("y");
             }
             var vx = 0;
             var vy = 0;
+            var t = tween.time;
             if ("vx" in propertiesTo) {
-                vx = propertiesTo["vx"];
+                vx = +propertiesTo["vx"];
                 useAttributes.push("vx");
+                if (!("x" in propertiesTo)) {
+                    endX = startX + t * vx;
+                }
             }
             if ("vy" in propertiesTo) {
-                vy = propertiesTo["vy"];
+                vy = +propertiesTo["vy"];
                 useAttributes.push("vy");
+                if (!("y" in propertiesTo)) {
+                    endY = startY + t * vy;
+                }
             }
             this.vx = vx;
             this.vy = vy;
-            var t = tween.time;
-            this.ax = (endX - startX - vx*t)*2/(t*t);
-            this.ay = (endY - startY - vy*t)*2/(t*t);
+            this.ax = (endX - startX - vx * t) * 2 / (t * t);
+            this.ay = (endY - startY - vy * t) * 2 / (t * t);
             this.time = t;
             return useAttributes;
         }
@@ -72,15 +78,36 @@ module lark {
          */
         public update(value:number):void {
             var target = this.tween.target;
-            var t = this.time*value;
-            target.x = this.startX + this.vx*t + .5*this.ax*t*t + this.startX;
-            var lastY = target.y;
-            target.y = this.startY + this.vy*t + .5*this.ay*t*t + this.startY;
-            console.log(target.y,value,target.y - lastY);
+            var t = this.time * value;
+            target.x = this.startX + this.vx * t + .5 * this.ax * t * t + this.startX;
+            target.y = this.startY + this.vy * t + .5 * this.ay * t * t + this.startY;
         }
 
         public static freeFallTo(target:any, time:number, groundY:number):Tween {
-            return new Tween(target, time, {"y": groundY, "physicMove": true});
+            return Tween.to(target, time, {"y": groundY, "physicMove": true});
+        }
+
+        public static freeFallToWithG(target:any, g:number, groundY:number):Tween {
+            return Tween.to(target, Math.sqrt(2 * (groundY - target.y) / g), {"y": groundY, "physicMove": true});
+        }
+
+        public static fallTo(target:any, time:number, groundY:number, vX?:number, vY?:number):Tween {
+            return Tween.to(target, time, {"y": groundY, "physicMove": true, "vx": vX, "vy": vY});
+        }
+
+        public static fallToWithG(target:any, g:number, groundY:number, vX?:number, vY?:number):Tween {
+            vX = +vX;
+            vY = +vY;
+            return Tween.to(target, Math.sqrt(2 * (groundY - target.y) / g + (vY * vY / (g * g))) - vY / g, {
+                "y": groundY,
+                "physicMove": true,
+                "vx": vX,
+                "vy": vY
+            });
+        }
+
+        public static to(target:any, time:number, toX:number, toY:number, vX:number = 0, vY:number = 0):Tween {
+            return Tween.to(target, time, {"x": toX, "y": toY, "vx": vX, "vy": vY, "physicMove": true});
         }
     }
 
