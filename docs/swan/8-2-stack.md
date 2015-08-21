@@ -68,7 +68,30 @@ console.log( "tabbar:", tabbar.numElements, tabbar.elementsContent );
 this.viewStack.y = 200;
 this.addChild( this.viewStack );
 ```
-
+> 注意上面我们为循环产生的group设置了名称(通过name属性)，这样TabBar的显示，就可以根据Group的名称来做。由于ViewStack实现的是ICollection接口，它默认会取子项的name属性，就是说，想显示在TabBar的文本，必须写在子项的name属性上。
+  通过设置TabBar.dataProvider等于ViewStack实例，来实现两者的绑定。     
+效果：    
+![][8-2-tabbar-A]     
+#####  用法2：结合ArrayCollection   
+TabBar也是可以单独使用的，将数据源设置为一个ArrayCollection实例即可。并且您可以通过侦听itemClick事件，来获取TabBar的选中项。示意代码：    
+``` TypeScript
+private createTabWithArrayCollection():void {
+    //tabBar
+    this.tabBar = new swan.TabBar();
+    this.tabBar.dataProvider = new swan.ArrayCollection(["Tab 1", "Tab 2", "Tab 3"]);
+    this.tabBar.on(swan.ItemTapEvent.ITEM_TAP, this.onBarItemTap, this);
+    //show
+    this.addChild(this.tabBar);
+}
+private onBarItemTap(event:swan.ItemTapEvent):void {
+    console.log(event.itemIndex);
+}
+```    
+效果：   
+![][8-2-tabbar-B]     
+ 
 
 [8-2-stack-A]: image/8/8-2-stack-A.jpg
 [8-2-stack-B]: image/8/8-2-stack-B.jpg
+[8-2-tabbar-A]: image/8/8-2-tabbar-A.png
+[8-2-tabbar-B]: image/8/8-2-tabbar-B.png
