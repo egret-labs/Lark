@@ -313,12 +313,16 @@ module lark {
             var allPlugins = Tween.plugins;
             if (params) {
                 var keys = Object.keys(allPlugins);
+                var deletes = [];
                 for (var i = 0, len = keys.length; i < len; i++) {
                     if (keys[i] in params) {
                         controller = new allPlugins[keys[i]];
-                        controller.init(this, params, this._propertiesFrom);
+                        deletes = deletes.concat(controller.init(this, params, this._propertiesFrom));
                         this.pugins.push(controller);
                     }
+                }
+                for(i = 0; i < deletes.length; i++) {
+                    delete params[deletes[i]];
                 }
                 keys = Object.keys(params);
                 for (i = 0; i < keys.length; i++) {
