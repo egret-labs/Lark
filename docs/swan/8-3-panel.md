@@ -43,6 +43,6 @@ this.myPanel.addChild(btn);
 ![][8-3-panel-C]
 
 
-[8-3-panel-A]: image/8/8-3-panel-A.jpg
-[8-3-panel-B]: image/8/8-3-panel-B.jpg
-[8-3-panel-C]: image/8/8-3-panel-C.jpg
+[8-3-panel-A]: image/8/8-3-panel-A.png
+[8-3-panel-B]: image/8/8-3-panel-B.png
+[8-3-panel-C]: image/8/8-3-panel-C.png
