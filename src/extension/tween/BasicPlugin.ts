@@ -59,6 +59,7 @@ module lark {
          */
         public update(value:number):void {
             var target = this.tween.target;
+            value = 0.25;
             var keys = this.keys;
             var length = keys.length;
             var startAttributes = this.startAttributes;

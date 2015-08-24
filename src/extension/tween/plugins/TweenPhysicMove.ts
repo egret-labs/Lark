@@ -106,8 +106,8 @@ module lark {
             });
         }
 
-        public static to(target:any, time:number, toX:number, toY:number, vX:number = 0, vY:number = 0):Tween {
-            return Tween.to(target, time, {"x": toX, "y": toY, "vx": vX, "vy": vY, "physicMove": true});
+        public static to(target:any, time:number, xTo:number, yTo:number, vX:number = 0, vY:number = 0):Tween {
+            return Tween.to(target, time, {"x": xTo, "y": yTo, "vx": vX, "vy": vY, "physicMove": true});
         }
     }
 
