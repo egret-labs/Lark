@@ -7665,6 +7665,10 @@ declare module lark.sys {
          * @private
          */
         selectionAnchorPosition = 23,
+        /**
+         * @private
+         */
+        sourceFontString = 24,
     }
 }
 declare module lark {
@@ -7780,6 +7784,11 @@ declare module lark {
          * 获取字体信息的字符串形式。
          */
         private getFontString();
+        /**
+         * @private
+         * 获取字体信息的字符串形式。
+         */
+        private getSourceFontString();
         /**
          * @language en_US
          * Horizontal alignment of text.

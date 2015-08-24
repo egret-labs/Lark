@@ -128,7 +128,11 @@ module lark.sys {
         /**
          * @private
          */
-        selectionAnchorPosition
+        selectionAnchorPosition,
+        /**
+         * @private
+         */
+        sourceFontString
     }
 }
 
@@ -201,7 +205,8 @@ module lark {
                 18: false,         //textLinesChanged,
                 19: true,          //wordWrap
                 20: false,         //displayAsPassword
-                21: 0              //maxChars
+                21: 0,             //maxChars
+                22: ""             //sourceFontString
             };
             this.text = text;
         }
@@ -356,8 +361,21 @@ module lark {
                 this.$fontScale = size / Math.round(scale * size);
                 size = Math.ceil(scale * size);
                 values[sys.TextKeys.fontString] = sys.toFontString(this, size);
+                values[sys.TextKeys.sourceFontString] = sys.toFontString(this, this.fontSize || 12);
             }
             return values[sys.TextKeys.fontString];
+        }
+
+        /**
+         * @private
+         * 获取字体信息的字符串形式。
+         */
+        private getSourceFontString():string {
+            var values = this.$TextField;
+            if (values[sys.TextKeys.fontStringChanged]) {
+                this.getFontString();
+            }
+            return values[sys.TextKeys.sourceFontString];
         }
 
         /**
@@ -765,7 +783,7 @@ module lark {
             }
 
             var hasWidthSet = !isNaN(textFieldWidth);
-            var font = this.getFontString();
+            var font = this.getSourceFontString();
             var lines = text.split(/(?:\r\n|\r|\n)/);
             var length = lines.length;
             var maxWidth = 0;

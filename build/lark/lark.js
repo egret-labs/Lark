@@ -10039,7 +10039,8 @@ var lark;
                 18: false,
                 19: true,
                 20: false,
-                21: 0 //maxChars
+                21: 0,
+                22: "" //sourceFontString
             };
             this.text = text;
         }
@@ -10185,8 +10186,20 @@ var lark;
                 this.$fontScale = size / Math.round(scale * size);
                 size = Math.ceil(scale * size);
                 values[12 /* fontString */] = lark.sys.toFontString(this, size);
+                values[24 /* sourceFontString */] = lark.sys.toFontString(this, this.fontSize || 12);
             }
             return values[12 /* fontString */];
+        };
+        /**
+         * @private
+         * 获取字体信息的字符串形式。
+         */
+        p.getSourceFontString = function () {
+            var values = this.$TextField;
+            if (values[17 /* fontStringChanged */]) {
+                this.getFontString();
+            }
+            return values[24 /* sourceFontString */];
         };
         d(p, "textAlign"
             /**
@@ -10577,7 +10590,7 @@ var lark;
                 text = asterisks;
             }
             var hasWidthSet = !isNaN(textFieldWidth);
-            var font = this.getFontString();
+            var font = this.getSourceFontString();
             var lines = text.split(/(?:\r\n|\r|\n)/);
             var length = lines.length;
             var maxWidth = 0;
