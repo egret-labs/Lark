@@ -10181,6 +10181,7 @@ var lark;
                 if (scale == 0) {
                     scale = 0.001;
                 }
+                scale *= this.stage.$displayList.$pixelRatio;
                 this.$fontScale = size / Math.round(scale * size);
                 size = Math.ceil(scale * size);
                 values[12 /* fontString */] = lark.sys.toFontString(this, size);
