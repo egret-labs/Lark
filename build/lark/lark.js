@@ -10011,6 +10011,7 @@ var lark;
          */
         function TextField(text) {
             _super.call(this);
+            this.$fontScale = 1;
             /**
              * @private
              */
@@ -10162,6 +10163,10 @@ var lark;
             this.$TextField[17 /* fontStringChanged */] = true;
             this.$invalidateContentBounds();
         };
+        p.$preRender = function () {
+            this.$TextField[17 /* fontStringChanged */] = true;
+            this.getFontString();
+        };
         /**
          * @private
          * 获取字体信息的字符串形式。
@@ -10169,8 +10174,16 @@ var lark;
         p.getFontString = function () {
             var values = this.$TextField;
             if (values[17 /* fontStringChanged */]) {
+                var matrix = this.$getConcatenatedMatrix();
                 values[17 /* fontStringChanged */] = false;
-                values[12 /* fontString */] = lark.sys.toFontString(this);
+                var size = this.fontSize || 12;
+                var scale = Math.abs(matrix.a) > Math.abs(matrix.d) ? Math.abs(matrix.a) : Math.abs(matrix.d);
+                if (scale == 0) {
+                    scale = 0.001;
+                }
+                this.$fontScale = size / Math.round(scale * size);
+                size = Math.ceil(scale * size);
+                values[12 /* fontString */] = lark.sys.toFontString(this, size);
             }
             return values[12 /* fontString */];
         };
@@ -10488,6 +10501,7 @@ var lark;
             context.fillStyle = values[11 /* colorString */];
             var length = lines.length;
             var lineHeight = values[0 /* fontSize */];
+            lineHeight /= this.$fontScale;
             var halfLineHeight = lineHeight * 0.5;
             var drawY = halfLineHeight + 2;
             var vGap = lineHeight + values[1 /* lineSpacing */];
@@ -10687,13 +10701,13 @@ var lark;
          * @private
          * 返回格式化的字体样式文本
          */
-        function toFontString(style) {
+        function toFontString(style, size) {
             var font = "";
             if (style.italic)
                 font += "italic ";
             if (style.bold)
                 font += "bold ";
-            font += (style.fontSize || 12) + "px ";
+            font += (size || style.fontSize || 12) + "px ";
             font += (style.fontFamily || "sans-serif");
             return font;
         }
@@ -11666,12 +11680,24 @@ var lark;
                         context.globalAlpha = globalAlpha;
                         var m = node.$renderMatrix;
                         if (rootMatrix) {
-                            context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+                            if (node instanceof lark.TextField) {
+                                node.$preRender();
+                                context.transform(m.a * node.$fontScale, m.b * node.$fontScale, m.c * node.$fontScale, m.d * node.$fontScale, m.tx, m.ty);
+                            }
+                            else {
+                                context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+                            }
                             node.$render(context);
                             context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx * this.$pixelRatio, rootMatrix.ty * this.$pixelRatio);
                         }
                         else {
-                            context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+                            if (node instanceof lark.TextField) {
+                                node.$preRender();
+                                context.setTransform(m.a * node.$fontScale, m.b * node.$fontScale, m.c * node.$fontScale, m.d * node.$fontScale, m.tx, m.ty);
+                            }
+                            else {
+                                context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+                            }
                             node.$render(context);
                         }
                         node.$isDirty = false;

@@ -7930,7 +7930,7 @@ declare module lark.sys {
         fontSize?: number;
         bold?: boolean;
         italic?: boolean;
-    }): string;
+    }, size?: number): string;
     /**
      * @private
      * 返回字符串形式的颜色值

@@ -331,6 +331,13 @@ module lark {
             this.$invalidateContentBounds();
         }
 
+        $fontScale = 1;
+
+        $preRender():void {
+            this.$TextField[sys.TextKeys.fontStringChanged] = true;
+            this.getFontString();
+        }
+
         /**
          * @private
          * 获取字体信息的字符串形式。
@@ -338,8 +345,16 @@ module lark {
         private getFontString():string {
             var values = this.$TextField;
             if (values[sys.TextKeys.fontStringChanged]) {
+                var matrix = this.$getConcatenatedMatrix();
                 values[sys.TextKeys.fontStringChanged] = false;
-                values[sys.TextKeys.fontString] = sys.toFontString(this);
+                var size = this.fontSize || 12;
+                var scale = Math.abs(matrix.a) > Math.abs(matrix.d) ? Math.abs(matrix.a) : Math.abs(matrix.d);
+                if (scale == 0) {
+                    scale = 0.001;
+                }
+                this.$fontScale = size / Math.round(scale * size);
+                size = Math.ceil(scale * size);
+                values[sys.TextKeys.fontString] = sys.toFontString(this, size);
             }
             return values[sys.TextKeys.fontString];
         }
@@ -667,6 +682,7 @@ module lark {
             context.fillStyle = values[sys.TextKeys.colorString];
             var length = lines.length;
             var lineHeight = values[sys.TextKeys.fontSize];
+            lineHeight /= this.$fontScale;
             var halfLineHeight = lineHeight * 0.5;
             var drawY = halfLineHeight + 2;
             var vGap = lineHeight + values[sys.TextKeys.lineSpacing];
@@ -876,13 +892,13 @@ module lark.sys {
      * @private
      * 返回格式化的字体样式文本
      */
-    export function toFontString(style:{fontFamily?:string;fontSize?:number;bold?:boolean;italic?:boolean}):string {
+    export function toFontString(style:{fontFamily?:string;fontSize?:number;bold?:boolean;italic?:boolean}, size?:number):string {
         var font = "";
         if (style.italic)
             font += "italic ";
         if (style.bold)
             font += "bold ";
-        font += (style.fontSize || 12) + "px ";
+        font += (size || style.fontSize || 12) + "px ";
         font += (style.fontFamily || "sans-serif");
         return font;
     }
