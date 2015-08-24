@@ -735,7 +735,7 @@ module lark {
             else {
                 maxWidth = values[sys.TextKeys.textFieldWidth];
             }
-            var maxYPos = explicitHeight - 2 + roundOff;
+            var maxYPos = (explicitHeight - 2 + roundOff) * this.stage.$displayList.$pixelRatio;
             for (var i = 0; i < length; i++) {
                 var line = lines[i];
                 var measureW = measuredWidths[i];
