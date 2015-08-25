@@ -247,11 +247,10 @@ module swan.sys {
 
             var pixelsPerMS = sum / totalWeight;
             var absPixelsPerMS = Math.abs(pixelsPerMS);
-            absPixelsPerMS *= this.$scrollFactor;
             var duration = 0;
             var posTo = 0;
             if (absPixelsPerMS > MINIMUM_VELOCITY) {
-                posTo = currentScrollPos + (pixelsPerMS - MINIMUM_VELOCITY) / FRICTION_LOG;
+                posTo = currentScrollPos + (pixelsPerMS - MINIMUM_VELOCITY) / FRICTION_LOG * 2 * this.$scrollFactor;
                 if (posTo < 0 || posTo > maxScrollPos) {
                     posTo = currentScrollPos;
                     while (Math.abs(pixelsPerMS) > MINIMUM_VELOCITY) {
@@ -260,7 +259,7 @@ module swan.sys {
                             pixelsPerMS *= FRICTION * EXTRA_FRICTION;
                         }
                         else {
-                            pixelsPerMS *= FRICTION * this.$scrollFactor;
+                            pixelsPerMS *= FRICTION;
                         }
                         duration++;
                     }
@@ -272,8 +271,8 @@ module swan.sys {
             else {
                 posTo = currentScrollPos;
             }
-            if(this.target["$getThrowInfo"]) {
-                var event:swan.ScrollerThrowEvent = this.target["$getThrowInfo"](currentScrollPos,posTo);
+            if (this.target["$getThrowInfo"]) {
+                var event:swan.ScrollerThrowEvent = this.target["$getThrowInfo"](currentScrollPos, posTo);
                 posTo = event.toPos;
             }
             if (duration > 0) {
@@ -295,15 +294,15 @@ module swan.sys {
             var timeOffset = timeStamp - this.previousTime;
             //endif*/
             /*//if egret
-            var timeOffset = timeStamp;
+             var timeOffset = timeStamp;
              //endif*/
-            if (timeOffset > 0) {
+            if (timeOffset > 10) {
                 var previousVelocity = this.previousVelocity;
-                previousVelocity.push(this.velocity);
-                if (previousVelocity.length > MAX_VELOCITY_COUNT) {
+                if (previousVelocity.length >= MAX_VELOCITY_COUNT) {
                     previousVelocity.shift();
                 }
                 this.velocity = (this.currentPosition - this.previousPosition) / timeOffset;
+                previousVelocity.push(this.velocity);
                 //if lark
                 this.previousTime = timeStamp;
                 //endif*/
