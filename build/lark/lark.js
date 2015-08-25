@@ -4558,8 +4558,13 @@ var lark;
      */
     function getVector(x1, y1, x2, y2, v) {
         var l = distance(x1, y1, x2, y2);
-        v.x = (x2 - x1) / l;
-        v.y = (y2 - y1) / l;
+        if (l == 0) {
+            v.x = v.y = 0;
+        }
+        else {
+            v.x = (x2 - x1) / l;
+            v.y = (y2 - y1) / l;
+        }
     }
     /**
      * @language en_US
