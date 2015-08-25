@@ -704,7 +704,7 @@ module lark {
             lineHeight /= this.$fontScale;
             var halfLineHeight = lineHeight * 0.5;
             var drawY = halfLineHeight + 2;
-            var vGap = lineHeight + values[sys.TextKeys.lineSpacing];
+            var vGap = lineHeight + values[sys.TextKeys.lineSpacing] * this.stage.$displayList.$pixelRatio;
 
             var textHeight = values[sys.TextKeys.textHeight];
             var hasHeightSet = !isNaN(values[sys.TextKeys.textFieldHeight]);
@@ -744,7 +744,7 @@ module lark {
                     drawX = 0;
                 }
                 if (drawY + halfLineHeight <= maxYPos || i === 0) {
-                    context.fillText(line, drawX, drawY * this.stage.$displayList.$pixelRatio);
+                    context.fillText(line, drawX, drawY);
                 }
                 drawY += vGap;
             }

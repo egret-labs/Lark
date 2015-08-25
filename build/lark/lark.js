@@ -10518,7 +10518,7 @@ var lark;
             lineHeight /= this.$fontScale;
             var halfLineHeight = lineHeight * 0.5;
             var drawY = halfLineHeight + 2;
-            var vGap = lineHeight + values[1 /* lineSpacing */];
+            var vGap = lineHeight + values[1 /* lineSpacing */] * this.stage.$displayList.$pixelRatio;
             var textHeight = values[6 /* textHeight */];
             var hasHeightSet = !isNaN(values[4 /* textFieldHeight */]);
             var explicitHeight = hasHeightSet ? values[4 /* textFieldHeight */] : Number.POSITIVE_INFINITY;
@@ -10557,7 +10557,7 @@ var lark;
                     drawX = 0;
                 }
                 if (drawY + halfLineHeight <= maxYPos || i === 0) {
-                    context.fillText(line, drawX, drawY * this.stage.$displayList.$pixelRatio);
+                    context.fillText(line, drawX, drawY);
                 }
                 drawY += vGap;
             }
