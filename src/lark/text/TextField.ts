@@ -744,7 +744,7 @@ module lark {
                     drawX = 0;
                 }
                 if (drawY + halfLineHeight <= maxYPos || i === 0) {
-                    context.fillText(line, drawX, drawY);
+                    context.fillText(line, drawX, drawY * this.stage.$displayList.$pixelRatio);
                 }
                 drawY += vGap;
             }
