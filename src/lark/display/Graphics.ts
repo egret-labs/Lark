@@ -63,8 +63,13 @@ module lark {
      */
     function getVector(x1:number, y1:number, x2:number, y2:number, v:Vector):void {
         var l = distance(x1, y1, x2, y2);
-        v.x = (x2 - x1) / l;
-        v.y = (y2 - y1) / l;
+        if (l == 0) {
+            v.x = v.y = 0;
+        }
+        else {
+            v.x = (x2 - x1) / l;
+            v.y = (y2 - y1) / l;
+        }
     }
 
     /**

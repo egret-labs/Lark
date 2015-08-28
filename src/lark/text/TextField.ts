@@ -128,7 +128,11 @@ module lark.sys {
         /**
          * @private
          */
-        selectionAnchorPosition
+        selectionAnchorPosition,
+        /**
+         * @private
+         */
+        sourceFontString
     }
 }
 
@@ -201,7 +205,8 @@ module lark {
                 18: false,         //textLinesChanged,
                 19: true,          //wordWrap
                 20: false,         //displayAsPassword
-                21: 0              //maxChars
+                21: 0,             //maxChars
+                22: ""             //sourceFontString
             };
             this.text = text;
         }
@@ -331,6 +336,13 @@ module lark {
             this.$invalidateContentBounds();
         }
 
+        $fontScale = 1;
+
+        $preRender():void {
+            this.$TextField[sys.TextKeys.fontStringChanged] = true;
+            this.getFontString();
+        }
+
         /**
          * @private
          * 获取字体信息的字符串形式。
@@ -338,10 +350,34 @@ module lark {
         private getFontString():string {
             var values = this.$TextField;
             if (values[sys.TextKeys.fontStringChanged]) {
+                var matrix = this.$getConcatenatedMatrix();
                 values[sys.TextKeys.fontStringChanged] = false;
-                values[sys.TextKeys.fontString] = sys.toFontString(this);
+                var size = this.fontSize || 12;
+                var scale = Math.abs(matrix.a) > Math.abs(matrix.d) ? Math.abs(matrix.a) : Math.abs(matrix.d);
+                if (scale == 0) {
+                    scale = 0.001;
+                }
+                if (this.stage) {
+                    scale *= this.stage.$displayList.$pixelRatio;
+                }
+                this.$fontScale = size / Math.round(scale * size);
+                size = Math.ceil(scale * size);
+                values[sys.TextKeys.fontString] = sys.toFontString(this, size);
+                values[sys.TextKeys.sourceFontString] = sys.toFontString(this, this.fontSize || 12);
             }
             return values[sys.TextKeys.fontString];
+        }
+
+        /**
+         * @private
+         * 获取字体信息的字符串形式。
+         */
+        private getSourceFontString():string {
+            var values = this.$TextField;
+            if (values[sys.TextKeys.fontStringChanged]) {
+                this.getFontString();
+            }
+            return values[sys.TextKeys.sourceFontString];
         }
 
         /**
@@ -667,9 +703,10 @@ module lark {
             context.fillStyle = values[sys.TextKeys.colorString];
             var length = lines.length;
             var lineHeight = values[sys.TextKeys.fontSize];
+            lineHeight /= this.$fontScale;
             var halfLineHeight = lineHeight * 0.5;
             var drawY = halfLineHeight + 2;
-            var vGap = lineHeight + values[sys.TextKeys.lineSpacing];
+            var vGap = lineHeight + values[sys.TextKeys.lineSpacing] * this.stage.$displayList.$pixelRatio;
 
             var textHeight = values[sys.TextKeys.textHeight];
             var hasHeightSet = !isNaN(values[sys.TextKeys.textFieldHeight]);
@@ -700,7 +737,7 @@ module lark {
             else {
                 maxWidth = values[sys.TextKeys.textFieldWidth];
             }
-            var maxYPos = explicitHeight - 2 + roundOff;
+            var maxYPos = (explicitHeight - 2 + roundOff) * this.stage.$displayList.$pixelRatio;
             for (var i = 0; i < length; i++) {
                 var line = lines[i];
                 var measureW = measuredWidths[i];
@@ -748,7 +785,7 @@ module lark {
             }
 
             var hasWidthSet = !isNaN(textFieldWidth);
-            var font = this.getFontString();
+            var font = this.getSourceFontString();
             var lines = text.split(/(?:\r\n|\r|\n)/);
             var length = lines.length;
             var maxWidth = 0;
@@ -876,13 +913,13 @@ module lark.sys {
      * @private
      * 返回格式化的字体样式文本
      */
-    export function toFontString(style:{fontFamily?:string;fontSize?:number;bold?:boolean;italic?:boolean}):string {
+    export function toFontString(style:{fontFamily?:string;fontSize?:number;bold?:boolean;italic?:boolean}, size?:number):string {
         var font = "";
         if (style.italic)
             font += "italic ";
         if (style.bold)
             font += "bold ";
-        font += (style.fontSize || 12) + "px ";
+        font += (size || style.fontSize || 12) + "px ";
         font += (style.fontFamily || "sans-serif");
         return font;
     }

@@ -67,3 +67,8 @@ VSliderSkin.exml皮肤的代码如下：
     <s:Image id="thumb" source="resource/assets/blue/Slider/thumb.png" horizontalCenter="0" />
 </s:Skin>
 ```
+其中的 ```<s:Image id="track"/>``` 表示横向或者纵向的滑动轨道。
+
+其中的 ```<s:Image id="thumb"/>``` 表示轨道上的滑块。
+
+如果不设置它们，将无法拖动滑块或者设置value定位滑块。

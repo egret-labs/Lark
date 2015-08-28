@@ -48,3 +48,4 @@ CheckBoxSkin.exml皮肤的代码如下：
     </s:Group>
 </s:Skin>
 ```
+其中的 ```<s:Label id="labelDisplay"/>``` 表示复选框上的默认文本组件，如果不设置该id，将无法使用checkBox.label="xxxx"显示文本。

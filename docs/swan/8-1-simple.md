@@ -1,1 +1,65 @@
-#Swan (UI¿â) ±à³ÌÖ¸ÄÏ - ¼òµ¥ÈİÆ÷( Group )ÔÚ Swan Ìá¹©µÄÈİÆ÷ÖĞ£¬swan.GroupÊÇ×îÇáÁ¿¼¶µÄ£¬Ëü±¾Éí²»¿ÉÒÔÉèÖÃÆ¤·ô£¬Ò²²»»á¾ß±¸Íâ¹Û£¬ËüµÄ³ÊÏÖÖ»È¡¾öÓÚÄÚ²¿µÄÏÔÊ¾¶ÔÏó¡£Èç¹ûÄúĞèÒªÊ¹ÓÃÈİÆ÷£¬²¢ÇÒÃ»ÓĞÉèÖÃÆ¤·ôµÄĞèÇó£¬ÄÇÃ´Çë¾¡Á¿Ê¹ÓÃGroup¡£     ÎªÁË±£³ÖÏ°¹ßºÍ·ç¸ñÍ³Ò»£¬ÔÚ swan.Group ÖĞ¶ÔÓÚÏÔÊ¾ÁĞ±íµÄ²Ù×÷£¬Óë swan.Sprite ´óÌåÏàÍ¬£ºÊ¹ÓÃ addChild£¬addChildAt£¬removeChild£¬removeChildAt£¬getChildIndex£¬setChilcIndex£¬swapChildren Õâ¼¸¸ö·½·¨¶¼ÊÇÍêÈ«Ò»ÖÂµÄ¡£    ÁíÍâÔÚÁ½¸ö·½·¨ÉÏÓĞ×¨ÃÅÊÊÓÃÓÚ Swan µÄ±äÌå£ºgetChildAt ºÍ numChildren¡£ÕâÁ½¸ö·½·¨ÔÚ Swan ÉÏ·Ö±ğÔö¼ÓÁË getElementAt  ºÍ numElements ¡£ÕâÁ½¸ö·½·¨¶¼´ø Element £¬¶ÔÓ¦ÓÚGUIÌåÏµÖĞµÄ²¼¾ÖÔªËØ£¬ÎÒÃÇ³ÆÖ®Îª²¼¾ÖÔªËØ²Ù×÷·½·¨¡£     ÕâÁ½¸ö²¼¾ÖÔªËØ²Ù×÷·½·¨£¬ÔÚ DataGroup ÀïÊÇÓĞÇø±ğµÄ£¬ÔÚ Group ÀïÃ»Çø±ğ¡£ÒòÎª DataGroup ÀïÊµ¼ÊÉÏÖ»ÓĞ¼¸¸ö¸´ÓÃµÄ×ÓÏî£¬getChildAt Ò»Ö±·µ»ØÄÇ¼¸¸ö item ÏÔÊ¾¶ÔÏó£¬getElementAt ¾Í»á°´Êı¾İÔ´Ïî·µ»Ø¡£     Èç¹ûÄú×Ô¶¨ÒåÒ»¸öÀà£¬¼Ì³Ğ×ÔGroup£¬ÄÇÃ´×¢Òâ£¬ÄÚ²¿µÄÆäËü¶ÔÏóÓ¦¸ÃÔÚ createChildren() ·½·¨ÖĞ´´½¨ºÍÌí¼Ó£¬Ò²¾ÍÊÇËµ£¬ÄúÒª¸²¸Ç Group µÄ createChildren() ·½·¨¡£²Î¼ûÏÂÃæµÄÀı×Ó£º   ``` TypeScriptclass Main extends swan.Group {    constructor() {        super();    }    protected createChildren():void {        lark.log( "createChildren" );        super.createChildren();        this.layContents();    }    private layContents():void {        new swan.Theme("resource/theme/"+"blue"+"-theme.json", this.stage);        this.myGroup = new swan.Group();        this.myGroup.x = 100;        this.myGroup.y = 100;        this.myGroup.width = 500;        this.myGroup.height = 300;        this.addChild( this.myGroup );                /// »æÖÆ¾ØĞÎÓÃÓÚÏÔÊ¾ myGroup µÄÂÖÀª        var outline:lark.Shape = new lark.Shape;        outline.graphics.strokeStyle = "#00ff00";        outline.graphics.beginPath();        outline.graphics.strokeRect( 0, 0, 500, 300 );        this.myGroup.addChild( outline );                this.myGroup.layout = new swan.BasicLayout();   ///ÓÃ¾ø¶Ô¶¨Î»£¬¿ØÖÆxy×ø±ê        for(var i:number=0;i<4;i++) {        var btn:swan.Button = new swan.Button();        btn.label = "button" + i;        btn.x = 10 + i * 30;        btn.y = 10 + i * 30;        this.myGroup.addChild( btn );        }		    }```       ±àÒëÔËĞĞ£¬Ğ§¹ûÈçÍ¼£º   ![][8-1-group]Ò»Ğ©Ê¹ÓÃ¼¼ÇÉ£º    * GroupºÍËùÓĞÆäËûGUI×é¼ş¶¼×ñÑ­Ò»¸öÔ­Ôò£º×é¼şÔÚÃ»±»Íâ²¿ÏÔÊ½ÉèÖÃ³ß´ç(Ö±½ÓÉèÖÃ width/height »òÉèÖÃ left right ÕâÖÖÏà¶Ô²¼¾ÖÊôĞÔ)µÄÇ°ÌáÏÂ¡£»á×Ô¼º²âÁ¿³öÒ»¸ö¡°ºÏÊÊ¡±µÄ´óĞ¡¡£ÕâÊ±ºò Group ¿í¸ß¾ÍÊÇ contentWidth ºÍ contentHeight µÄ¿í¸ß¡£Èç¹ûÄúÏÔÊ½ÉèÖÃÁË Group µÄ³ß´ç£¬ÔòËüµÄ³ß´ç²»Ò»¶¨µÈÓÚÄÚ²¿¶ÔÏó³ß´ç£¬±ÈÈçÄúµÄGroup¸ß¶ÈÊÇ 100 ÏñËØ£¬µ«ÄÚ²¿¼¸¸ö°´Å¥µÄ¸ß¶È¼ÓÆğÀ´¿ÉÄÜÊÇ 400 ÏñËØ¡£Äú¿ÉÒÔÊ¹ÓÃ contentWidth ºÍ contentHeight ÊôĞÔÀ´»ñÈ¡ÄÚ²¿¸ß¶È¡£ * Èç¹ûÄÚÈİ³ß´ç³¬³öÈİÆ÷³ß´ç£¬Ä¬ÈÏÊÇÈ«²¿ÏÔÊ¾µÄ£¬Äú¿ÉÒÔÉèÖÃ clipAndEnableScrolling Îª true £¬ÕâÑù³¬³öµÄ²¿·Ö¾Í²»ÔÙÏÔÊ¾ÁË¡£[8-1-group]: image/8/8-1-group.jpg
+#Swan (UIåº“) ç¼–ç¨‹æŒ‡å— - ç®€å•å®¹å™¨( Group )
+
+åœ¨ Swan æä¾›çš„å®¹å™¨ä¸­ï¼Œswan.Groupæ˜¯æœ€è½»é‡çº§çš„ï¼Œå®ƒæœ¬èº«ä¸å¯ä»¥è®¾ç½®çš®è‚¤ï¼Œä¹Ÿä¸ä¼šå…·å¤‡å¤–è§‚ï¼Œå®ƒçš„å‘ˆç°åªå–å†³äºå†…éƒ¨çš„æ˜¾ç¤ºå¯¹è±¡ã€‚å¦‚æœæ‚¨éœ€è¦ä½¿ç”¨å®¹å™¨ï¼Œå¹¶ä¸”æ²¡æœ‰è®¾ç½®çš®è‚¤çš„éœ€æ±‚ï¼Œé‚£ä¹ˆè¯·å°½é‡ä½¿ç”¨Groupã€‚     
+
+ä¸ºäº†ä¿æŒä¹ æƒ¯å’Œé£æ ¼ç»Ÿä¸€ï¼Œåœ¨ swan.Group ä¸­å¯¹äºæ˜¾ç¤ºåˆ—è¡¨çš„æ“ä½œï¼Œä¸ swan.Sprite å¤§ä½“ç›¸åŒï¼šä½¿ç”¨ addChildï¼ŒaddChildAtï¼ŒremoveChildï¼ŒremoveChildAtï¼ŒgetChildIndexï¼ŒsetChilcIndexï¼ŒswapChildren è¿™å‡ ä¸ªæ–¹æ³•éƒ½æ˜¯å®Œå…¨ä¸€è‡´çš„ã€‚    
+
+å¦å¤–åœ¨ä¸¤ä¸ªæ–¹æ³•ä¸Šæœ‰ä¸“é—¨é€‚ç”¨äº Swan çš„å˜ä½“ï¼šgetChildAt å’Œ numChildrenã€‚è¿™ä¸¤ä¸ªæ–¹æ³•åœ¨ Swan ä¸Šåˆ†åˆ«å¢åŠ äº† getElementAt  å’Œ numElements ã€‚è¿™ä¸¤ä¸ªæ–¹æ³•éƒ½å¸¦ Element 
+ï¼Œå¯¹åº”äºGUIä½“ç³»ä¸­çš„å¸ƒå±€å…ƒç´ ï¼Œæˆ‘ä»¬ç§°ä¹‹ä¸ºå¸ƒå±€å…ƒç´ æ“ä½œæ–¹æ³•ã€‚ 
+    
+è¿™ä¸¤ä¸ªå¸ƒå±€å…ƒç´ æ“ä½œæ–¹æ³•ï¼Œåœ¨ DataGroup é‡Œæ˜¯æœ‰åŒºåˆ«çš„ï¼Œåœ¨ Group é‡Œæ²¡åŒºåˆ«ã€‚å› ä¸º DataGroup é‡Œå®é™…ä¸Šåªæœ‰å‡ ä¸ªå¤ç”¨çš„å­é¡¹ï¼ŒgetChildAt ä¸€ç›´è¿”å›é‚£å‡ ä¸ª item æ˜¾ç¤ºå¯¹è±¡ï¼ŒgetElementAt å°±ä¼šæŒ‰æ•°æ®æºé¡¹è¿”å›ã€‚     
+
+å¦‚æœæ‚¨è‡ªå®šä¹‰ä¸€ä¸ªç±»ï¼Œç»§æ‰¿è‡ªGroupï¼Œé‚£ä¹ˆæ³¨æ„ï¼Œå†…éƒ¨çš„å…¶å®ƒå¯¹è±¡åº”è¯¥åœ¨ createChildren() æ–¹æ³•ä¸­åˆ›å»ºå’Œæ·»åŠ ï¼Œä¹Ÿå°±æ˜¯è¯´ï¼Œæ‚¨è¦è¦†ç›– Group çš„ createChildren() æ–¹æ³•ã€‚å‚è§ä¸‹é¢çš„ä¾‹å­ï¼š   
+``` TypeScript
+class Main extends swan.Group {
+
+    constructor() {
+        super();
+    }
+
+    protected createChildren():void {
+        lark.log( "createChildren" );
+        super.createChildren();
+
+        this.layContents();
+    }
+
+
+    private layContents():void {
+        new swan.Theme("resource/theme/"+"blue"+"-theme.json", this.stage);
+        this.myGroup = new swan.Group();
+        this.myGroup.x = 100;
+        this.myGroup.y = 100;
+        this.myGroup.width = 500;
+        this.myGroup.height = 300;
+        this.addChild( this.myGroup );
+        
+        /// ç»˜åˆ¶çŸ©å½¢ç”¨äºæ˜¾ç¤º myGroup çš„è½®å»“
+        var outline:lark.Shape = new lark.Shape;
+        outline.graphics.strokeStyle = "#00ff00";
+        outline.graphics.beginPath();
+        outline.graphics.strokeRect( 0, 0, 500, 300 );
+        this.myGroup.addChild( outline );
+        
+        this.myGroup.layout = new swan.BasicLayout();   ///ç”¨ç»å¯¹å®šä½ï¼Œæ§åˆ¶xyåæ ‡
+        for(var i:number=0;i<4;i++) {
+        var btn:swan.Button = new swan.Button();
+        btn.label = "button" + i;
+        btn.x = 10 + i * 30;
+        btn.y = 10 + i * 30;
+        this.myGroup.addChild( btn );
+        }
+		
+    }
+```       
+ç¼–è¯‘è¿è¡Œï¼Œæ•ˆæœå¦‚å›¾ï¼š   
+
+![][8-1-group]
+
+ä¸€äº›ä½¿ç”¨æŠ€å·§ï¼š   
+
+ * Groupå’Œæ‰€æœ‰å…¶ä»–GUIç»„ä»¶éƒ½éµå¾ªä¸€ä¸ªåŸåˆ™ï¼šç»„ä»¶åœ¨æ²¡è¢«å¤–éƒ¨æ˜¾å¼è®¾ç½®å°ºå¯¸(ç›´æ¥è®¾ç½® width/height æˆ–è®¾ç½® left right è¿™ç§ç›¸å¯¹å¸ƒå±€å±æ€§)çš„å‰æä¸‹ã€‚ä¼šè‡ªå·±æµ‹é‡å‡ºä¸€ä¸ªâ€œåˆé€‚â€çš„å¤§å°ã€‚è¿™æ—¶å€™ Group å®½é«˜å°±æ˜¯ contentWidth å’Œ contentHeight çš„å®½é«˜ã€‚å¦‚æœæ‚¨æ˜¾å¼è®¾ç½®äº† Group çš„å°ºå¯¸ï¼Œåˆ™å®ƒçš„å°ºå¯¸ä¸ä¸€å®šç­‰äºå†…éƒ¨å¯¹è±¡å°ºå¯¸ï¼Œæ¯”å¦‚æ‚¨çš„Groupé«˜åº¦æ˜¯ 100 åƒç´ ï¼Œä½†å†…éƒ¨å‡ ä¸ªæŒ‰é’®çš„é«˜åº¦åŠ èµ·æ¥å¯èƒ½æ˜¯ 400 åƒç´ ã€‚æ‚¨å¯ä»¥ä½¿ç”¨ contentWidth å’Œ contentHeight å±æ€§æ¥è·å–å†…éƒ¨é«˜åº¦ã€‚
+ * å¦‚æœå†…å®¹å°ºå¯¸è¶…å‡ºå®¹å™¨å°ºå¯¸ï¼Œé»˜è®¤æ˜¯å…¨éƒ¨æ˜¾ç¤ºçš„ï¼Œæ‚¨å¯ä»¥è®¾ç½® clipAndEnableScrolling ä¸º true ï¼Œè¿™æ ·è¶…å‡ºçš„éƒ¨åˆ†å°±ä¸å†æ˜¾ç¤ºäº†ã€‚
+
+
+[8-1-group]: image/8/8-1-group.jpg

@@ -107,13 +107,13 @@ module lark.sys {
          * @private
          * 相对于显示列表根节点或位图缓存根节点的矩阵对象
          */
-        $renderMatrix: Matrix = new Matrix();
+        $renderMatrix:Matrix = new Matrix();
 
-        $ratioMatrix: Matrix = new Matrix();
+        $ratioMatrix:Matrix = new Matrix();
 
-        $ratioChanged: boolean = false;
+        $ratioChanged:boolean = false;
 
-        $pixelRatio: number = 1;
+        $pixelRatio:number = 1;
 
         /**
          * @private
@@ -125,7 +125,7 @@ module lark.sys {
          * @private
          * 更新对象在舞台上的显示区域和透明度,返回显示区域是否发生改变。
          */
-        $update(): boolean {
+        $update():boolean {
             var target = this.root;
             //当cache对象的显示列表已经加入dirtyList，对象又取消cache的时候，root为空
             if (target == null) {
@@ -147,8 +147,8 @@ module lark.sys {
             if (this.needRedraw) {
                 this.updateDirtyRegions();
             }
-            if(!displayList){
-                region.setTo(0,0,0,0);
+            if (!displayList) {
+                region.setTo(0, 0, 0, 0);
                 region.moved = false;
                 return false;
             }
@@ -160,8 +160,8 @@ module lark.sys {
             var matrix = this.$renderMatrix;
             matrix.copyFrom(concatenatedMatrix);
             var root = displayList.root;
-            if(root!==target.$stage){
-                target.$getConcatenatedMatrixAt(root,matrix);
+            if (root !== target.$stage) {
+                target.$getConcatenatedMatrixAt(root, matrix);
             }
             this.$ratioMatrix.$preMultiplyInto(matrix, matrix);
             region.updateRegion(bounds, matrix);
@@ -220,7 +220,7 @@ module lark.sys {
          * @private
          * 设置剪裁边界，不再绘制完整目标对象，画布尺寸由外部决定，超过边界的节点将跳过绘制。
          */
-        public setClipRect(width: number, height: number): void {
+        public setClipRect(width:number, height:number):void {
             width *= this.$pixelRatio;
             height *= this.$pixelRatio;
             this.dirtyRegion.setClipRect(width, height);
@@ -315,7 +315,7 @@ module lark.sys {
             context.save();
             context.beginPath();
             if (m) {
-                context.setTransform(1, 0, 0, 1, -this.offsetX * this.$pixelRatio, -this.offsetY* this.$pixelRatio);
+                context.setTransform(1, 0, 0, 1, -this.offsetX * this.$pixelRatio, -this.offsetY * this.$pixelRatio);
             }
             var dirtyList = this.dirtyList;
             this.dirtyList = null;
@@ -326,7 +326,7 @@ module lark.sys {
                 context.rect(region.minX, region.minY, region.width, region.height);
             }
             context.clip();
-            if(m){
+            if (m) {
                 context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
             }
             //绘制显示对象
@@ -378,12 +378,22 @@ module lark.sys {
                     context.globalAlpha = globalAlpha;
                     var m = node.$renderMatrix;
                     if (rootMatrix) {
-                        context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+                        if (node instanceof lark.TextField) {
+                            node.$preRender();
+                            context.transform(m.a * node.$fontScale, m.b * node.$fontScale, m.c * node.$fontScale, m.d * node.$fontScale, m.tx, m.ty);
+                        } else {
+                            context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+                        }
                         node.$render(context);
                         context.setTransform(rootMatrix.a, rootMatrix.b, rootMatrix.c, rootMatrix.d, rootMatrix.tx * this.$pixelRatio, rootMatrix.ty * this.$pixelRatio);
                     }
                     else {//绘制到舞台上时，所有矩阵都是绝对的，不需要调用transform()叠加。
-                        context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+                        if (node instanceof lark.TextField) {
+                            node.$preRender();
+                            context.setTransform(m.a * node.$fontScale, m.b * node.$fontScale, m.c * node.$fontScale, m.d * node.$fontScale, m.tx, m.ty);
+                        } else {
+                            context.setTransform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+                        }
                         node.$render(context);
                     }
                     node.$isDirty = false;
@@ -401,7 +411,7 @@ module lark.sys {
                         continue;
                     }
                     if (child.$blendMode !== 0 ||
-                        (child.$mask&&child.$mask.$parentDisplayList)) {//若遮罩不在显示列表中，放弃绘制遮罩。
+                        (child.$mask && child.$mask.$parentDisplayList)) {//若遮罩不在显示列表中，放弃绘制遮罩。
                         drawCalls += this.drawWithClip(child, context, dirtyList, rootMatrix, clipRegion);
                     }
                     else if (child.$scrollRect) {
@@ -436,7 +446,7 @@ module lark.sys {
 
             var scrollRect = displayObject.$scrollRect;
             var mask = displayObject.$mask;
-            if(mask&&!mask.$parentDisplayList){
+            if (mask && !mask.$parentDisplayList) {
                 mask = null; //如果遮罩不在显示列表中，放弃绘制遮罩。
             }
 
@@ -446,9 +456,9 @@ module lark.sys {
             displayMatrix.copyFrom(displayObject.$getConcatenatedMatrix());
             var root = displayObject.$parentDisplayList.root;
             var invertedMatrix:Matrix;
-            if(root!==displayObject.$stage){
+            if (root !== displayObject.$stage) {
                 invertedMatrix = root.$getInvertedConcatenatedMatrix();
-                invertedMatrix.$preMultiplyInto(displayMatrix,displayMatrix);
+                invertedMatrix.$preMultiplyInto(displayMatrix, displayMatrix);
             }
 
             this.$ratioMatrix.$preMultiplyInto(displayMatrix, displayMatrix);
@@ -457,8 +467,8 @@ module lark.sys {
                 maskRegion = Region.create();
                 var m = Matrix.create();
                 m.copyFrom(mask.$getConcatenatedMatrix());
-                if(invertedMatrix){
-                    invertedMatrix.$preMultiplyInto(m,m);
+                if (invertedMatrix) {
+                    invertedMatrix.$preMultiplyInto(m, m);
                 }
                 this.$ratioMatrix.$preMultiplyInto(m, m);
                 maskRegion.updateRegion(bounds, m);
@@ -477,13 +487,13 @@ module lark.sys {
                 region = maskRegion;
             }
             if (region) {
-                if(region.isEmpty() || (clipRegion && !clipRegion.intersects(region))){
+                if (region.isEmpty() || (clipRegion && !clipRegion.intersects(region))) {
                     Region.release(region);
                     Matrix.release(displayMatrix);
                     return drawCalls;
                 }
             }
-            else{
+            else {
                 region = Region.create();
                 bounds = displayObject.$getOriginalBounds();
                 region.updateRegion(bounds, displayMatrix);
@@ -584,8 +594,8 @@ module lark.sys {
             var m = Matrix.create();
             m.copyFrom(displayObject.$getConcatenatedMatrix());
             var root = displayObject.$parentDisplayList.root;
-            if(root!==displayObject.$stage){
-                root.$getInvertedConcatenatedMatrix().$preMultiplyInto(m,m)
+            if (root !== displayObject.$stage) {
+                root.$getInvertedConcatenatedMatrix().$preMultiplyInto(m, m)
             }
             this.$ratioMatrix.$preMultiplyInto(m, m);
             var region:Region = Region.create();
@@ -658,7 +668,7 @@ module lark.sys {
          * @private
          * 改变画布的尺寸，由于画布尺寸修改会清空原始画布。所以这里将原始画布绘制到一个新画布上，再与原始画布交换。
          */
-        public changeSurfaceSize(): void {
+        public changeSurfaceSize():void {
             var root = this.root;
             var oldOffsetX = this.offsetX;
             var oldOffsetY = this.offsetY;
@@ -689,11 +699,11 @@ module lark.sys {
                 oldSurface.height = 1;
                 oldSurface.width = 1;
             }
-            this.rootMatrix.setTo(1, 0, 0, 1, - this.offsetX, - this.offsetY);
-            this.renderContext.setTransform(1, 0, 0, 1, - bounds.x, - bounds.y);
+            this.rootMatrix.setTo(1, 0, 0, 1, -this.offsetX, -this.offsetY);
+            this.renderContext.setTransform(1, 0, 0, 1, -bounds.x, -bounds.y);
         }
 
-        public setDevicePixelRatio(ratio: number = 1) {
+        public setDevicePixelRatio(ratio:number = 1) {
             if (this.$pixelRatio == ratio && this.$ratioMatrix)
                 return;
             if (!this.$ratioMatrix)

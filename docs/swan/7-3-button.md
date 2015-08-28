@@ -67,3 +67,6 @@ ButtonSkin.exml皮肤的代码如下：
     <s:Image id="iconDisplay" horizontalCenter="0" verticalCenter="0"/>
 </s:Skin>
 ```
+其中的 ```<s:Label id="labelDisplay"/>``` 表示按钮上的默认文本组件，如果不设置该id，将无法使用button.label="xxxx"显示文本。
+
+其中的```<s:Image id="iconDisplay"/>``` 表示按钮上的默认图标显示对象。如果不设置该id，将无法使用button.icon="xxxx"显示图标
