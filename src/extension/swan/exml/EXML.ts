@@ -120,18 +120,24 @@ module EXML {
      * @private
      */
     export function $loadAll(urls: string[], callBack?: (clazz: any[], url: string[]) => void, thisObject?: any, useCache = false): void {
-        var exmlContents: any = {};
+        if (!urls || urls.length == 0) {
+            callBack && callBack.call(thisObject, [], urls);
+            return;
+        }
+        var exmlContents: string[] = [];
 
         urls.forEach(url=> {
 
             if (useCache && (url in parsedClasses)) {
                 exmlContents[url] = "";
+                exmlContents.push(url);
                 return;
             }
             
             var loaded = (url: string, text: string) => {
                 exmlContents[url] = text;
-                if (Object.keys(exmlContents).length == urls.length)
+                exmlContents.push(url);
+                if (exmlContents.length == urls.length)
                     onLoadAllFinished(urls, exmlContents, callBack, thisObject);
             };
             

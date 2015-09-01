@@ -2377,8 +2377,8 @@ var lark;
                 var displayWidth = stageSize.displayWidth, displayHeight = stageSize.displayHeight;
                 var canvasWidth = stageWidth, canvasHeight = stageHeight;
                 if (highResolutionMode != lark.sys.HighResolutionMode.DEFAULT) {
-                    canvasWidth *= devicePixelRatio;
-                    canvasHeight *= devicePixelRatio;
+                    canvasWidth *= 1;
+                    canvasHeight *= 1;
                     if (highResolutionMode == lark.sys.HighResolutionMode.DEVICE) {
                         stageWidth *= devicePixelRatio;
                         stageHeight *= devicePixelRatio;

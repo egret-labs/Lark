@@ -151,16 +151,20 @@ module swan {
                     }
                 }
             }
+
+            if (!data.exmls || data.exmls.length == 0) {
+                this.onLoaded();
+            }
             // In release version, exml content is packaged in the theme file
-            if (data.exmls[0]['content']) {
+            else if (data.exmls[0]['content']) {
                 data.exmls.forEach((exml) => EXML.$parseURLContent((<EXMLFile>exml).path, (<EXMLFile>exml).content));
                 this.onLoaded();
             }
             else {
                 EXML.$loadAll(<string[]>data.exmls, this.onLoaded, this, true);
-                }
-
             }
+
+        }
 
         private onLoaded(classes?:any[],urls?:string[]) {
             this.initialized = true;
