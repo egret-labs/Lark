@@ -2,7 +2,7 @@
 
 在 Swan 提供的容器中，swan.Group是最轻量级的，它本身不可以设置皮肤，也不会具备外观，它的呈现只取决于内部的显示对象。如果您需要使用容器，并且没有设置皮肤的需求，那么请尽量使用Group。     
 
-为了保持习惯和风格统一，在 swan.Group 中对于显示列表的操作，与 swan.Sprite 大体相同：使用 addChild，addChildAt，removeChild，removeChildAt，getChildIndex，setChilcIndex，swapChildren 这几个方法都是完全一致的。    
+为了保持习惯和风格统一，在 swan.Group 中对于显示列表的操作，与 lark.Sprite 大体相同：使用 addChild，addChildAt，removeChild，removeChildAt，getChildIndex，setChilcIndex，swapChildren 这几个方法都是完全一致的。    
 
 另外在两个方法上有专门适用于 Swan 的变体：getChildAt 和 numChildren。这两个方法在 Swan 上分别增加了 getElementAt  和 numElements 。这两个方法都带 Element 
 ，对应于GUI体系中的布局元素，我们称之为布局元素操作方法。 
@@ -36,7 +36,7 @@ class Main extends swan.Group {
         
         /// 绘制矩形用于显示 myGroup 的轮廓
         var outline:lark.Shape = new lark.Shape;
-        outline.graphics.strokeStyle = "#00ff00";
+        outline.graphics.strokeStyle = 0x00ff00;
         outline.graphics.beginPath();
         outline.graphics.strokeRect( 0, 0, 500, 300 );
         this.myGroup.addChild( outline );
@@ -58,7 +58,7 @@ class Main extends swan.Group {
 
 一些使用技巧：   
 
- * Group和所有其他GUI组件都遵循一个原则：组件在没被外部显式设置尺寸(直接设置 width/height 或设置 left right 这种相对布局属性)的前提下。会自己测量出一个“合适”的大小。这时候 Group 宽高就是 contentWidth 和 contentHeight 的宽高。如果您显式设置了 Group 的尺寸，则它的尺寸不一定等于内部对象尺寸，比如您的Group高度是 100 像素，但内部几个按钮的高度加起来可能是 400 像素。您可以使用 contentWidth 和 contentHeight 属性来获取内部高度。
+ * Group和所有其他GUI组件都遵循一个原则：组件在没被外部显式设置尺寸(直接设置 width/height)的前提下。会自己测量出一个“合适”的大小。这时候 Group 宽高就是 contentWidth 和 contentHeight 的宽高。如果您显式设置了 Group 的尺寸，则它的尺寸不一定等于内部对象尺寸，比如您的Group高度是 100 像素，但内部几个按钮的高度加起来可能是 400 像素。您可以使用 contentWidth 和 contentHeight 属性来获取内部高度。
  * 如果内容尺寸超出容器尺寸，默认是全部显示的，您可以设置 clipAndEnableScrolling 为 true ，这样超出的部分就不再显示了。
 
 
