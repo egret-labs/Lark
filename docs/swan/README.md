@@ -35,7 +35,7 @@ Swan (UI库) 编程指南
 	* [滑动选择器](7-7-slider.md)(review)
 	* [进度条](7-8-progressbar.md)(review)
 	* [输入文本](7-9-editabletext.md)(review)	
-8. [容器](8-0-container.md)(done)	
+8. [容器](8-0-container.md)(review)	
 	* [简单容器](8-1-simple.md)(done)
 	* [层叠容器](8-2-stack.md)(done)	
 	* [面板容器](8-3-panel.md)(done)	
