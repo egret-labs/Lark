@@ -4076,6 +4076,10 @@ declare module swan.sys {
          */
         private currentClass;
         /**
+         * 当前exml的根节点是否为Skin
+         */
+        private isSkinClass;
+        /**
          * @private
          * 当前编译的类名
          */
@@ -4104,10 +4108,6 @@ declare module swan.sys {
          * 需要单独创建的实例id列表
          */
         private stateIds;
-        /**
-         * @private
-         */
-        private idToNode;
         /**
          * @private
          */
@@ -7806,7 +7806,7 @@ declare module swan {
      * @platform Web,Native
      * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
      */
-    class Skin extends lark.HashObject {
+    class Skin extends lark.EventEmitter {
         /**
          * @language en_US
          * The list of skin parts name
@@ -9674,6 +9674,166 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
+     * The ItemRenderer class is the base class for item renderers.
+     *
+     * @state up Up state
+     * @state down Down state
+     * @state upAndSelected Up state when the button is selected
+     * @state downAndSelected Down state when the button is selected
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ItemRendererExample.ts
+     */
+    /**
+     * @language zh_CN
+     * ItemRenderer 类是项呈示器的基类。
+     *
+     * @state up 弹起状态
+     * @state down 按下状态
+     * @state upAndSelected 选择时的弹起状态
+     * @state downAndSelected 选择时的按下状态
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ItemRendererExample.ts
+     */
+    class ItemRenderer extends Component implements IItemRenderer {
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        constructor();
+        /**
+         * @private
+         */
+        private _data;
+        /**
+         * @language en_US
+         * The data to render or edit.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 要呈示或编辑的数据。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        data: any;
+        /**
+         * @language en_US
+         * Update the view when the <code>data</code> property changes.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当数据改变时，更新视图。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected dataChanged(): void;
+        /**
+         * @private
+         */
+        private _selected;
+        /**
+         * @language en_US
+         * Contains <code>true</code> if the item renderer
+         * can show itself as selected.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 如果项呈示器可以将其自身显示为已选中，则为 true。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        selected: boolean;
+        /**
+         * @language en_US
+         * The index of the item in the data provider
+         * of the host component of the item renderer.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 项呈示器的数据提供程序中的项目索引。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        itemIndex: number;
+        /**
+         * @private
+         * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，触摸点是否在按钮上。
+         */
+        private touchCaptured;
+        /**
+         * @language en_US
+         * Handles <code>TouchEvent.TOUCH_BEGIN</code> events
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 触碰开始时触发事件
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected onTouchBegin(event: lark.TouchEvent): void;
+        /**
+         * @private
+         * 舞台上触摸弹起事件
+         */
+        private onStageTouchEnd(event);
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        protected getCurrentState(): string;
+    }
+}
+declare module swan {
+    /**
+     * @language en_US
      * The ScrollBarBase class helps to position
      * the portion of data that is displayed when there is too much data
      * to fit in a display area.
@@ -10505,166 +10665,6 @@ declare module swan {
 declare module swan {
     /**
      * @language en_US
-     * The ItemRenderer class is the base class for item renderers.
-     *
-     * @state up Up state
-     * @state down Down state
-     * @state upAndSelected Up state when the button is selected
-     * @state downAndSelected Down state when the button is selected
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/ItemRendererExample.ts
-     */
-    /**
-     * @language zh_CN
-     * ItemRenderer 类是项呈示器的基类。
-     *
-     * @state up 弹起状态
-     * @state down 按下状态
-     * @state upAndSelected 选择时的弹起状态
-     * @state downAndSelected 选择时的按下状态
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/ItemRendererExample.ts
-     */
-    class ItemRenderer extends Group implements IItemRenderer {
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        constructor();
-        /**
-         * @private
-         */
-        private _data;
-        /**
-         * @language en_US
-         * The data to render or edit.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 要呈示或编辑的数据。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        data: any;
-        /**
-         * @language en_US
-         * Update the view when the <code>data</code> property changes.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当数据改变时，更新视图。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected dataChanged(): void;
-        /**
-         * @private
-         */
-        private _selected;
-        /**
-         * @language en_US
-         * Contains <code>true</code> if the item renderer
-         * can show itself as selected.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 如果项呈示器可以将其自身显示为已选中，则为 true。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        selected: boolean;
-        /**
-         * @language en_US
-         * The index of the item in the data provider
-         * of the host component of the item renderer.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 项呈示器的数据提供程序中的项目索引。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        itemIndex: number;
-        /**
-         * @private
-         * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，触摸点是否在按钮上。
-         */
-        private touchCaptured;
-        /**
-         * @language en_US
-         * Handles <code>TouchEvent.TOUCH_BEGIN</code> events
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 触碰开始时触发事件
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected onTouchBegin(event: lark.TouchEvent): void;
-        /**
-         * @private
-         * 舞台上触摸弹起事件
-         */
-        private onStageTouchEnd(event);
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        protected getCurrentState(): string;
-    }
-}
-declare module swan {
-    /**
-     * @language en_US
      * The Scroller component displays a single scrollable component,
      * called a viewport, and horizontal and vertical scroll bars.
      * The viewport must implement the IViewport interface.
@@ -11119,8 +11119,6 @@ declare module swan {
         private freeRendererByIndex(index);
         /**
          * @private
-         *
-         * @param renderer
          */
         private doFreeRenderer(renderer);
         /**
@@ -11141,6 +11139,11 @@ declare module swan {
          * 根据rendererClass创建一个Renderer,并添加到显示列表
          */
         private createOneRenderer(rendererClass);
+        /**
+         * @private
+         * 设置项呈示器的默认皮肤
+         */
+        private setItemRenderSkinName(renderer, skinName);
         /**
          * @language en_US
          * The data provider for this DataGroup.
@@ -11294,6 +11297,24 @@ declare module swan {
          * @platform Web,Native
          */
         itemRenderer: any;
+        /**
+         * @language en_US
+         * The skinName property of the itemRenderer.This property will be passed to itemRenderer.skinName as default value,if you
+         * did not set it explicitly.<br>
+         * Note: This property is invalid if the itemRenderer is not a subclass of the Component class.
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 条目渲染器的可选皮肤标识符。在实例化itemRenderer时，若其内部没有设置过skinName,则将此属性的值赋值给它的skinName。
+         * 注意:若 itemRenderer 不是 Component 的子类，则此属性无效。
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        itemRendererSkinName: any;
         /**
          * @language en_US
          * Function that returns an item renderer for a

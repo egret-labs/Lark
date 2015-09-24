@@ -11,7 +11,7 @@
   <component id="HScrollBar" super="swan.ScrollBarBase" show="true" module="swan"/>
   <component id="HSlider" super="swan.SliderBase" show="true" module="swan"/>
   <component id="Image" super="lark.Bitmap" show="true" module="swan"/>
-  <component id="ItemRenderer" super="swan.Group" show="false" module="swan"/>
+  <component id="ItemRenderer" super="swan.Component" show="false" module="swan"/>
   <component id="Label" super="lark.TextField" show="true" module="swan"/>
   <component id="LayoutBase" super="lark.EventEmitter" show="false" module="swan"/>
   <component id="List" super="swan.ListBase" show="true" module="swan"/>

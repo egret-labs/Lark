@@ -6403,6 +6403,8 @@ var swan;
         var exmlParserPool = [];
         var parsedClasses = {};
         var innerClassCount = 1;
+        var HOST_COMPONENT = "hostComponent";
+        var SKIN_CLASS = "eui.Skin";
         var DECLARATIONS = "Declarations";
         var RECTANGLE = "lark.Rectangle";
         var TYPE_CLASS = "Class";
@@ -6510,7 +6512,6 @@ var swan;
                 this.currentClassName = className;
                 this.delayAssignmentDic = {};
                 this.idDic = {};
-                this.idToNode = {};
                 this.stateCode = [];
                 this.stateNames = [];
                 this.skinParts = [];
@@ -6541,7 +6542,9 @@ var swan;
                         lark.$error(2004, this.currentClassName, result.join("\n"));
                     }
                 }
-                this.currentClass.superClass = this.getClassNameOfNode(this.currentXML);
+                var superClass = this.getClassNameOfNode(this.currentXML);
+                this.isSkinClass = (superClass == SKIN_CLASS);
+                this.currentClass.superClass = superClass;
                 this.getStateNames();
                 var children = this.currentXML.children;
                 if (children) {
@@ -6609,7 +6612,6 @@ var swan;
                     else if (node.nodeType === 1) {
                         var id = node.attributes["id"];
                         if (id) {
-                            this.idToNode[id] = node;
                             if (this.skinParts.indexOf(id) == -1) {
                                 this.skinParts.push(id);
                             }
@@ -6619,7 +6621,6 @@ var swan;
                         }
                         else {
                             this.createIdForNode(node);
-                            this.idToNode[node.attributes.id] = node;
                             if (this.isStateNode(node))
                                 this.stateIds.push(node.attributes.id);
                         }
@@ -7097,6 +7098,10 @@ var swan;
                         value = value.substring(5);
                     }
                     this.checkIdForState(node);
+                    var firstKey = value.split(".")[0];
+                    if (firstKey != HOST_COMPONENT && this.skinParts.indexOf(firstKey) == -1) {
+                        value = HOST_COMPONENT + "." + value;
+                    }
                     this.bindings.push(new sys.EXBinding(node.attributes["id"], key, value));
                     value = "";
                 }
@@ -13470,6 +13475,7 @@ var swan;
                         }
                     }
                 }
+                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "hostComponent");
             }
         );
         /**
@@ -13481,12 +13487,13 @@ var swan;
             this.initializeStates(this._hostComponent.$stage);
         };
         return Skin;
-    })(lark.HashObject);
+    })(lark.EventEmitter);
     swan.Skin = Skin;
     lark.registerClass(Skin,"swan.Skin");
     swan.sys.mixin(Skin, swan.sys.StateClient);
     swan.registerProperty(Skin, "elementsContent", "Array", true);
     swan.registerProperty(Skin, "states", "State[]");
+    swan.registerBindable(swan.ItemRenderer.prototype, "hostComponent");
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
@@ -16387,6 +16394,245 @@ var swan;
 (function (swan) {
     /**
      * @language en_US
+     * The ItemRenderer class is the base class for item renderers.
+     *
+     * @state up Up state
+     * @state down Down state
+     * @state upAndSelected Up state when the button is selected
+     * @state downAndSelected Down state when the button is selected
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ItemRendererExample.ts
+     */
+    /**
+     * @language zh_CN
+     * ItemRenderer 类是项呈示器的基类。
+     *
+     * @state up 弹起状态
+     * @state down 按下状态
+     * @state upAndSelected 选择时的弹起状态
+     * @state downAndSelected 选择时的按下状态
+     * @version Lark 1.0
+     * @version Swan 1.0
+     * @platform Web,Native
+     * @includeExample examples/Samples/src/extension/swan/components/ItemRendererExample.ts
+     */
+    var ItemRenderer = (function (_super) {
+        __extends(ItemRenderer, _super);
+        /**
+         * @language en_US
+         * Constructor.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 构造函数。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        function ItemRenderer() {
+            _super.call(this);
+            /**
+             * @private
+             */
+            this._data = null;
+            /**
+             * @private
+             */
+            this._selected = false;
+            /**
+             * @language en_US
+             * The index of the item in the data provider
+             * of the host component of the item renderer.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 项呈示器的数据提供程序中的项目索引。
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            this.itemIndex = -1;
+            /**
+             * @private
+             * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，触摸点是否在按钮上。
+             */
+            this.touchCaptured = false;
+            this.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
+        }
+        var d = __define,c=ItemRenderer;p=c.prototype;
+        d(p, "data"
+            /**
+             * @language en_US
+             * The data to render or edit.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 要呈示或编辑的数据。
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this._data;
+            }
+            ,function (value) {
+                this._data = value;
+                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "data");
+                this.dataChanged();
+            }
+        );
+        /**
+         * @language en_US
+         * Update the view when the <code>data</code> property changes.
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 当数据改变时，更新视图。
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.dataChanged = function () {
+        };
+        d(p, "selected"
+            /**
+             * @language en_US
+             * Contains <code>true</code> if the item renderer
+             * can show itself as selected.
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 如果项呈示器可以将其自身显示为已选中，则为 true。
+             *
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this._selected;
+            }
+            ,function (value) {
+                if (this._selected == value)
+                    return;
+                this._selected = value;
+                this.invalidateState();
+            }
+        );
+        /**
+         * @language en_US
+         * Handles <code>TouchEvent.TOUCH_BEGIN</code> events
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        /**
+         * @language zh_CN
+         * 触碰开始时触发事件
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.onTouchBegin = function (event) {
+            this.$stage.on(lark.TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
+            this.touchCaptured = true;
+            this.invalidateState();
+            event.updateAfterEvent();
+        };
+        /**
+         * @private
+         * 舞台上触摸弹起事件
+         */
+        p.onStageTouchEnd = function (event) {
+            var stage = event.$currentTarget;
+            stage.removeListener(lark.TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
+            this.touchCaptured = false;
+            this.invalidateState();
+        };
+        /**
+         * @inheritDoc
+         *
+         * @version Lark 1.0
+         * @version Swan 1.0
+         * @platform Web,Native
+         */
+        p.getCurrentState = function () {
+            var state = "up";
+            if (this._selected || this.touchCaptured) {
+                state = "down";
+            }
+            var selectedState = state + "AndSelected";
+            var skin = this.skin;
+            if (skin && skin.hasState(selectedState)) {
+                return selectedState;
+            }
+            return state;
+        };
+        return ItemRenderer;
+    })(swan.Component);
+    swan.ItemRenderer = ItemRenderer;
+    lark.registerClass(ItemRenderer,"swan.ItemRenderer",["swan.IItemRenderer","swan.UIComponent"]);
+    swan.registerBindable(ItemRenderer.prototype, "data");
+})(swan || (swan = {}));
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (c) 2014-2015, Egret Technology Inc.
+//  All rights reserved.
+//  Redistribution and use in source and binary forms, with or without
+//  modification, are permitted provided that the following conditions are met:
+//
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the Egret nor the
+//       names of its contributors may be used to endorse or promote products
+//       derived from this software without specific prior written permission.
+//
+//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
+//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
+//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+//////////////////////////////////////////////////////////////////////////////////////
+var swan;
+(function (swan) {
+    /**
+     * @language en_US
      * The ScrollBarBase class helps to position
      * the portion of data that is displayed when there is too much data
      * to fit in a display area.
@@ -17679,244 +17925,6 @@ var swan;
 //////////////////////////////////////////////////////////////////////////////////////
 var swan;
 (function (swan) {
-    /**
-     * @language en_US
-     * The ItemRenderer class is the base class for item renderers.
-     *
-     * @state up Up state
-     * @state down Down state
-     * @state upAndSelected Up state when the button is selected
-     * @state downAndSelected Down state when the button is selected
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/ItemRendererExample.ts
-     */
-    /**
-     * @language zh_CN
-     * ItemRenderer 类是项呈示器的基类。
-     *
-     * @state up 弹起状态
-     * @state down 按下状态
-     * @state upAndSelected 选择时的弹起状态
-     * @state downAndSelected 选择时的按下状态
-     * @version Lark 1.0
-     * @version Swan 1.0
-     * @platform Web,Native
-     * @includeExample examples/Samples/src/extension/swan/components/ItemRendererExample.ts
-     */
-    var ItemRenderer = (function (_super) {
-        __extends(ItemRenderer, _super);
-        /**
-         * @language en_US
-         * Constructor.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 构造函数。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        function ItemRenderer() {
-            _super.call(this);
-            /**
-             * @private
-             */
-            this._data = null;
-            /**
-             * @private
-             */
-            this._selected = false;
-            /**
-             * @language en_US
-             * The index of the item in the data provider
-             * of the host component of the item renderer.
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 项呈示器的数据提供程序中的项目索引。
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            this.itemIndex = -1;
-            /**
-             * @private
-             * 指示第一次分派 TouchEvent.TOUCH_BEGIN 时，触摸点是否在按钮上。
-             */
-            this.touchCaptured = false;
-            this.on(lark.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
-        }
-        var d = __define,c=ItemRenderer;p=c.prototype;
-        d(p, "data"
-            /**
-             * @language en_US
-             * The data to render or edit.
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 要呈示或编辑的数据。
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            ,function () {
-                return this._data;
-            }
-            ,function (value) {
-                this._data = value;
-                swan.PropertyEvent.emitPropertyEvent(this, swan.PropertyEvent.PROPERTY_CHANGE, "data");
-                this.dataChanged();
-            }
-        );
-        /**
-         * @language en_US
-         * Update the view when the <code>data</code> property changes.
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 当数据改变时，更新视图。
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.dataChanged = function () {
-        };
-        d(p, "selected"
-            /**
-             * @language en_US
-             * Contains <code>true</code> if the item renderer
-             * can show itself as selected.
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            /**
-             * @language zh_CN
-             * 如果项呈示器可以将其自身显示为已选中，则为 true。
-             *
-             * @version Lark 1.0
-             * @version Swan 1.0
-             * @platform Web,Native
-             */
-            ,function () {
-                return this._selected;
-            }
-            ,function (value) {
-                if (this._selected == value)
-                    return;
-                this._selected = value;
-                this.invalidateState();
-            }
-        );
-        /**
-         * @language en_US
-         * Handles <code>TouchEvent.TOUCH_BEGIN</code> events
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        /**
-         * @language zh_CN
-         * 触碰开始时触发事件
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.onTouchBegin = function (event) {
-            this.$stage.on(lark.TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
-            this.touchCaptured = true;
-            this.invalidateState();
-            event.updateAfterEvent();
-        };
-        /**
-         * @private
-         * 舞台上触摸弹起事件
-         */
-        p.onStageTouchEnd = function (event) {
-            var stage = event.$currentTarget;
-            stage.removeListener(lark.TouchEvent.TOUCH_END, this.onStageTouchEnd, this);
-            this.touchCaptured = false;
-            this.invalidateState();
-        };
-        /**
-         * @inheritDoc
-         *
-         * @version Lark 1.0
-         * @version Swan 1.0
-         * @platform Web,Native
-         */
-        p.getCurrentState = function () {
-            var state = "up";
-            if (this._selected || this.touchCaptured) {
-                state = "down";
-            }
-            var selectedState = state + "AndSelected";
-            if (this.hasState(selectedState)) {
-                return selectedState;
-            }
-            return state;
-        };
-        return ItemRenderer;
-    })(swan.Group);
-    swan.ItemRenderer = ItemRenderer;
-    lark.registerClass(ItemRenderer,"swan.ItemRenderer",["swan.IItemRenderer","swan.UIComponent"]);
-    swan.registerBindable(ItemRenderer.prototype, "data");
-})(swan || (swan = {}));
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2014-2015, Egret Technology Inc.
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without
-//  modification, are permitted provided that the following conditions are met:
-//
-//     * Redistributions of source code must retain the above copyright
-//       notice, this list of conditions and the following disclaimer.
-//     * Redistributions in binary form must reproduce the above copyright
-//       notice, this list of conditions and the following disclaimer in the
-//       documentation and/or other materials provided with the distribution.
-//     * Neither the name of the Egret nor the
-//       names of its contributors may be used to endorse or promote products
-//       derived from this software without specific prior written permission.
-//
-//  THIS SOFTWARE IS PROVIDED BY EGRET AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-//  OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-//  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-//  IN NO EVENT SHALL EGRET AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-//  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-//  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;LOSS OF USE, DATA,
-//  OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-//  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-//  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-//  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-//////////////////////////////////////////////////////////////////////////////////////
-var swan;
-(function (swan) {
     var scrollerThrowEvent;
     /**
      * @language en_US
@@ -18803,6 +18811,8 @@ var swan;
                 10: false,
                 11: false,
                 12: null,
+                13: null,
+                14: false,
             };
         }
         var d = __define,c=DataGroup;p=c.prototype;
@@ -18922,8 +18932,6 @@ var swan;
         };
         /**
          * @private
-         *
-         * @param renderer
          */
         p.doFreeRenderer = function (renderer) {
             var values = this.$DataGroup;
@@ -18971,12 +18979,27 @@ var swan;
          */
         p.createOneRenderer = function (rendererClass) {
             var renderer = (new rendererClass());
-            this.$DataGroup[2 /* rendererToClassMap */][renderer.$hashCode] = rendererClass;
+            var values = this.$DataGroup;
+            values[2 /* rendererToClassMap */][renderer.$hashCode] = rendererClass;
             if (!lark.is(renderer, "swan.IItemRenderer")) {
                 return null;
             }
+            if (values[13 /* itemRendererSkinName */]) {
+                this.setItemRenderSkinName(renderer, values[13 /* itemRendererSkinName */]);
+            }
             this.addChild(renderer);
             return renderer;
+        };
+        /**
+         * @private
+         * 设置项呈示器的默认皮肤
+         */
+        p.setItemRenderSkinName = function (renderer, skinName) {
+            if (renderer && renderer instanceof swan.Component) {
+                var comp = renderer;
+                if (!comp.$Component[5 /* skinNameExplicitlySet */])
+                    comp.skinName = skinName;
+            }
         };
         d(p, "dataProvider"
             /**
@@ -19011,8 +19034,6 @@ var swan;
         );
         /**
          * @private
-         *
-         * @param value
          */
         p.$setDataProvider = function (value) {
             if (this.$dataProvider == value)
@@ -19274,6 +19295,38 @@ var swan;
                 this.invalidateProperties();
             }
         );
+        d(p, "itemRendererSkinName"
+            /**
+             * @language en_US
+             * The skinName property of the itemRenderer.This property will be passed to itemRenderer.skinName as default value,if you
+             * did not set it explicitly.<br>
+             * Note: This property is invalid if the itemRenderer is not a subclass of the Component class.
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            /**
+             * @language zh_CN
+             * 条目渲染器的可选皮肤标识符。在实例化itemRenderer时，若其内部没有设置过skinName,则将此属性的值赋值给它的skinName。
+             * 注意:若 itemRenderer 不是 Component 的子类，则此属性无效。
+             * @version Lark 1.0
+             * @version Swan 1.0
+             * @platform Web,Native
+             */
+            ,function () {
+                return this.$DataGroup[13 /* itemRendererSkinName */];
+            }
+            ,function (value) {
+                var values = this.$DataGroup;
+                if (values[13 /* itemRendererSkinName */] == value)
+                    return;
+                values[13 /* itemRendererSkinName */] = value;
+                if (value && this.$UIComponent[29 /* initialized */]) {
+                    values[14 /* itemRendererSkinNameChange */] = true;
+                    this.invalidateProperties();
+                }
+            }
+        );
         d(p, "itemRendererFunction"
             /**
              * @language en_US
@@ -19382,6 +19435,28 @@ var swan;
                 if (this.$dataProvider && this.$dataProvider.length > 0) {
                     values[12 /* typicalItem */] = this.$dataProvider.getItemAt(0);
                     this.measureRendererSize();
+                }
+            }
+            if (values[14 /* itemRendererSkinNameChange */]) {
+                values[14 /* itemRendererSkinNameChange */] = false;
+                var skinName = values[13 /* itemRendererSkinName */];
+                var indexToRenderer = this.$indexToRenderer;
+                var keys = Object.keys(indexToRenderer);
+                var length = keys.length;
+                for (var i = 0; i < length; i++) {
+                    var index = keys[i];
+                    this.setItemRenderSkinName(indexToRenderer[index], skinName);
+                }
+                var freeRenderers = values[3 /* freeRenderers */];
+                var keys = Object.keys(freeRenderers);
+                var length = keys.length;
+                for (var i = 0; i < length; i++) {
+                    var hashCode = keys[i];
+                    var list = freeRenderers[hashCode];
+                    var length = list.length;
+                    for (var i = 0; i < length; i++) {
+                        this.setItemRenderSkinName(list[i], skinName);
+                    }
                 }
             }
         };
@@ -19664,6 +19739,7 @@ var swan;
     swan.DataGroup = DataGroup;
     lark.registerClass(DataGroup,"swan.DataGroup");
     swan.registerProperty(DataGroup, "itemRenderer", "Class");
+    swan.registerProperty(DataGroup, "itemRendererSkinName", "Class");
     swan.registerProperty(DataGroup, "dataProvider", "swan.ICollection", true);
     if (DEBUG) {
         lark.$markReadOnly(DataGroup, "numElements");

@@ -73,7 +73,7 @@ module swan {
      * @platform Web,Native
      * @includeExample examples/Samples/src/extension/swan/components/SkinExample.ts
      */
-    export class Skin extends lark.HashObject {
+    export class Skin extends lark.EventEmitter {
 
         /**
          * @language en_US
@@ -275,6 +275,7 @@ module swan {
                     }
                 }
             }
+            PropertyEvent.emitPropertyEvent(this, PropertyEvent.PROPERTY_CHANGE, "hostComponent");
         }
 
         /**
@@ -359,4 +360,5 @@ module swan {
     sys.mixin(Skin, sys.StateClient);
     registerProperty(Skin, "elementsContent", "Array", true);
     registerProperty(Skin, "states", "State[]");
+    registerBindable(ItemRenderer.prototype, "hostComponent");
 }
