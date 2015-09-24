@@ -360,5 +360,5 @@ module swan {
     sys.mixin(Skin, sys.StateClient);
     registerProperty(Skin, "elementsContent", "Array", true);
     registerProperty(Skin, "states", "State[]");
-    registerBindable(ItemRenderer.prototype, "hostComponent");
+    registerBindable(Skin.prototype, "hostComponent");
 }

@@ -13493,7 +13493,7 @@ var swan;
     swan.sys.mixin(Skin, swan.sys.StateClient);
     swan.registerProperty(Skin, "elementsContent", "Array", true);
     swan.registerProperty(Skin, "states", "State[]");
-    swan.registerBindable(swan.ItemRenderer.prototype, "hostComponent");
+    swan.registerBindable(Skin.prototype, "hostComponent");
 })(swan || (swan = {}));
 //////////////////////////////////////////////////////////////////////////////////////
 //
