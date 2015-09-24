@@ -2846,6 +2846,7 @@ var swan;
          * Wing命名空间
          */
         sys.NS_W = "http://ns.egret.com/wing";
+        var coreClasses = ["Point", "Matrix", "Rectangle"];
         var basicTypes = ["Array", "boolean", "string", "number"];
         var MODULE_NAME = "swan.";
         var hashCount = 0;
@@ -2930,8 +2931,13 @@ var swan;
              * @param ns 命名空间
              */
             p.getClassNameById = function (id, ns) {
-                if (id == "Object" && ns == sys.NS_S) {
-                    return id;
+                if (ns == sys.NS_S) {
+                    if (id == "Object") {
+                        return id;
+                    }
+                    if (coreClasses.indexOf(id) != -1) {
+                        return "lark." + id;
+                    }
                 }
                 var name = "";
                 if (basicTypes.indexOf(id) != -1) {

@@ -40,6 +40,7 @@ module swan.sys {
      */
     export var NS_W:string = "http://ns.egret.com/wing";
 
+    var coreClasses:string[] = ["Point","Matrix","Rectangle"];
     var basicTypes:string[] = ["Array", "boolean", "string", "number"];
 
     var MODULE_NAME = "swan.";
@@ -131,9 +132,15 @@ module swan.sys {
          * @param ns 命名空间
          */
         public getClassNameById(id:string, ns:string):string {
-            if (id == "Object"&&ns==NS_S) {
-                return id;
+            if(ns==NS_S){
+                if (id == "Object") {
+                    return id;
+                }
+                if(coreClasses.indexOf(id)!=-1){
+                    return "lark."+id;
+                }
             }
+
             var name:string = "";
             if (basicTypes.indexOf(id) != -1) {
                 return id;
