@@ -45,6 +45,6 @@ Swan (UI库) 编程指南
 	* [数组集合](9-2-ArrayCollection.md)(review)
 	* [列表](9-3-list.md)(review)	
 	* [选项卡](9-4-TabBar.md)(review)	
-	* [自定义项呈示器](9-5-ItemRenderer.md)(editing)	
+	* [自定义项呈示器](9-5-ItemRenderer.md)(review)	
 
 	
