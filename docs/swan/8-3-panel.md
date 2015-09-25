@@ -38,8 +38,9 @@ class PanelDemo extends swan.Group {
 
 显示效果：
 ![][8-3-panel-C]
-Panel 中有3个默认对象，就是上面代码中 exml 皮肤里对应的 ```id="xxx"```。
-Panel 容器为他们提供了一些默认的功能。
+
+Panel 中有3个默认的皮肤部件，就是上面代码中 exml 皮肤里对应的 ```id="xxx"```。
+Panel 容器为他们提供了一些默认的功能，若皮肤中不存在这些id，对应的逻辑功能将无法使用。
 ```
 moveArea
 上面显示效果中的蓝色长条
