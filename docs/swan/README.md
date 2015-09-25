@@ -38,7 +38,7 @@ Swan (UI库) 编程指南
 8. [容器](8-0-container.md)(review)	
 	* [简单容器](8-1-simple.md)(review)
 	* [层叠容器](8-2-stack.md)(review)	
-	* [面板容器](8-3-panel.md)(done)	
+	* [面板容器](8-3-panel.md)(review)	
 	* [滚动控制](8-4-scroller.md)(done)		
 9. [数据集合](9-0-datacollection.md)	(review)
 	* [数据容器](9-1-DataGroup.md)(review)
