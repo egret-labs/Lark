@@ -1,4 +1,9 @@
-#注意：Lark项目现已合并到Egret项目中，游戏和应用开发采用统一的引擎核心，此项目今后不再单独维护，具体请参考：[https://github.com/egret-labs/egret-core](https://github.com/egret-labs/egret-core)
+#注意：Lark项目现已合并到Egret项目中，游戏和应用开发采用统一的引擎核心，继续关注Lark项目，请移步：[egret-core](https://github.com/egret-labs/egret-core)
+
+
+
+
+
 
 
 #Lark
