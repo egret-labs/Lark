@@ -3,7 +3,7 @@
 
 列表组件 List ，继承自 DataGroup，它和 DataGroup 的区别在于：
 * 在 List 中选中一项，会触发 swan.ItemTapEvent.ITEM_TAP 事件，然后您就可以执行后续的逻辑处理
-* 可以设置 List 中的默认选项
+* List有选中项的概念，可以设置 List 中的默认选中项。
 
 下面来看看List的基本用法：
 ``` TypeScript
