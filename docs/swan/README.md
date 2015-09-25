@@ -40,11 +40,11 @@ Swan (UI库) 编程指南
 	* [层叠容器](8-2-stack.md)(review)	
 	* [面板容器](8-3-panel.md)(review)	
 	* [滚动控制](8-4-scroller.md)(review)		
-9. [数据集合](9-0-datacollection.md)	(review)
+9. [数据集合](9-0-datacollection.md)(review)
 	* [数据容器](9-1-DataGroup.md)(review)
 	* [数组集合](9-2-ArrayCollection.md)(review)
-	* [列表](9-3-list.md)(editing)	
-	* [选项卡](9-4-TabBar.md)(editing)	
+	* [列表](9-3-list.md)(review)	
+	* [选项卡](9-4-TabBar.md)(review)	
 	* [自定义项呈示器](9-5-ItemRenderer.md)(editing)	
 
 	
