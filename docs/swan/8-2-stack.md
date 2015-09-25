@@ -1,8 +1,6 @@
 #Swan (UI库) 编程指南 - 层叠容器
 
 
-
-层叠容器分为两种： ViewStack 和 TabBar 。
 ## ViewStack
 
 您可以在 ViewStack 这个容器中添加多个子项，但只能显示其中的一个。您可以通过设置 selectedIndex 或者 selectedChild 属性，来控制当前应该显示的子项。
@@ -48,7 +46,7 @@ class ViewStackDemo extends swan.Group {
 
 
 ## TabBar
-请看 [选项卡](9-4-TabBar.md) 章节
+ViewStack通常都同时配合导航条使用，这部分内容请参考 [选项卡](9-4-TabBar.md) 章节
 
 [8-2-stack-A]: image/8/8-2-stack-A.jpg
 
