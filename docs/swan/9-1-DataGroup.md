@@ -25,15 +25,14 @@ DataGroup，可以直译为"数据容器"。但叫"容器"又不太严谨，因�
 </ul>
 ```
 
-对于DataGroup而言，也是类似的道理。您除了设置数据源，还要设置单条数据的"模板"。这个"模板"，在swan框架中称之为ItemRenderer。
+对于 DataGroup 而言，也是类似的道理。您除了设置数据源，还要设置单条数据的"模板"。这个"模板"，在swan 框架中称之为 ItemRenderer。
+,
+来看看一个DataGroup的例子，首先创建数据源：
 
-来看看一个DataGroup的例子吧。首先，先创建数据源：
-
-```
+``` TypeScript
 //先创建一个数组
 var sourceArr:any[] = [];
-for (var i:number = 1; i < 5; i++)
-{
+for (var i:number = 1; i < 5; i++) {
     sourceArr.push({label:"item"+i});
 }
 //用ArrayCollection包装
@@ -42,7 +41,7 @@ var myCollection:swan.ArrayCollection = new swan.ArrayCollection(sourceArr);
 
 然后创建DataGroup的实例，并设置数据源(属性名称是dataProvider)：
 
-```
+``` TypeScript
 var dataGroup:swan.DataGroup = new swan.DataGroup();
 dataGroup.dataProvider = myCollection;
 dataGroup.percentWidth = 100;
@@ -50,14 +49,12 @@ dataGroup.percentHeight = 100;
 this.addChild(dataGroup);
 ```
 
-写到这里直接编译运行会发生什么？当然是什么都看不到的。我们还有两个重要的工作没有做，一个是ItemRenderer，一个ItemRenderer对应的样式。
+写到这里直接编译运行会发生什么？当然是什么都看不到的。我们还有两个重要的工作没有做，一个是创建 ItemRenderer，一个设置 ItemRenderer 的样式。
 
-**ItemRenderer**
+**创建ItemRenderer**
 
-```
-class LabelRenderer extends swan.ItemRenderer
-{
-
+``` TypeScript
+class LabelRenderer extends swan.ItemRenderer {
 	private labelDisplay:swan.Label;
     public constructor(){
         super();
@@ -66,7 +63,7 @@ class LabelRenderer extends swan.ItemRenderer
         this.labelDisplay = new swan.Label();
         this.addChild( this.labelDisplay );
     }
-    public dataChanged():void{
+    protected dataChanged():void{
         this.labelDisplay.text = this.data.label;
     }
 }
@@ -74,18 +71,17 @@ class LabelRenderer extends swan.ItemRenderer
 
 注意两点：
 
-1. 自定义的ItemRenderer，应该继承swan.ItemRenderer，然后在内部添加自定义的功能
-2. 将数据对应到显示的语句，应该放在dataChanged方法中，当数据改变并且皮肤已经创建完毕的情况下这个方法会被执行。这样的好处是，保证您调用的皮肤部件一定是实例化完成的。如果同样的逻辑，您放在data的setter中实现，就可能会遇到部件是null的情况，因为皮肤部件可能还未实例化完毕。
+1. 自定义的ItemRenderer，应该继承 swan.ItemRenderer，然后在内部添加自定义的功能
+2. 将数据对应到显示的语句，应该放在 dataChanged方法中，当数据改变并且皮肤已经创建完毕的情况下这个方法会被执行。这样的好处是，保证您调用的皮肤部件一定是实例化完成的。
 
-然后我们将自定义的ItemRenderer设置到DataGroup上：
+然后我们将自定义的 LabelRenderer 类赋值给 itemRenderer 属性：
 
-```
+``` TypeScript
 dataGroup.itemRenderer = LabelRenderer;
 ```
 
-你可以直接将 LabelRenderer 的类定义赋值给 itemRenderer 属性。
 
-现在编译看看，欧耶，终于有显示效果了：
+再编译就能看到显示效果了：
 
 ![](./image/9/9_1_1.png)
 
@@ -93,22 +89,16 @@ dataGroup.itemRenderer = LabelRenderer;
 
 Main.ts
 
-```
-class Main extends swan.Group {
-
+``` TypeScript
+class DataGroupDemo extends swan.Group {
     public constructor() {
         super();
     }
-
-    protected createChildren():void 
-    {
-        this.width = this.stage.stageWidth;
-        this.height = this.stage.stageHeight;
-
+    protected createChildren():void {
         //先创建一个数组
         var sourceArr:any[] = [];
-        for (var i:number = 1; i < 5; i++)
-        {
+        for (var i:number = 1; i < 5; i++){
+        	//给数据中添加一个含有"label"属性的对象
             sourceArr.push({label:"item"+i});
         }
         //用ArrayCollection包装
@@ -127,23 +117,48 @@ class Main extends swan.Group {
 
 LabelRenderer.ts
 
-```
-class LabelRenderer extends swan.ItemRenderer
-{
-
+``` TypeScript
+class LabelRenderer extends swan.ItemRenderer {
 	private labelDisplay:swan.Label;
     public constructor(){
         super();
         this.touchChildren = true;
-
         this.labelDisplay = new swan.Label();
         this.addChild( this.labelDisplay );
     }
-    public dataChanged():void{
+    protected dataChanged():void{
+    	//显示数据中的 label 值
         this.labelDisplay.text = this.data.label;
     }
 }
 ```
+**如何给 ItemRenderer 设置皮肤，请看后面的[自定义项呈示器](9-5-ItemRenderer.md)章节**
 
+###大数据优化
+DataGroup 中有一个属性 useVirtualLayout，默认为 true，这个属性决定了列表创建内部对象的策略：
+**策略1**
+useVirtualLayout = false;
+有多少条数据就创建多少个 ItemRenderer 的实例
+**策略2**
+useVirtualLayout = true;
+**一般配合 [Scroller](8-4-scroller.md) 使用。**
+DataGroup 会根据组件的尺寸，计算同时最多能显示多少个组件，根据这个数字创建一组 ItemRenderer 并循环使用。当您滚动切换数据的时候，只是这一组 ItemRenderer 循环切换自己的位置和显示，这个过程是顺畅的无缝衔接的。
 
+举个例子，比如 ItemRenderer 的高度是10，DataGroup 的高度是100，DataGroup 的 dataProvider 中有1000条数据。这种情况下，DataGroup 中只会创建 11 个 ItemRenderer 的实例，当您向下滚动 DataGroup 的时候，移出舞台的那个 ItemRenderer 会自动移到最顶端，根据下一条数据改变自己的样式，而不需要再创建一个新的实例。
 
+显然策略2在数据量大的时候，会具备更好的性能优势。假设您有上千条数据，用策略1的话，界面估计就卡死了，而用策略2的话就不存在这个问题，因为数据量的增加，并不会导致显示对象数量的增加，也不会导致重绘次数的增加。
+
+1000条数据的对比图
+![](./image/9/9_3_2.jpg)
+
+我们在前面 Group 容器章节中提到过，swan 的容器类比 lark.Sprite 多2个方法： getElementAt  和 numElements，他们和 getChildAt 和 numChildren 有什么区别呢？
+**在策略1的情况下**
+两个完全是相同的
+numElements 和 numChildren 都会获得相同的实例数量
+getElementAt 和 getChildAt 获取的对象也是相同的
+**在策略2的情况下**
+numChildren 会获得具体的实例数量，而 numElements 会获得总的数据条数。
+还用之前那个例子，ItemRenderer 的高度是10，DataGroup 的高度是100，DataGroup 的 dataProvider 中有1000条数据。
+numChiild 获得的数量是11，而 numElements 获得的数量是 1000。
+getChildAt 可以在0-10的索引中获取具体的实例对象
+getElementAt 可以在0-999的索引中获取虚拟布局中的元素
