@@ -43,3 +43,22 @@ list.selectedIndex = 1;
 list.selectedItem
 list.selectedIndex
 ~~~
+### 多选状态
+ List 还可以开启多选状态
+~~~ TypeScript
+list.allowMultipleSelection = true;
+~~~
+效果如下：
+![](./image/9/9_3_3.png)
+多选状态下，List 中所有的条目都可以被选中，再次点击选中的条目则会取消选中，恢复原状。
+
+此时监听 swan.ItemTapEvent.ITEM_TAP 事件，可以通过下面两个属性获得一个数组，里面包含了当前哪些条目处于选中状态：
+~~~
+list.selectedIndices
+list.selectedItems
+~~~
+在多选状态下还有一个命令可以配合使用：
+~~~ TypeScript
+list.requireSelection = true;
+~~~
+该属性设置为 true 后，多选状态下最少有一个条目会被选中，不可以被取消。
